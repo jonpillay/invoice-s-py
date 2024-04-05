@@ -5,15 +5,16 @@ import ttkbootstrap as tkb
 root = tkb.Window(themename="solar")
 
 root.title("InvoicesPY")
-root.geometry('1000x800')
+root.geometry('1400x1000')
 
-test_label = tkb.Label(root, text="We are live!")
-test_label.grid(column=2, row=1)
+root.rowconfigure(0, weight=1)
+root.rowconfigure(1, weight=20)
+root.columnconfigure(0, weight=1)
 
-test_label2 = tkb.Label(root, text="here though", bootstyle='danger')
-test_label2.grid(column=1, row=0)
+title_label = tkb.Label(root, text="InvoicesPY for...", background='red')
+title_label.grid(row=0, column=0, sticky='nesw')
 
-test_label3 = tkb.Label(root, text="here next", bootstyle='danger')
-test_label3.grid(column=1, row=1)
+controls_frame = tkb.Frame(root)
+controls_frame.grid(row=1, column=0)
 
 root.mainloop()
