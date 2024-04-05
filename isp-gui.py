@@ -17,7 +17,7 @@ title_label.grid(row=0, column=0, sticky='nesw')
 main_frame = tkb.Frame(root)
 main_frame.grid(row=1, column=0, sticky='nesw')
 
-main_frame.rowconfigure(0, weight=5)
+main_frame.rowconfigure(0, weight=10)
 main_frame.rowconfigure(1, weight=19)
 main_frame.columnconfigure(0, weight=1)
 
@@ -27,22 +27,29 @@ results_frame = tkb.Frame(main_frame)
 controls_frame.grid(row=0, column=0, sticky='nesw')
 results_frame.grid(row=1, column=0, sticky='nesw')
 
-controls_frame.columnconfigure(0, weight=1)
-controls_frame.columnconfigure(1, weight=1)
+controls_frame.columnconfigure(0, weight=6)
+controls_frame.columnconfigure(1, weight=3)
 controls_frame.rowconfigure(0, weight=1)
 
 results_frame.rowconfigure(0, weight=1)
 results_frame.rowconfigure(1, weight=10)
 results_frame.columnconfigure(0, weight=1)
 
-controls_dummy1 = tkb.Label(controls_frame, text='Controls Dummy', background='black')
-controls_dummy2 = tkb.Label(controls_frame, text='Controls Dummy2', background='orange')
+# CSV Upload Widget
+upload_dummy = tkb.Label(controls_frame, text='Upload Dummy', background='black')
 
-controls_dummy1.grid(row=0, column=0, sticky='nesw')
-controls_dummy2.grid(row=0, column=1, sticky='nesw')
+# Report Gen Widget Panel. Report Gen By Date Range and Customer. Gen both OnScreen and PDF.
+report_gen_dummy = tkb.Label(controls_frame, text='Report Gen Dummy', background='green')
 
-results_dummy_tabs = tkb.Label(results_frame, text='Results Dummy Tabs', background='grey')
-results_dummy_text = tkb.Label(results_frame, text='Results Dummy Text', background='green')
+upload_dummy.grid(row=0, column=0, sticky='nesw')
+report_gen_dummy.grid(row=0, column=1, sticky='nesw')
+
+# Tabs for switching between different portions of results (paid, outstanding, possible errors)
+results_dummy_tabs = tkb.Label(results_frame, text='Results Dummy Tabs', background='#8B8000')
+
+# Query Result Printed to console. Each invoice is printed with related payment details- 
+# except in the case of payments without invoice, which are displayed alone (and marked)
+results_dummy_text = tkb.Label(results_frame, text='Results Dummy Text', background='orange')
 
 results_dummy_tabs.grid(row=0, column=0, sticky='nesw')
 results_dummy_text.grid(row=1, column=0, sticky='nesw')
