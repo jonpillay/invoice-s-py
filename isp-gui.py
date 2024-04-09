@@ -2,6 +2,8 @@ from tkinter import *
 from ttkbootstrap.constants import *
 import ttkbootstrap as tkb
 
+from ispCsvHelpers import getCSVfile
+
 root = tkb.Window(themename="solar")
 
 root.title("InvoicesPY")
@@ -36,12 +38,21 @@ results_frame.rowconfigure(1, weight=10)
 results_frame.columnconfigure(0, weight=1)
 
 # CSV Upload Widget
-upload_dummy = tkb.Label(controls_frame, text='Upload Dummy', background='black')
+upload_frame = tkb.Frame(controls_frame)
+upload_frame.columnconfigure(0, weight=1)
+upload_frame.columnconfigure(1, weight=1)
+upload_frame.grid(row=0, column=0, sticky='nesw')
+upload_frame.rowconfigure(0, weight=1)
+
+
+invoice_upload = tkb.Button(upload_frame, text='Invoice Upload', bootstyle='primary', command=getCSVfile)
+invoice_upload.grid(row=0, column=0)
+
+statement_upload = tkb.Button(upload_frame, text='Statement Upload', bootstyle='primary')
+statement_upload.grid(row=0, column=1)
 
 # Report Gen Widget Panel. Report Gen By Date Range and Customer. Gen both OnScreen and PDF.
-report_gen_dummy = tkb.Label(controls_frame, text='Report Gen Dummy', background='green')
-
-upload_dummy.grid(row=0, column=0, sticky='nesw')
+report_gen_dummy = tkb.Label(controls_frame, text='Report Gen Controls Dummy', background='green')
 report_gen_dummy.grid(row=0, column=1, sticky='nesw')
 
 # Tabs for switching between different portions of results (paid, outstanding, possible errors)
