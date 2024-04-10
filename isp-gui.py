@@ -2,8 +2,8 @@ from tkinter import *
 from ttkbootstrap.constants import *
 import ttkbootstrap as tkb
 
-from isp_csv_helpers import *
-from isp_db_helpers import *
+from isp_db_helpers import checkDBStatus
+from isp_frontend_functions import *
 
 checkDBStatus()
 
@@ -48,7 +48,7 @@ upload_frame.grid(row=0, column=0, sticky='nesw')
 upload_frame.rowconfigure(0, weight=1)
 
 
-invoice_upload = tkb.Button(upload_frame, text='Invoice Upload', bootstyle='primary', command=getCSVfile)
+invoice_upload = tkb.Button(upload_frame, text='Invoice Upload', bootstyle='primary', command=handleInvoiceUploadClick)
 invoice_upload.grid(row=0, column=0)
 
 statement_upload = tkb.Button(upload_frame, text='Statement Upload', bootstyle='primary')
