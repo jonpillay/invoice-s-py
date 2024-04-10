@@ -2,7 +2,13 @@ from tkinter import *
 from ttkbootstrap.constants import *
 import ttkbootstrap as tkb
 
-from ispCsvHelpers import getCSVfile
+from isp_csv_helpers import getCSVfile
+from isp_db_helpers import dbStartUpChecks
+
+if dbStartUpChecks() == True:
+  print("The Check Works!")
+else:
+  print("The check defiently works!!!")
 
 root = tkb.Window(themename="solar")
 
