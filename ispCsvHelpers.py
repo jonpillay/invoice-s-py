@@ -28,6 +28,7 @@ def getCSVfile():
       for el in entry:
         match = re.findall(os.getenv("CSV_TRANSACTION_REGEX"), el)
         if match:
+          # print(match)
           matchList.append(match[0])
           matchFound = True
       if matchFound == False:
@@ -39,9 +40,10 @@ def getCSVfile():
       #   for match in matches:
       #     matchList.append(match)
 
-    print(count)
-    print(len(matchList))
-    print(len(errorList))
-    
+    # print(count)
+    # print(len(matchList))
     for error in errorList:
       print(error)
+    
+    # for error in errorList:
+    #   print(error)
