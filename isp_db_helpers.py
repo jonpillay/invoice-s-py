@@ -10,14 +10,13 @@ def dbExists():
   return os.path.exists('./' + os.getenv("DB_NAME"))
 
 
-def dbInvoicesTableExist():
+def dbInvoicesTableExists():
   con = sqlite3.connect(os.getenv("DB_NAME"))
   cur = con.cursor()
 
   invoicesTable = cur.execute("""
     --begin-sql
-    SELECT tableName FROM sqlite_master WHERE type='table'
-    AND tableName='INVOICES'
+    SELECT name FROM sqlite_master WHERE type='table' AND name='INVOICES'
     --end-sql
     """).fetchall()
 
@@ -27,13 +26,17 @@ def dbInvoicesTableExist():
     return True
 
 
-def DBTransactionsTableExist():
+def dbTransactionsTableExists():
+
   con = sqlite3.connect(os.getenv("DB_NAME"))
   cur = con.cursor()
 
-  transactionsTable = cur.execute(
-  """SELECT tableName FROM sqlite_master WHERE type='table'
-  AND tableName='TRANSACTIONS'; """).fetchall()
+  transactionsTable = cur.execute("""
+    --begin-sql
+    SELECT name FROM sqlite_master WHERE type='table' AND name='TRANSACTIONS'
+    --end-sql
+    """).fetchall()
+  
 
   if transactionsTable == []:
     return False
@@ -50,16 +53,16 @@ def createInvoicesTable():
   con = sqlite3.connect(os.getenv("DB_NAME"))
   cur = con.cursor()
 
-  cur.execute("""
+  cur.execute( """
     --begin-sql
-    CREATE TABLE INVOICES(
+    CREATE TABLE INVOICES (
       invoice_num INT,
       amount REAL,
       date_issued DATE,
-      company_name VARCHAR,
+      company_name VARCHAR(255)
     )
     --end-sql      
-    """)
+    """ )
   
   con.commit()
   con.close()
@@ -75,10 +78,21 @@ def createTransactionsTable():
       invoice_num INT,
       amount REAL,
       paid_on DATE,
-      company_name VARCHAR,
+      company_name VARCHAR(255)
     )
     --end-sql
     """)
   
   con.commit()
   con.close()
+
+def checkDBStatus():
+
+  if dbExists() == False:
+    createDB()
+
+  if dbTransactionsTableExists() == False:
+    createTransactionsTable()
+
+  if dbInvoicesTableExists() == False:
+    createInvoicesTable()

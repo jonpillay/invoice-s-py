@@ -2,3 +2,4 @@
 test-files/
 __pycache__/
 .env
+*.db
