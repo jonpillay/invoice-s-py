@@ -3,9 +3,9 @@ from ttkbootstrap.constants import *
 import ttkbootstrap as tkb
 
 from isp_csv_helpers import getCSVfile
-from isp_db_helpers import dbStartUpChecks
+from isp_db_helpers import dbExists
 
-if dbStartUpChecks() == True:
+if dbExists() == True:
   print("The Check Works!")
 else:
   print("The check defiently works!!!")
