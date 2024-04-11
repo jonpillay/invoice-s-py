@@ -51,7 +51,7 @@ upload_frame.rowconfigure(0, weight=1)
 invoice_upload = tkb.Button(upload_frame, text='Invoice Upload', bootstyle='primary', command=handleInvoiceUploadClick)
 invoice_upload.grid(row=0, column=0)
 
-statement_upload = tkb.Button(upload_frame, text='Statement Upload', bootstyle='primary')
+statement_upload = tkb.Button(upload_frame, text='Statement Upload', bootstyle='primary', command=handleTransactionUploadClick)
 statement_upload.grid(row=0, column=1)
 
 # Report Gen Widget Panel. Report Gen By Date Range and Customer. Gen both OnScreen and PDF.

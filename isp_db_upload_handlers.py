@@ -1,6 +1,7 @@
 import csv
 import sqlite3
 import os
+import re
 from datetime import datetime
 
 def getDBInvoiceNums():
@@ -50,3 +51,41 @@ def handleInvoiceUpload(filename):
 
     con.commit()
     con.close()
+
+def handleTransactionUpload(filename):
+
+  compRec = []
+  incompRec = []
+  multiRec = []
+
+  with open(filename) as csv_file:
+    CSVreader = csv.reader(csv_file)
+
+    for entry in CSVreader:
+      invMatches = re.findall(os.getenv('CSV_TRANSACTION_REGEX'), entry[2])
+
+      # print(invMatches)
+      
+      if len(invMatches) == 0:
+        incompRec.append(entry)
+      elif len(invMatches) == 1:
+        compRec.append(entry)
+      else:
+        multiRec.append(entry)
+
+    print(len(incompRec))
+    print(len(compRec))
+    print(len(multiRec))
+
+    # for i in incompRec:
+    #   print(i)
+
+    # print("Break")
+    # print(" ")
+
+    # for i in compRec:
+    #   print(i)
+    # print("Break")
+    # print(" ")
+    # for i in multiRec:
+    #   print(i)
