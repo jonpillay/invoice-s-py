@@ -7,11 +7,11 @@ load_dotenv()
 from tkinter import filedialog
 import csv
 
-def getFilename():
+def getFilename ():
 
   filename = filedialog.askopenfilename(
     initialdir=os.getenv("CSV_INITIAL_PATH"),
-    title="Open Invoice",
+    title="Open Document",
     filetypes=([("CSV Files","*.csv*")])
   )
   
