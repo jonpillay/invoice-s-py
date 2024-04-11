@@ -3,6 +3,20 @@ import sqlite3
 import os
 from datetime import datetime
 
+def getDBInvoiceNums():
+    
+    con = sqlite3.connect(os.getenv("DB_NAME"))
+    cur = con.cursor()
+
+    fetctInvNumSQL = "SELECT invoice_num from INVOICES"
+
+    cur.execute(fetctInvNumSQL)
+
+    invoiceNums = cur.fetchall()
+
+    return [invoice[0] for invoice in invoiceNums]
+
+
 def handleInvoiceUpload(filename):
 
   with open(filename) as csv_file:
@@ -10,9 +24,15 @@ def handleInvoiceUpload(filename):
 
     entriesList = []
 
+    invoiceNumsList = getDBInvoiceNums()
+
+    # print(invoiceNumsList)
+
     for entry in CSVreader:
-      entriesList.append(entry)
-      
+      if int(entry[0]) not in invoiceNumsList:
+        entriesList.append(entry)
+
+    print(entriesList)
 
     con = sqlite3.connect(os.getenv("DB_NAME"))
     cur = con.cursor()
@@ -23,7 +43,7 @@ def handleInvoiceUpload(filename):
 
       currentInvoice = (int(invoice[0]), float(invoice[4]), formattedDate, invoice[2].strip())
 
-      sql = """INSERT INTO INVOICES(invoice_num, amount, date_issued, company_name)
+      sql = """INSERT OR IGNORE INTO INVOICES(invoice_num, amount, date_issued, company_name)
                VALUES(?,?,?,?)"""
       
       cur.execute(sql, currentInvoice)
