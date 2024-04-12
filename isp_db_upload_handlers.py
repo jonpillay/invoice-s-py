@@ -73,19 +73,7 @@ def handleTransactionUpload(filename):
       else:
         multiRec.append(entry)
 
-    print(len(incompRec))
-    print(len(compRec))
-    print(len(multiRec))
-
     # for i in incompRec:
     #   print(i)
-
-    # print("Break")
-    # print(" ")
-
-    # for i in compRec:
-    #   print(i)
-    # print("Break")
-    # print(" ")
-    # for i in multiRec:
-    #   print(i)
+    # print(len(compRec))
+    # print(len(multiRec))
