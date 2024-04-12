@@ -4,6 +4,10 @@ import os
 import re
 from datetime import datetime
 
+from isp_db_comparrison_functs import compareInvNumbers
+
+from isp_csv_helpers import cleanTransactionRaw
+
 def getDBInvoiceNums():
     
     con = sqlite3.connect(os.getenv("DB_NAME"))
@@ -27,13 +31,10 @@ def handleInvoiceUpload(filename):
 
     invoiceNumsList = getDBInvoiceNums()
 
-    # print(invoiceNumsList)
-
     for entry in CSVreader:
+      print(entry)
       if int(entry[0]) not in invoiceNumsList:
         entriesList.append(entry)
-
-    print(entriesList)
 
     con = sqlite3.connect(os.getenv("DB_NAME"))
     cur = con.cursor()
@@ -62,9 +63,16 @@ def handleTransactionUpload(filename):
     CSVreader = csv.reader(csv_file)
 
     for entry in CSVreader:
+      try:
+        datetime.strptime(entry[0].strip(), '%d %b %Y')
+      except:
+        continue
+
       invMatches = re.findall(os.getenv('CSV_TRANSACTION_REGEX'), entry[2])
 
-      # print(invMatches)
+      cleanedEntry = cleanTransactionRaw(invMatches, entry)
+
+      print(cleanedEntry)
       
       if len(invMatches) == 0:
         incompRec.append(entry)
@@ -72,6 +80,14 @@ def handleTransactionUpload(filename):
         compRec.append(entry)
       else:
         multiRec.append(entry)
+
+    # for entry in compRec:
+
+    #   con = sqlite3.connect(os.getenv("DB_NAME"))
+
+    #   match = compareInvNumbers()
+
+    #   print(match)
 
     # for i in incompRec:
     #   print(i)
