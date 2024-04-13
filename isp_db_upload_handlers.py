@@ -32,11 +32,13 @@ def handleInvoiceUpload(filename):
     invoiceNumsList = getDBInvoiceNums()
 
     for entry in CSVreader:
-      print(entry)
       if int(entry[0]) not in invoiceNumsList:
         entriesList.append(entry)
 
     con = sqlite3.connect(os.getenv("DB_NAME"))
+
+    con.execute('PRAGMA foreign_keys = ON')
+
     cur = con.cursor()
 
     for invoice in entriesList:
@@ -48,8 +50,11 @@ def handleInvoiceUpload(filename):
       sql = """INSERT OR IGNORE INTO INVOICES(invoice_num, amount, date_issued, company_name)
                VALUES(?,?,?,?)"""
       
-      cur.execute(sql, currentInvoice)
-
+      try:
+        cur.execute(sql, currentInvoice)
+      except:
+        print("Invoice upload failed")
+        
     con.commit()
     con.close()
 

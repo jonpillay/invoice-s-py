@@ -56,7 +56,8 @@ def createInvoicesTable():
   cur.execute( """
     --begin-sql
     CREATE TABLE INVOICES (
-      invoice_num INT,
+      id INTEGER PRIMARY KEY NOT NULL,
+      invoice_num INTEGER,
       amount REAL,
       date_issued DATE,
       company_name VARCHAR(255)
@@ -75,10 +76,13 @@ def createTransactionsTable():
   cur.execute("""
     --begin-sql
     CREATE TABLE TRANSACTIONS(
-      invoice_num INT,
+      id INTEGER PRIMARY KEY NOT NULL,
+      invoice_num INTEGER,
       amount REAL,
       paid_on DATE,
-      company_name VARCHAR(255)
+      company_name VARCHAR(255),
+      invoice_id INTEGER,
+      FOREIGN KEY(invoice_id) REFERENCES INVOICES(id)
     )
     --end-sql
     """)
