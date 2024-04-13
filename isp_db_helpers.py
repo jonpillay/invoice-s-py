@@ -13,9 +13,9 @@ def getInvoiceNumsIDs(cur):
 
 def transactionInvoiceMatcher(invoiceNumber, cur):
 
-  sql = "SELECT id, invoice_num, amount, company_name FROM INVOICES WHERE invoice_num=?"
+  sql = f"SELECT id, invoice_num, amount, company_name FROM INVOICES WHERE invoice_num={invoiceNumber}"
 
-  cur.execute(sql, str(invoiceNumber))
+  cur.execute(sql)
 
   invoice = cur.fetchall()
 

@@ -6,7 +6,7 @@ from datetime import datetime
 
 from isp_db_comparrison_functs import compareInvNumbers
 from isp_csv_helpers import cleanTransactionRaw
-
+from isp_trans_verify import verifyTransactionDetails
 from isp_db_helpers import getInvoiceNumsIDs, transactionInvoiceMatcher
 
 def getDBInvoiceNums():
@@ -89,12 +89,41 @@ def handleTransactionUpload(filename):
 
     cur = con.cursor()
 
-    for i in compRec:
-      invoiceNum = i[0][0]
+    matches = []
+    noMatchFromNum = []
+    matchPaymentError = []
+    matchNameError = []
+
+    for transaction in compRec:
+
+      invoiceNum = transaction[0][0]
 
       invoice = transactionInvoiceMatcher(invoiceNum, cur)
 
-      print(invoice)
+      if len(invoice) == 0:
+        noMatchFromNum.append(transaction)
+        continue
+      else:
+        matches.append(transaction)
+
+      detailMatch = verifyTransactionDetails(transaction, invoice)
+
+      if type(detailMatch) == int:
+        matchPaymentError.append([transaction, invoice])
+      elif type(detailMatch) == str:
+        matchNameError.append([transaction, invoice])
+      elif detailMatch == True:
+        # Need transaction upload handler
+        print("success")
+      else:
+        print("error") 
+
+
+
+      # print(invoice)
+      # print(i)
+
+      
     
 
     # for entry in compRec:
