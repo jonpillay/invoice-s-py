@@ -2,7 +2,7 @@ from tkinter import *
 from ttkbootstrap.constants import *
 import ttkbootstrap as tkb
 
-from isp_db_functs import checkDBStatus
+from isp_db_setup_functs import checkDBStatus
 from isp_frontend_functions import *
 
 checkDBStatus()
