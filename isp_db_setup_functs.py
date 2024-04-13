@@ -81,6 +81,8 @@ def createTransactionsTable():
       amount REAL,
       paid_on DATE,
       company_name VARCHAR(255),
+      payment_method VARCHAR(255),
+      og_string VARCHAR(255),
       invoice_id INTEGER,
       FOREIGN KEY(invoice_id) REFERENCES INVOICES(id)
     )

@@ -4,10 +4,9 @@ import os
 import re
 from datetime import datetime
 
-from isp_db_comparrison_functs import compareInvNumbers
 from isp_csv_helpers import cleanTransactionRaw
 from isp_trans_verify import verifyTransactionDetails
-from isp_db_helpers import getInvoiceNumsIDs, transactionInvoiceMatcher
+from isp_db_helpers import getInvoiceNumsIDs, fetchInvoiceByNum, addTransactionsToDB
 
 def getDBInvoiceNums():
     
@@ -75,6 +74,8 @@ def handleTransactionUpload(filename):
         continue
 
       cleanedEntry = cleanTransactionRaw(entry)
+
+      print(cleanedEntry)
       
       if len(cleanedEntry[0]) == 0:
         incompRec.append(cleanedEntry)
@@ -83,22 +84,23 @@ def handleTransactionUpload(filename):
       else:
         multiRec.append(cleanedEntry)
 
-    con = sqlite3.connect(os.getenv("DB_NAME"))
-
-    con.execute('PRAGMA foreign_keys = ON')
-
-    cur = con.cursor()
-
     matches = []
     noMatchFromNum = []
     matchPaymentError = []
     matchNameError = []
+    transactionUploadList = []
 
     for transaction in compRec:
 
+      con = sqlite3.connect(os.getenv("DB_NAME"))
+
+      con.execute('PRAGMA foreign_keys = ON')
+
+      cur = con.cursor()
+
       invoiceNum = transaction[0][0]
 
-      invoice = transactionInvoiceMatcher(invoiceNum, cur)
+      invoice = fetchInvoiceByNum(invoiceNum, cur)
 
       if len(invoice) == 0:
         noMatchFromNum.append(transaction)
@@ -113,11 +115,16 @@ def handleTransactionUpload(filename):
       elif type(detailMatch) == str:
         matchNameError.append([transaction, invoice])
       elif detailMatch == True:
-        # Need transaction upload handler
-        print("success")
+        og_string = " ".join(transaction[5])
+        transactionTuple = (transaction[0][0], transaction[1], transaction[2], transaction[3], transaction[4], og_string, invoice[0][0])
+        transactionUploadList.append(transactionTuple)
       else:
-        print("error") 
+        print("cannot match")
 
+  # print(noMatchFromNum)
+
+    addTransactionsToDB(transactionUploadList, cur)
+    con.commit()
 
 
       # print(invoice)

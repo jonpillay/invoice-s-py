@@ -11,7 +11,7 @@ def getInvoiceNumsIDs(cur):
 
   return [invoice[0] for invoice in invoiceNumsIDs]
 
-def transactionInvoiceMatcher(invoiceNumber, cur):
+def fetchInvoiceByNum(invoiceNumber, cur):
 
   sql = f"SELECT id, invoice_num, amount, company_name FROM INVOICES WHERE invoice_num={invoiceNumber}"
 
@@ -20,3 +20,9 @@ def transactionInvoiceMatcher(invoiceNumber, cur):
   invoice = cur.fetchall()
 
   return invoice
+
+def addTransactionsToDB(transactionsTuples, cur):
+
+  sql = "INSERT INTO TRANSACTIONS (invoice_num, amount, paid_on, company_name, payment_method, og_string, invoice_id) VALUES (?, ?, ?, ?, ?, ?, ?)"
+
+  cur.executemany(sql, transactionsTuples)
