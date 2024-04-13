@@ -18,7 +18,9 @@ def getFilename ():
   
   return filename
 
-def cleanTransactionRaw(invoiceMatches, entry):
+def cleanTransactionRaw(entry):
+
+  invMatches = re.findall(os.getenv('CSV_TRANSACTION_REGEX'), entry[2])
 
   customer = entry[2].split(',')[0].strip()
 
@@ -28,4 +30,4 @@ def cleanTransactionRaw(invoiceMatches, entry):
 
   paidBy = entry[1]
 
-  return [invoiceMatches, payment, formattedDate, customer, paidBy, entry] 
+  return [invMatches, payment, formattedDate, customer, paidBy, entry] 

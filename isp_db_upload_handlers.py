@@ -5,7 +5,6 @@ import re
 from datetime import datetime
 
 from isp_db_comparrison_functs import compareInvNumbers
-
 from isp_csv_helpers import cleanTransactionRaw
 
 def getDBInvoiceNums():
@@ -54,7 +53,7 @@ def handleInvoiceUpload(filename):
         cur.execute(sql, currentInvoice)
       except:
         print("Invoice upload failed")
-        
+
     con.commit()
     con.close()
 
@@ -73,18 +72,26 @@ def handleTransactionUpload(filename):
       except:
         continue
 
-      invMatches = re.findall(os.getenv('CSV_TRANSACTION_REGEX'), entry[2])
-
-      cleanedEntry = cleanTransactionRaw(invMatches, entry)
+      cleanedEntry = cleanTransactionRaw(entry)
 
       print(cleanedEntry)
       
-      if len(invMatches) == 0:
+      if len(cleanedEntry[0]) == 0:
         incompRec.append(entry)
-      elif len(invMatches) == 1:
+      elif len(cleanedEntry[0]) == 1:
         compRec.append(entry)
       else:
         multiRec.append(entry)
+
+      con = sqlite3.connect(os.getenv("DB_NAME"))
+
+      con.execute('PRAGMA foreign_keys = ON')
+
+      cur = con.cursor()
+
+    
+
+    
 
     # for entry in compRec:
 
