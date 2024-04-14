@@ -65,7 +65,6 @@ def createInvoicesTable():
     --end-sql      
     """ )
   
-  con.commit()
   con.close()
 
 
@@ -89,13 +88,45 @@ def createTransactionsTable():
     --end-sql
     """)
   
-  con.commit()
+  con.close()
+
+def createCustomersTable():
+  con = sqlite3.connect(os.getenv("DB_NAME"))
+  cur = con.cursor()
+
+  cur.execute("""
+    --begin-sql
+    CREATE TABLE IF NOT EXISTS CUSTOMER(
+      id INTEGER PRIMARY KEY NOT NULL,
+      customer_name VARCHAR(255)
+    )
+    --end-sql
+    """)
+  
+def createAliasesTable():
+  con = sqlite3.connect(os.getenv("DB_NAME"))
+  cur = con.cursor()
+
+  cur.execute("""
+    --begin-sql
+    CREATE TABLE IF NOT EXISTS ALIASES(
+      id INTEGER PRIMARY KEY NOT NULL,
+      customer_alias VARCHAR(255),
+      customer_id INTEGER,
+      FOREIGN KEY(customer_id) REFERENCES CUSTOMER(id)
+    )
+    --end-sql
+    """)
+  
+  
   con.close()
 
 def checkDBStatus():
 
   if dbExists() == False:
     createDB()
+    createCustomersTable()
+    createAliasesTable()
 
   if dbTransactionsTableExists() == False:
     createTransactionsTable()

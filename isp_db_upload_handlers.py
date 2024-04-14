@@ -75,7 +75,7 @@ def handleTransactionUpload(filename):
 
       cleanedEntry = cleanTransactionRaw(entry)
 
-      print(cleanedEntry)
+      # print(cleanedEntry)
       
       if len(cleanedEntry[0]) == 0:
         incompRec.append(cleanedEntry)
