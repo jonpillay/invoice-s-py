@@ -12,6 +12,8 @@ def verifyTransactionDetails(transaction, invoice):
     return True
   
 def verifyAlias(transaction, invoice):
+  print(transaction)
   invoiceIDummy = None
-  # frontendTransaction = Transaction(transaction[0], transaction[1], transaction[2], transaction[3], transaction[4], transaction[5], invoiceIDummy)
+  og_string = " ".join(transaction[5])
+  frontendTransaction = Transaction(transaction[0][0], transaction[1], transaction[2], transaction[3], transaction[4], og_string, invoiceIDummy)
   # frontendInvoice = Invoice()

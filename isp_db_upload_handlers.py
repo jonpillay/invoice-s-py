@@ -5,7 +5,7 @@ import re
 from datetime import datetime
 
 from isp_csv_helpers import cleanTransactionRaw
-from isp_trans_verify import verifyTransactionDetails
+from isp_trans_verify import verifyTransactionDetails, verifyAlias
 from isp_db_helpers import getInvoiceNumsIDs, fetchInvoiceByNum, addTransactionsToDB
 
 def getDBInvoiceNums():
@@ -109,8 +109,9 @@ def handleTransactionUpload(filename):
         matches.append(transaction)
 
       detailMatch = verifyTransactionDetails(transaction, invoice)
+      print(detailMatch)
 
-      if type(detailMatch) == int:
+      if type(detailMatch) == float:
         matchPaymentError.append([transaction, invoice])
       elif type(detailMatch) == str:
         matchNameError.append([transaction, invoice])
@@ -124,8 +125,8 @@ def handleTransactionUpload(filename):
     # Function for incomp teansactions (no invoice number) to match transactions with invoices via payment amount and then
     # matching and adding aliases (via user promting) to the database so they can be identified automatically on next upload.
 
-    for nameError in matchNameError:
-      pass
+    # for nameError in matchNameError[0:4]:
+    #   verifyAlias(nameError, "test")
       # aliasMatchFunction(nameError[0], nameError[1])
 
     # Need final matching function for transactions that have multiple invoice numbers, which relate to a payment made for invoices
