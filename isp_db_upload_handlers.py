@@ -76,6 +76,8 @@ def handleTransactionUpload(filename):
       cleanedEntry = cleanTransactionRaw(entry)
 
       # print(cleanedEntry)
+
+      """ Check to see if the Transaction entry has one, numerous, or no invoice number matches """
       
       if len(cleanedEntry[0]) == 0:
         incompRec.append(cleanedEntry)
@@ -89,6 +91,25 @@ def handleTransactionUpload(filename):
     matchPaymentError = []
     matchNameError = []
     transactionUploadList = []
+
+    """
+      Two database related functions need to be written. One here and one on the invoice upload.
+
+      One here needs to go through the entries that have matched with one invoice number and also
+      amounts and see if there are instnaces where the name does not match and promt the user if
+      if they want to create a alias assotiation with the customer object in the ds (the alias being
+      a DB object with the FK to customer.
+
+      The function needs to loop through the list of entries examining each, but needs to skip associations
+      already made in run of the function. A list of tuples should also be made to compare before prompting the
+      user.
+
+      With this added verifyTransactionDetails() below can also verify via aliases. Leaving only actual naming errors
+      to be flagged (which you would assume there would be none - payment + invoice are varified).
+
+      The other function that needs to be added (first) is in the invoiceUpload to build a list of Customer objects in
+      the database from new customers (which they all will be first time).
+    """
 
     for transaction in compRec:
 
@@ -123,6 +144,13 @@ def handleTransactionUpload(filename):
 
     # Function for incomp teansactions (no invoice number) to match transactions with invoices via payment amount and then
     # matching and adding aliases (via user promting) to the database so they can be identified automatically on next upload.
+
+    """
+    IMPORTANT
+
+    Need to change flow
+    
+    """
 
     for nameError in matchNameError[0:4]:
       verifyAlias(nameError[0], nameError[1][0])
