@@ -124,6 +124,10 @@ def handleTransactionUpload(filename):
     # Function for incomp teansactions (no invoice number) to match transactions with invoices via payment amount and then
     # matching and adding aliases (via user promting) to the database so they can be identified automatically on next upload.
 
+    for nameError in matchNameError:
+      pass
+      # aliasMatchFunction(nameError[0], nameError[1])
+
     # Need final matching function for transactions that have multiple invoice numbers, which relate to a payment made for invoices
     # between two date. The function should pull relelvant invoices for the transaction cutomer and see if their total matches that paid,
     # with the help of tha aliases table in relation to customers, hopefully this should yeild a full match set.
