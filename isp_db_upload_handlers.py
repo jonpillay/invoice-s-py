@@ -109,7 +109,6 @@ def handleTransactionUpload(filename):
         matches.append(transaction)
 
       detailMatch = verifyTransactionDetails(transaction, invoice)
-      print(detailMatch)
 
       if type(detailMatch) == float:
         matchPaymentError.append([transaction, invoice])
@@ -125,9 +124,8 @@ def handleTransactionUpload(filename):
     # Function for incomp teansactions (no invoice number) to match transactions with invoices via payment amount and then
     # matching and adding aliases (via user promting) to the database so they can be identified automatically on next upload.
 
-    # for nameError in matchNameError[0:4]:
-    #   verifyAlias(nameError, "test")
-      # aliasMatchFunction(nameError[0], nameError[1])
+    for nameError in matchNameError[0:4]:
+      verifyAlias(nameError[0], nameError[1][0])
 
     # Need final matching function for transactions that have multiple invoice numbers, which relate to a payment made for invoices
     # between two date. The function should pull relelvant invoices for the transaction cutomer and see if their total matches that paid,
