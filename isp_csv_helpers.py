@@ -43,7 +43,9 @@ def cleanInvoiceListRawGenCustomerList(entries):
 
     formattedDate = datetime.strptime(invoice[1], '%d/%m/%Y').strftime('%Y-%m-%d')
     
-    customerName = invoice[2].strip()
+    customerName = invoice[2].strip().upper()
+
+    customerName = customerName.replace("  ", " ")
 
     if customerName not in uniqueCustomers:
       uniqueCustomers.append(customerName)
