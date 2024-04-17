@@ -26,3 +26,24 @@ def addTransactionsToDB(transactionsTuples, cur):
   sql = "INSERT INTO TRANSACTIONS (invoice_num, amount, paid_on, company_name, payment_method, og_string, invoice_id) VALUES (?, ?, ?, ?, ?, ?, ?)"
 
   cur.executemany(sql, transactionsTuples)
+
+def addNewCustomersToDB(customerList, cur):
+
+  customerTuples = []
+
+  for customer in customerList:
+
+    customerTuple = (customer.strip(),)
+
+    customerTuples.append(customerTuple)
+
+    # popup for new customers asking if wanting to attatch to existing customer
+
+  sql = "INSERT OR IGNORE INTO CUSTOMERS (customer_name) VALUES (?)"
+
+  customerTuples.sort(key= lambda x: x[0])
+
+  for i in customerTuples:
+    print(i)
+
+  cur.executemany(sql, customerTuples)

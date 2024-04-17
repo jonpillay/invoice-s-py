@@ -6,7 +6,7 @@ from datetime import datetime
 
 from isp_csv_helpers import cleanTransactionRaw, cleanInvoiceListRawGenCustomerList
 from isp_trans_verify import verifyTransactionDetails, verifyAlias
-from isp_db_helpers import getInvoiceNumsIDs, fetchInvoiceByNum, addTransactionsToDB
+from isp_db_helpers import getInvoiceNumsIDs, fetchInvoiceByNum, addTransactionsToDB, addNewCustomersToDB
 
 def getDBInvoiceNums():
     
@@ -41,8 +41,21 @@ def handleInvoiceUpload(filename):
         continue
     
   cleanedInvoices, customers = cleanInvoiceListRawGenCustomerList(entriesList)
+  
+  print(customers)
 
-  print(cleanedInvoices)
+  conn = sqlite3.connect(os.getenv("DB_NAME"))
+
+  conn.execute('PRAGMA foreign_keys = ON')
+
+  cur = conn.cursor()
+
+  addNewCustomersToDB(customers, cur)
+
+  conn.commit()
+
+  cur.close()
+  conn.close()
 
 def handleTransactionUpload(filename):
 
