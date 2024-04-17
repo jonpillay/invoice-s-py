@@ -3,6 +3,8 @@ import re
 from dotenv import load_dotenv, dotenv_values
 from datetime import datetime
 
+# from isp_dataframes import Invoice
+
 load_dotenv()
 
 from tkinter import filedialog
@@ -30,4 +32,27 @@ def cleanTransactionRaw(entry):
 
   paidBy = entry[1]
 
-  return [invMatches, payment, formattedDate, customer, paidBy, entry] 
+  return [invMatches, payment, formattedDate, customer, paidBy, entry]
+
+def cleanInvoiceListRawGenCustomerList(entries):
+  
+  uniqueCustomers = []
+  cleanedInvoices = []
+
+  for invoice in entries:
+
+    formattedDate = datetime.strptime(invoice[1], '%d/%m/%Y').strftime('%Y-%m-%d')
+    
+    customerName = invoice[2].strip()
+
+    if customerName not in uniqueCustomers:
+      uniqueCustomers.append(customerName)
+
+    # formattedInvoice = Invoice(int(invoice[0]), float(invoice[4]), formattedDate, customerName)
+
+    cleanedInvoices.append(formattedInvoice)
+
+    return cleanedInvoices, uniqueCustomers
+
+
+

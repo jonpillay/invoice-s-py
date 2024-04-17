@@ -4,7 +4,7 @@ import os
 import re
 from datetime import datetime
 
-from isp_csv_helpers import cleanTransactionRaw
+from isp_csv_helpers import cleanTransactionRaw, cleanInvoiceListRawGenCustomerList
 from isp_trans_verify import verifyTransactionDetails, verifyAlias
 from isp_db_helpers import getInvoiceNumsIDs, fetchInvoiceByNum, addTransactionsToDB
 
@@ -35,28 +35,9 @@ def handleInvoiceUpload(filename):
       if int(entry[0]) not in invoiceNumsList:
         entriesList.append(entry)
 
-    con = sqlite3.connect(os.getenv("DB_NAME"))
+  cleanedInvoices, customers = cleanInvoiceListRawGenCustomerList(entriesList)
 
-    con.execute('PRAGMA foreign_keys = ON')
-
-    cur = con.cursor()
-
-    for invoice in entriesList:
-
-      formattedDate = datetime.strptime(invoice[1], '%d/%m/%Y').strftime('%Y-%m-%d')
-
-      currentInvoice = (int(invoice[0]), float(invoice[4]), formattedDate, invoice[2].strip())
-
-      sql = """INSERT OR IGNORE INTO INVOICES(invoice_num, amount, date_issued, company_name)
-               VALUES(?,?,?,?)"""
-      
-      try:
-        cur.execute(sql, currentInvoice)
-      except:
-        print("Invoice upload failed")
-
-    con.commit()
-    con.close()
+  print(cleanedInvoices)
 
 def handleTransactionUpload(filename):
 
