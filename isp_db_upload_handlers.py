@@ -31,10 +31,15 @@ def handleInvoiceUpload(filename):
 
     invoiceNumsList = getDBInvoiceNums()
 
-    for entry in CSVreader:
-      if int(entry[0]) not in invoiceNumsList:
-        entriesList.append(entry)
+    count = 0
 
+    for entry in CSVreader:
+      try: 
+        if int(entry[0]) not in invoiceNumsList:
+          entriesList.append(entry)
+      except:
+        continue
+    
   cleanedInvoices, customers = cleanInvoiceListRawGenCustomerList(entriesList)
 
   print(cleanedInvoices)

@@ -13,11 +13,12 @@ class Transaction:
   og_string: str
   invoice_id: int = None
 
+@dataclass
 class Invoice:
-  invoice_id: int = None
   invoice_num: int
   amount: float
   date_issued: datetime.date
   issued_to: str
+  invoice_id: int = None
 
 # Transaction = NamedTuple('Transaction', 'invoice_num, amount, paid_on, company_name, payment_method, og_string, invoice_id')

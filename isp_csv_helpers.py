@@ -3,7 +3,7 @@ import re
 from dotenv import load_dotenv, dotenv_values
 from datetime import datetime
 
-# from isp_dataframes import Invoice
+from isp_dataframes import Invoice
 
 load_dotenv()
 
@@ -48,11 +48,11 @@ def cleanInvoiceListRawGenCustomerList(entries):
     if customerName not in uniqueCustomers:
       uniqueCustomers.append(customerName)
 
-    # formattedInvoice = Invoice(int(invoice[0]), float(invoice[4]), formattedDate, customerName)
+    formattedInvoice = Invoice(int(invoice[0]), float(invoice[4]), formattedDate, customerName)
 
     cleanedInvoices.append(formattedInvoice)
 
-    return cleanedInvoices, uniqueCustomers
+  return cleanedInvoices, uniqueCustomers
 
 
 
