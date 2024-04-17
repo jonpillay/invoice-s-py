@@ -10,9 +10,7 @@ def dbExists():
   return os.path.exists('./' + os.getenv("DB_NAME"))
 
 
-def dbInvoicesTableExists():
-  con = sqlite3.connect(os.getenv("DB_NAME"))
-  cur = con.cursor()
+def dbInvoicesTableExists(cur):
 
   invoicesTable = cur.execute("""
     --begin-sql
@@ -26,10 +24,7 @@ def dbInvoicesTableExists():
     return True
 
 
-def dbTransactionsTableExists():
-
-  con = sqlite3.connect(os.getenv("DB_NAME"))
-  cur = con.cursor()
+def dbTransactionsTableExists(cur):
 
   transactionsTable = cur.execute("""
     --begin-sql
@@ -44,14 +39,24 @@ def dbTransactionsTableExists():
     return True
   
 
-def createDB():
-  con = sqlite3.connect(os.getenv("DB_NAME"))
-  con.close()
+def createDB(conn):
+  conn = sqlite3.connect(os.getenv("DB_NAME"))
+
+def createAliasesTable(cur):
+
+  cur.execute("""
+    --begin-sql
+    CREATE TABLE IF NOT EXISTS ALIASES(
+      id INTEGER PRIMARY KEY NOT NULL,
+      customer_alias VARCHAR(255),
+      customer_id INTEGER,
+      FOREIGN KEY(customer_id) REFERENCES CUSTOMER(id)
+    )
+    --end-sql
+    """)
 
 
-def createInvoicesTable():
-  con = sqlite3.connect(os.getenv("DB_NAME"))
-  cur = con.cursor()
+def createInvoicesTable(cur):
 
   cur.execute( """
     --begin-sql
@@ -64,13 +69,9 @@ def createInvoicesTable():
     )
     --end-sql      
     """ )
-  
-  con.close()
 
 
-def createTransactionsTable():
-  con = sqlite3.connect(os.getenv("DB_NAME"))
-  cur = con.cursor()
+def createTransactionsTable(cur):
 
   cur.execute("""
     --begin-sql
@@ -87,12 +88,8 @@ def createTransactionsTable():
     )
     --end-sql
     """)
-  
-  con.close()
 
-def createCustomersTable():
-  con = sqlite3.connect(os.getenv("DB_NAME"))
-  cur = con.cursor()
+def createCustomersTable(cur):
 
   cur.execute("""
     --begin-sql
@@ -102,34 +99,18 @@ def createCustomersTable():
     )
     --end-sql
     """)
-  
-def createAliasesTable():
-  con = sqlite3.connect(os.getenv("DB_NAME"))
-  cur = con.cursor()
 
-  cur.execute("""
-    --begin-sql
-    CREATE TABLE IF NOT EXISTS ALIASES(
-      id INTEGER PRIMARY KEY NOT NULL,
-      customer_alias VARCHAR(255),
-      customer_id INTEGER,
-      FOREIGN KEY(customer_id) REFERENCES CUSTOMER(id)
-    )
-    --end-sql
-    """)
-  
-  
-  con.close()
 
-def checkDBStatus():
+def checkDBStatus(cur, conn):
 
   if dbExists() == False:
-    createDB()
-    createCustomersTable()
-    createAliasesTable()
+    createDB(conn)
 
-  if dbTransactionsTableExists() == False:
-    createTransactionsTable()
+  if dbTransactionsTableExists(cur) == False:
+    createTransactionsTable(cur)
 
-  if dbInvoicesTableExists() == False:
-    createInvoicesTable()
+  if dbInvoicesTableExists(cur) == False:
+    createInvoicesTable(cur)
+  
+  createCustomersTable(cur)
+  createAliasesTable(cur)

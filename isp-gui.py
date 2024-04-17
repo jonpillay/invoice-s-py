@@ -5,7 +5,16 @@ import ttkbootstrap as tkb
 from isp_db_setup_functs import checkDBStatus
 from isp_frontend_functions import *
 
-checkDBStatus()
+import sqlite3
+import os
+
+conn = sqlite3.connect(os.getenv("DB_NAME"))
+cur = conn.cursor()
+
+checkDBStatus(cur, conn)
+
+cur.close()
+conn.close()
 
 root = tkb.Window(themename="solar")
 
