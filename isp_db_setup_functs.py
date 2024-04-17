@@ -9,6 +9,9 @@ load_dotenv()
 def dbExists():
   return os.path.exists('./' + os.getenv("DB_NAME"))
 
+def createDB(conn):
+  conn = sqlite3.connect(os.getenv("DB_NAME"))
+
 
 def dbInvoicesTableExists(cur):
 
@@ -38,9 +41,17 @@ def dbTransactionsTableExists(cur):
   else:
     return True
   
+def createCustomersTable(cur):
 
-def createDB(conn):
-  conn = sqlite3.connect(os.getenv("DB_NAME"))
+  cur.execute("""
+    --begin-sql
+    CREATE TABLE IF NOT EXISTS CUSTOMER(
+      id INTEGER PRIMARY KEY NOT NULL,
+      customer_name VARCHAR(255)
+    )
+    --end-sql
+    """)
+
 
 def createAliasesTable(cur):
 
@@ -65,7 +76,9 @@ def createInvoicesTable(cur):
       invoice_num INTEGER,
       amount REAL,
       date_issued DATE,
-      company_name VARCHAR(255)
+      issued_to VARCHAR(255),
+      customer_id INTEGER,
+      FOREIGN KEY(customer_id) REFERENCES CUSTOMER(id)      
     )
     --end-sql      
     """ )
@@ -85,17 +98,6 @@ def createTransactionsTable(cur):
       og_string VARCHAR(255),
       invoice_id INTEGER,
       FOREIGN KEY(invoice_id) REFERENCES INVOICES(id)
-    )
-    --end-sql
-    """)
-
-def createCustomersTable(cur):
-
-  cur.execute("""
-    --begin-sql
-    CREATE TABLE IF NOT EXISTS CUSTOMER(
-      id INTEGER PRIMARY KEY NOT NULL,
-      customer_name VARCHAR(255)
     )
     --end-sql
     """)
