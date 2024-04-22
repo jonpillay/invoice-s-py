@@ -43,7 +43,4 @@ def addNewCustomersToDB(customerList, cur):
 
   customerTuples.sort(key= lambda x: x[0])
 
-  for i in customerTuples:
-    print(i)
-
   cur.executemany(sql, customerTuples)

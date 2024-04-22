@@ -42,7 +42,8 @@ def handleInvoiceUpload(filename):
     
   cleanedInvoices, customers = cleanInvoiceListRawGenCustomerList(entriesList)
   
-  print(customers)
+  for i in cleanedInvoices:
+    print(i)
 
   conn = sqlite3.connect(os.getenv("DB_NAME"))
 
