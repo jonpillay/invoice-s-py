@@ -56,12 +56,12 @@ def getDBInvoiceNums(cur):
   return [invoice[0] for invoice in invoiceNums]
 
 
-def getCustomerNames(cur):
+def getCustomerNamesIDs(cur):
 
-  fetctInvNumSQL = "SELECT customer_name from CUSTOMERS"
+  fetctInvNumSQL = "SELECT id, customer_name from CUSTOMERS"
 
   cur.execute(fetctInvNumSQL)
 
   customerNames = cur.fetchall()
 
-  return [customer[0] for customer in customerNames]
+  return [(customer[1], customer[0]) for customer in customerNames]
