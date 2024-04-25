@@ -1,7 +1,9 @@
 import datetime
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 
-"""Class for rednering backend information to the frontend"""
+# print(dataclasses.__version__)
+
+"""Class for rendering backend information to the frontend"""
 
 @dataclass
 class Transaction:
@@ -22,5 +24,10 @@ class Invoice:
   issued_to: str
   invoice_id: int = None
   customer_id: int = None
+
+@dataclass
+class Customer:
+  customer_name: str
+  customer_aliases: list[str] = field(default_factory=list)
 
 # Transaction = NamedTuple('Transaction', 'invoice_num, amount, paid_on, company_name, payment_method, og_string, invoice_id')

@@ -6,30 +6,23 @@ from datetime import datetime
 
 from isp_csv_helpers import cleanTransactionRaw, cleanInvoiceListRawGenCustomerList
 from isp_trans_verify import verifyTransactionDetails, verifyAlias
-from isp_db_helpers import getInvoiceNumsIDs, fetchInvoiceByNum, addTransactionsToDB, addNewCustomersToDB
-
-def getDBInvoiceNums():
-    
-    con = sqlite3.connect(os.getenv("DB_NAME"))
-    cur = con.cursor()
-
-    fetctInvNumSQL = "SELECT invoice_num from INVOICES"
-
-    cur.execute(fetctInvNumSQL)
-
-    invoiceNums = cur.fetchall()
-
-    return [invoice[0] for invoice in invoiceNums]
+from isp_db_helpers import getInvoiceNumsIDs, fetchInvoiceByNum, addTransactionsToDB, addNewCustomersToDB, getDBInvoiceNums, getCustomerNames
 
 
 def handleInvoiceUpload(filename):
+
+  conn = sqlite3.connect(os.getenv("DB_NAME"))
+
+  conn.execute('PRAGMA foreign_keys = ON')
+
+  cur = conn.cursor()
 
   with open(filename) as csv_file:
     CSVreader = csv.reader(csv_file)
 
     entriesList = []
 
-    invoiceNumsList = getDBInvoiceNums()
+    invoiceNumsList = getDBInvoiceNums(cur)
 
     count = 0
 
@@ -41,15 +34,13 @@ def handleInvoiceUpload(filename):
         continue
     
   cleanedInvoices, customers = cleanInvoiceListRawGenCustomerList(entriesList)
+
+  dbCustomers = getCustomerNames(cur)
+
+  # Need function to resolve the new customer names against the database.
   
   for i in cleanedInvoices:
     print(i)
-
-  conn = sqlite3.connect(os.getenv("DB_NAME"))
-
-  conn.execute('PRAGMA foreign_keys = ON')
-
-  cur = conn.cursor()
 
   addNewCustomersToDB(customers, cur)
 

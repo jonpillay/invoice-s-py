@@ -1,6 +1,5 @@
 import sqlite3
 
-
 def getInvoiceNumsIDs(cur):
 
   invoiceIDnumsSQL = "SELECT id invoice_num from INVOICES"
@@ -44,3 +43,25 @@ def addNewCustomersToDB(customerList, cur):
   customerTuples.sort(key= lambda x: x[0])
 
   cur.executemany(sql, customerTuples)
+
+
+def getDBInvoiceNums(cur):
+
+  fetctInvNumSQL = "SELECT invoice_num from INVOICES"
+
+  cur.execute(fetctInvNumSQL)
+
+  invoiceNums = cur.fetchall()
+
+  return [invoice[0] for invoice in invoiceNums]
+
+
+def getCustomerNames(cur):
+
+  fetctInvNumSQL = "SELECT customer_name from CUSTOMERS"
+
+  cur.execute(fetctInvNumSQL)
+
+  customerNames = cur.fetchall()
+
+  return [customer[0] for customer in customerNames]
