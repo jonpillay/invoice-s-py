@@ -47,7 +47,8 @@ def createCustomersTable(cur):
     --begin-sql
     CREATE TABLE IF NOT EXISTS CUSTOMERS(
       id INTEGER PRIMARY KEY NOT NULL,
-      customer_name VARCHAR(255)
+      customer_name VARCHAR(255),
+      UNIQUE(customer_name)
     )
     --end-sql
     """)

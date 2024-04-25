@@ -64,4 +64,14 @@ def getCustomerNamesIDs(cur):
 
   customerNames = cur.fetchall()
 
-  return [(customer[1], customer[0]) for customer in customerNames]
+  return [(customer[0], customer[1]) for customer in customerNames]
+
+def getCustomerAliases(cur, customerID):
+
+  sql = f"SELECT customer_alias FROM ALIASES WHERE customer_id={customerID}"
+
+  cur.execute(sql)
+
+  customerAliases = cur.fetchall()
+
+  return [alias[0] for alias in customerAliases]
