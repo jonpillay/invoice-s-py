@@ -74,4 +74,16 @@ def getCustomerAliases(cur, customerID):
 
   customerAliases = cur.fetchall()
 
-  return [alias[0] for alias in customerAliases]
+  return [alias[0].upper() for alias in customerAliases]
+
+def resolveNewCustomersDB(invoiceCustomers, aliasesDict):
+  for customer in invoiceCustomers:
+    for customerDB in aliasesDict:
+      if customer.upper() == customerDB.upper():
+        continue
+      else:
+        if customer in aliasesDict[customerDB]:
+          continue
+        else:
+          # need to add pop window to prompt user to create new customer, or to create a new aloas for the customer.
+          pass

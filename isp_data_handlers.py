@@ -4,8 +4,6 @@ def sortCustmoerInvoiceLists(invoiceList, customerList):
   pass
 
 def constructCustomerAliasesDict(cur, namesIDsTups):
-
-  print(namesIDsTups)
   
   aliasesDict = {}
 
