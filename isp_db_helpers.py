@@ -1,5 +1,8 @@
 import sqlite3
 
+from isp_render_popup import promptUserNewCustomer
+from isp_data_comparers import compareCustomerToAliasesDict
+
 def getInvoiceNumsIDs(cur):
 
   invoiceIDnumsSQL = "SELECT id invoice_num from INVOICES"
@@ -76,14 +79,13 @@ def getCustomerAliases(cur, customerID):
 
   return [alias[0].upper() for alias in customerAliases]
 
-def resolveNewCustomersDB(invoiceCustomers, aliasesDict):
+def resolveNewCustomersDB(root, invoiceCustomers, aliasesDict, dbCustomers):
   for customer in invoiceCustomers:
-    for customerDB in aliasesDict:
-      if customer.upper() == customerDB.upper():
-        continue
-      else:
-        if customer in aliasesDict[customerDB]:
-          continue
-        else:
-          # need to add pop window to prompt user to create new customer, or to create a new aloas for the customer.
-          pass
+    existsBool = compareCustomerToAliasesDict(customer, aliasesDict)
+
+    if existsBool == True:
+      print("here Though")
+      continue
+    else:
+      print("here")
+      promptUserNewCustomer(root, customer, dbCustomers)

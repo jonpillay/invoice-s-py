@@ -10,7 +10,7 @@ from isp_db_helpers import getInvoiceNumsIDs, fetchInvoiceByNum, addTransactions
 from isp_data_handlers import constructCustomerAliasesDict
 
 
-def handleInvoiceUpload(filename):
+def handleInvoiceUpload(root, filename):
 
   conn = sqlite3.connect(os.getenv("DB_NAME"))
 
@@ -40,7 +40,7 @@ def handleInvoiceUpload(filename):
 
   alisesDict = constructCustomerAliasesDict(cur, dbCustomers)
 
-  resolveNewCustomersDB(customers, alisesDict)
+  resolveNewCustomersDB(root, customers, alisesDict, dbCustomers)
 
   # Need function to resolve the new customer names against the database.
   
