@@ -80,7 +80,11 @@ def getCustomerAliases(cur, customerID):
   return [alias[0].upper() for alias in customerAliases]
 
 def resolveNewCustomersDB(root, invoiceCustomers, aliasesDict, dbCustomers):
+
+  updateDict = {}
+
   for customer in invoiceCustomers:
+
     existsBool = compareCustomerToAliasesDict(customer, aliasesDict)
 
     if existsBool == True:
@@ -88,4 +92,4 @@ def resolveNewCustomersDB(root, invoiceCustomers, aliasesDict, dbCustomers):
       continue
     else:
       print("here")
-      promptUserNewCustomer(root, customer, dbCustomers)
+  promptUserNewCustomer(root, customer, dbCustomers)
