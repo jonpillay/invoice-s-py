@@ -1,6 +1,8 @@
 import sqlite3
 
-from isp_render_popup import promptUserNewCustomer
+import tkinter as tk
+
+from isp_user_prompts import promptUserNewCustomer
 from isp_data_comparers import compareCustomerToAliasesDict
 
 def getInvoiceNumsIDs(cur):
@@ -92,4 +94,9 @@ def resolveNewCustomersDB(root, invoiceCustomers, aliasesDict, dbCustomers):
       continue
     else:
       print("here")
-  promptUserNewCustomer(root, customer, dbCustomers)
+
+      response = tk.StringVar()
+
+      promptUserNewCustomer(root, customer, dbCustomers, response)
+
+      print(response.get())

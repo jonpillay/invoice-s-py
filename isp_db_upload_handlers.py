@@ -47,7 +47,7 @@ def handleInvoiceUpload(root, filename):
   # for i in cleanedInvoices:
   #   print(i)
 
-  addNewCustomersToDB(customers, cur)
+  # addNewCustomersToDB(customers, cur)
 
   conn.commit()
 
