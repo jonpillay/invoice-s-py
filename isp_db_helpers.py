@@ -95,8 +95,12 @@ def resolveNewCustomersDB(root, invoiceCustomers, aliasesDict, dbCustomers):
     else:
       print("here")
 
-      response = tk.StringVar()
+      nameReturn = tk.StringVar()
+      nameReturn.set(None)
 
-      promptUserNewCustomer(root, customer, dbCustomers, response)
+      customerIDReturn = tk.IntVar()
+      customerIDReturn.set(None)
 
-      print(response.get())
+      promptUserNewCustomer(root, customer, dbCustomers, nameReturn, customerIDReturn)
+
+      print(nameReturn.get())
