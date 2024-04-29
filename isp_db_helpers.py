@@ -2,7 +2,8 @@ import sqlite3
 
 import tkinter as tk
 
-from isp_user_prompts import promptUserNewCustomer
+
+from isp_popup_window import openNewCustomerPrompt
 from isp_data_comparers import compareCustomerToAliasesDict
 
 def getInvoiceNumsIDs(cur):
@@ -81,11 +82,13 @@ def getCustomerAliases(cur, customerID):
 
   return [alias[0].upper() for alias in customerAliases]
 
-def resolveNewCustomersDB(root, invoiceCustomers, aliasesDict, dbCustomers):
+def resolveNewCustomersDB(root, invoiceCustomers, aliasesDict, cur, conn):
 
   updateDict = {}
 
   for customer in invoiceCustomers:
+
+    dbCustomers = getCustomerNamesIDs(cur)
 
     existsBool = compareCustomerToAliasesDict(customer, aliasesDict)
 
@@ -101,6 +104,16 @@ def resolveNewCustomersDB(root, invoiceCustomers, aliasesDict, dbCustomers):
       customerIDReturn = tk.IntVar()
       customerIDReturn.set(None)
 
-      promptUserNewCustomer(root, customer, dbCustomers, nameReturn, customerIDReturn)
+      openNewCustomerPrompt(root, customer, dbCustomers, nameReturn, customerIDReturn)
+
+      if nameReturn.get() != None:
+
+        customer_name = nameReturn.get()
+
+        sql = "INSERT OR IGNORE INTO CUSTOMERS (customer_name) VALUES (?)"
+
+        cur.execute(sql, (customer_name,))
+
+        conn.commit()
 
       print(nameReturn.get())

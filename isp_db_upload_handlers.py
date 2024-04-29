@@ -25,8 +25,6 @@ def handleInvoiceUpload(root, filename):
 
     invoiceNumsList = getDBInvoiceNums(cur)
 
-    count = 0
-
     for entry in CSVreader:
       try: 
         if int(entry[0]) not in invoiceNumsList:
@@ -38,16 +36,18 @@ def handleInvoiceUpload(root, filename):
 
   dbCustomers = getCustomerNamesIDs(cur)
 
+  print(dbCustomers)
+
   alisesDict = constructCustomerAliasesDict(cur, dbCustomers)
 
-  resolveNewCustomersDB(root, customers, alisesDict, dbCustomers)
+  resolveNewCustomersDB(root, customers, alisesDict, cur, conn)
 
   # Need function to resolve the new customer names against the database.
   
   # for i in cleanedInvoices:
   #   print(i)
 
-  # addNewCustomersToDB(customers, cur)
+  addNewCustomersToDB(customers, cur)
 
   conn.commit()
 
