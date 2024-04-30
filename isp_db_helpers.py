@@ -2,7 +2,6 @@ import sqlite3
 
 import tkinter as tk
 
-
 from isp_popup_window import openNewCustomerPrompt
 from isp_data_comparers import compareCustomerToAliasesDict, findCustomerIDInTup
 
@@ -32,6 +31,15 @@ def addTransactionsToDB(transactionsTuples, cur):
 
   cur.executemany(sql, transactionsTuples)
 
+
+
+def addNewCustomerToDB(customerName, cur):
+
+  sql = "INSERT OR IGNORE INTO CUSTOMERS (customer_name) VALUES (?)"
+
+  cur.execute(sql, (customerName.strip(),))
+
+
 def addNewCustomersToDB(customerList, cur):
 
   customerTuples = []
@@ -49,6 +57,14 @@ def addNewCustomersToDB(customerList, cur):
   customerTuples.sort(key= lambda x: x[0])
 
   cur.executemany(sql, customerTuples)
+
+def addAliasToDB(aliasName, customerID, cur):
+
+  aliasEntry = (aliasName, customerID)
+  
+  sql = "INSERT OR IGNORE INTO ALIASES (customer_alias, customer_id) VALUES (?,?)"
+
+  cur.execute(sql, aliasEntry)
 
 
 def getDBInvoiceNums(cur):
@@ -108,11 +124,19 @@ def resolveNewCustomersDB(root, invoiceCustomers, aliasesDict, cur, conn):
 
       aliasName = newAliasReturn.get()
 
-      if customerName != "":
+      """ 
+      If user has edited the entry box on the form to enter the customer name
+      as different from that of the invoice - the edited name should be entered as the customer
+      name and the invoice name as an alias of it.
 
-        sql = "INSERT OR IGNORE INTO CUSTOMERS (customer_name) VALUES (?)"
+      THIS NEEDS TO BE SEPARETD INTO ITS OWN FUNCITON
+      """
 
-        cur.execute(sql, (customerName,))
+      if customerName != "" and customerName == customer:
+
+        addNewCustomerToDB(customer, cur)
+
+        print(cur.lastrowid)
 
         conn.commit()
 
@@ -120,12 +144,21 @@ def resolveNewCustomersDB(root, invoiceCustomers, aliasesDict, cur, conn):
 
         customerID = findCustomerIDInTup(aliasName, dbCustomers)
 
-        aliasEntry = (customer, customerID)
-
-        print(type(customerID))
-
-        sql = "INSERT OR IGNORE INTO ALIASES (customer_alias, customer_id) VALUES (?,?)"
-
-        cur.execute(sql, aliasEntry)
+        addAliasToDB(aliasName, customerID, cur)
 
         conn.commit()
+
+      elif customerName != "" and customerName != customer:
+        
+        addNewCustomerToDB(customerName, cur)
+
+        customerID = cur.lastrowid
+
+        conn.commit()
+
+        addAliasToDB(customer, customerID, cur)
+
+        conn.commit()
+
+  conn.close()
+      
