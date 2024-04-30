@@ -62,7 +62,7 @@ def createAliasesTable(cur):
       id INTEGER PRIMARY KEY NOT NULL,
       customer_alias VARCHAR(255),
       customer_id INTEGER,
-      FOREIGN KEY(customer_id) REFERENCES CUSTOMER(id)
+      FOREIGN KEY(customer_id) REFERENCES CUSTOMERS(id)
     )
     --end-sql
     """)

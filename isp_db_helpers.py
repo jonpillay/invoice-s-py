@@ -4,7 +4,7 @@ import tkinter as tk
 
 
 from isp_popup_window import openNewCustomerPrompt
-from isp_data_comparers import compareCustomerToAliasesDict
+from isp_data_comparers import compareCustomerToAliasesDict, findCustomerIDInTup
 
 def getInvoiceNumsIDs(cur):
 
@@ -98,22 +98,34 @@ def resolveNewCustomersDB(root, invoiceCustomers, aliasesDict, cur, conn):
     else:
       print("here")
 
-      nameReturn = tk.StringVar()
-      nameReturn.set(None)
+      newCustomerReturn = tk.StringVar()
 
-      customerIDReturn = tk.IntVar()
-      customerIDReturn.set(None)
+      newAliasReturn = tk.StringVar()
 
-      openNewCustomerPrompt(root, customer, dbCustomers, nameReturn, customerIDReturn)
+      openNewCustomerPrompt(root, customer, dbCustomers, newCustomerReturn, newAliasReturn)
 
-      if nameReturn.get() != None:
+      customerName = newCustomerReturn.get()
 
-        customer_name = nameReturn.get()
+      aliasName = newAliasReturn.get()
+
+      if customerName != "":
 
         sql = "INSERT OR IGNORE INTO CUSTOMERS (customer_name) VALUES (?)"
 
-        cur.execute(sql, (customer_name,))
+        cur.execute(sql, (customerName,))
 
         conn.commit()
 
-      print(nameReturn.get())
+      elif aliasName != "":
+
+        customerID = findCustomerIDInTup(aliasName, dbCustomers)
+
+        aliasEntry = (customer, customerID)
+
+        print(type(customerID))
+
+        sql = "INSERT OR IGNORE INTO ALIASES (customer_alias, customer_id) VALUES (?,?)"
+
+        cur.execute(sql, aliasEntry)
+
+        conn.commit()

@@ -4,3 +4,9 @@ def compareCustomerToAliasesDict(customer, aliasesDict):
         return True
     elif customer.upper() in aliasesDict[customerDB]:
         return True
+    
+
+def findCustomerIDInTup(customerName, customerTup):
+  for id, name in customerTup:
+    if name.upper() == customerName.upper():
+      return id
