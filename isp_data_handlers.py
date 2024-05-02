@@ -16,10 +16,10 @@ def constructCustomerIDict(cur, aliasesDict):
 
   customerIDict = {}
 
-  for customerName, aliases in aliasesDict:
+  for customerName in aliasesDict:
     customerID = getCustomerID(cur, customerName)
 
-    namesList = aliases.append(customerName)
+    namesList = aliasesDict[customerName]
 
     customerIDict[customerID] = namesList
 

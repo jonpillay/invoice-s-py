@@ -54,11 +54,13 @@ def openNewCustomerPrompt(root, customer, dbCustomers, newCustomerReturn, newAli
     add_alias_button.grid(row=2, column=0)
 
     def updateNewCustomerVar():
+      newAliasReturn.set("")
       print('running')
       newCustomerReturn.set(add_customer_entry.get())
       promptWindow.destroy()
 
     def updateNewAliasVar():
+      newCustomerReturn.set("")
       print('runningAlias')
       newAliasReturn.set(add_alias_dropdown.get())
       promptWindow.destroy()

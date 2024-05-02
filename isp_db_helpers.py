@@ -80,9 +80,9 @@ def getDBInvoiceNums(cur):
 
 def getCustomerID(cur, name):
 
-  fetchCustomerIDSQL = f"SELECT id from CUSTOMERS WHERE customer_name={name}"
+  fetchCustomerIDSQL = f"SELECT id FROM CUSTOMERS WHERE customer_name=?"
 
-  cur.execute(fetchCustomerIDSQL)
+  cur.execute(fetchCustomerIDSQL, (name,))
 
   customerID = cur.fetchall()
 
@@ -143,6 +143,10 @@ def resolveNewCustomersDB(root, invoiceCustomers, aliasesDict, cur, conn):
 
       if customerName != "" and customerName == customer:
 
+        print("It took us here")
+
+        print(customerName)
+
         addNewCustomerToDB(customer, cur)
 
         print(cur.lastrowid)
@@ -150,6 +154,8 @@ def resolveNewCustomersDB(root, invoiceCustomers, aliasesDict, cur, conn):
         conn.commit()
 
       elif aliasName != "":
+
+        print(customerName + "this is from the alias")
 
         customerID = findCustomerIDInTup(aliasName, dbCustomers)
 

@@ -7,7 +7,7 @@ from datetime import datetime
 from isp_csv_helpers import cleanTransactionRaw, cleanInvoiceListRawGenCustomerList
 from isp_trans_verify import verifyTransactionDetails, verifyAlias
 from isp_db_helpers import getInvoiceNumsIDs, fetchInvoiceByNum, addTransactionsToDB, addNewCustomersToDB, getDBInvoiceNums, getCustomerNamesIDs, resolveNewCustomersDB
-from isp_data_handlers import constructCustomerAliasesDict
+from isp_data_handlers import constructCustomerAliasesDict, constructCustomerIDict
 
 
 def handleInvoiceUpload(root, filename):
@@ -34,8 +34,6 @@ def handleInvoiceUpload(root, filename):
     
   cleanedInvoices, customers = cleanInvoiceListRawGenCustomerList(entriesList)
 
-  print(customers)
-
   dbCustomers = getCustomerNamesIDs(cur)
 
   alisesDict = constructCustomerAliasesDict(cur, dbCustomers)
@@ -44,7 +42,13 @@ def handleInvoiceUpload(root, filename):
 
   updatedDBCustomers = getCustomerNamesIDs(cur)
 
-  updatedAliasesDict = constructCustomerAliasesDict(cur, dbCustomers)
+  updatedAliasesDict = constructCustomerAliasesDict(cur, updatedDBCustomers)
+
+  print(updatedAliasesDict)
+
+  customerIDict = constructCustomerIDict(cur, updatedAliasesDict)
+
+  # print(customerIDict)
 
   # Need function to resolve the new customer names against the database.
   
