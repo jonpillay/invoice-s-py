@@ -78,6 +78,17 @@ def getDBInvoiceNums(cur):
   return [invoice[0] for invoice in invoiceNums]
 
 
+def getCustomerID(cur, name):
+
+  fetchCustomerIDSQL = f"SELECT id from CUSTOMERS WHERE customer_name={name}"
+
+  cur.execute(fetchCustomerIDSQL)
+
+  customerID = cur.fetchall()
+
+  return customerID[0]
+
+
 def getCustomerNamesIDs(cur):
 
   fetctInvNumSQL = "SELECT id, customer_name from CUSTOMERS"
@@ -157,6 +168,4 @@ def resolveNewCustomersDB(root, invoiceCustomers, aliasesDict, cur, conn):
         addAliasToDB(customer, customerID, cur)
 
         conn.commit()
-
-  conn.close()
       
