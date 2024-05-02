@@ -1,5 +1,8 @@
 import re
 
+from datetime import datetime, timedelta, date
+
+from isp_dataframes import Transaction, Invoice
 from isp_db_helpers import getCustomerAliases, getCustomerID
 
 def constructCustomerAliasesDict(cur, namesIDsTups):
@@ -29,9 +32,12 @@ def constructCustomerIDict(cur, aliasesDict):
 
   return customerIDict
 
+
 def prepInvoiceUploadList(invoiceList, customerAliasIDict):
 
   invoiceUploadTups = []
+
+  cashTransList = []
 
   for invoice in invoiceList:
 
@@ -39,13 +45,42 @@ def prepInvoiceUploadList(invoiceList, customerAliasIDict):
 
     if re.search("CASH", customerName):
       for id in customerAliasIDict:
-        print("here")
         if "CASH" in customerAliasIDict[id]:
-          invoice.customer_id = id
-          print("this" + str(invoice.customer_id))
-          break
 
-    for id in customerAliasIDict:
-      if invoice.issued_to.upper().strip() in customerAliasIDict[id]:
-        invoice.customer_id = id
-    print("this" + str(invoice.customer_id))
+          # Transaction data obj - information that is local at the moment from Invoice obj - passed, completed after invoice upload
+
+          invoice.customer_id = id
+
+          invoiceIssuedDT =  datetime.strptime(invoice.date_issued, '%Y-%m-%d').date()
+          cashTransTime = invoiceIssuedDT + timedelta(days=1)
+
+          cashTrans = Transaction(
+            invoice_num = invoice.invoice_num, 
+            amount = invoice.amount, 
+            paid_on = cashTransTime,
+            paid_by = invoice.issued_to,
+            payment_method="CASH",
+            og_string="CASH TRANSACTION"
+            )
+
+          cashTransList.append(cashTrans)
+
+          cashInvoiceTup =  (invoice.invoice_num, invoice.amount, invoice.date_issued, invoice.issued_to, invoice.customer_id)
+
+          invoiceUploadTups.append(cashInvoiceTup)
+
+          break
+      
+    else:
+      for id in customerAliasIDict:
+        if invoice.issued_to.upper().strip() in customerAliasIDict[id]:
+          invoice.customer_id = id
+
+          cashInvoiceTup =  (invoice.invoice_num, invoice.amount, invoice.date_issued, invoice.issued_to, invoice.customer_id)
+
+          invoiceUploadTups.append(cashInvoiceTup)
+
+  print(len(cashTransList))
+  print(len(invoiceUploadTups))
+
+  return invoiceUploadTups, cashTransList
