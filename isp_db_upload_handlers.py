@@ -34,9 +34,9 @@ def handleInvoiceUpload(root, filename):
     
   cleanedInvoices, customers = cleanInvoiceListRawGenCustomerList(entriesList)
 
-  dbCustomers = getCustomerNamesIDs(cur)
+  print(customers)
 
-  print(dbCustomers)
+  dbCustomers = getCustomerNamesIDs(cur)
 
   alisesDict = constructCustomerAliasesDict(cur, dbCustomers)
 
@@ -47,7 +47,7 @@ def handleInvoiceUpload(root, filename):
   # for i in cleanedInvoices:
   #   print(i)
 
-  addNewCustomersToDB(customers, cur)
+  # addNewCustomersToDB(customers, cur)
 
   conn.commit()
 
@@ -55,6 +55,8 @@ def handleInvoiceUpload(root, filename):
   conn.close()
 
 def handleTransactionUpload(filename):
+
+  conn = sqlite3.connect(os.getenv("DB_NAME"))
 
   compRec = []
   incompRec = []
@@ -177,3 +179,6 @@ def handleTransactionUpload(filename):
     #   print(i)
     # print(len(compRec))
     # print(len(multiRec))
+  
+  cur.close()
+  conn.close()

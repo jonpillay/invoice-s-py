@@ -100,8 +100,6 @@ def getCustomerAliases(cur, customerID):
 
 def resolveNewCustomersDB(root, invoiceCustomers, aliasesDict, cur, conn):
 
-  updateDict = {}
-
   for customer in invoiceCustomers:
 
     dbCustomers = getCustomerNamesIDs(cur)
