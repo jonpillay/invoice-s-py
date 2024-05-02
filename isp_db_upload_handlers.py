@@ -34,8 +34,6 @@ def handleInvoiceUpload(root, filename):
     
   cleanedInvoices, customers = cleanInvoiceListRawGenCustomerList(entriesList)
 
-  print(customers)
-
   dbCustomers = getCustomerNamesIDs(cur)
 
   alisesDict = constructCustomerAliasesDict(cur, dbCustomers)
@@ -166,7 +164,7 @@ def handleTransactionUpload(filename):
     # with the help of tha aliases table in relation to customers, hopefully this should yeild a full match set.
 
 
-    addTransactionsToDB(transactionUploadList, cur)
+    # addTransactionsToDB(transactionUploadList, cur)
 
 
       # print(invoice)
