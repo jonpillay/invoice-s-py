@@ -86,7 +86,7 @@ def getCustomerID(cur, name):
 
   customerID = cur.fetchall()
 
-  return customerID[0]
+  return customerID[0][0]
 
 
 def getCustomerNamesIDs(cur):
@@ -107,7 +107,7 @@ def getCustomerAliases(cur, customerID):
 
   customerAliases = cur.fetchall()
 
-  return [alias[0].upper() for alias in customerAliases]
+  return [alias[0].upper().strip() for alias in customerAliases]
 
 def resolveNewCustomersDB(root, invoiceCustomers, aliasesDict, cur, conn):
 
@@ -118,10 +118,8 @@ def resolveNewCustomersDB(root, invoiceCustomers, aliasesDict, cur, conn):
     existsBool = compareCustomerToAliasesDict(customer, aliasesDict)
 
     if existsBool == True:
-      print("here Though")
       continue
     else:
-      print("here")
 
       newCustomerReturn = tk.StringVar()
 
@@ -155,11 +153,11 @@ def resolveNewCustomersDB(root, invoiceCustomers, aliasesDict, cur, conn):
 
       elif aliasName != "":
 
-        print(customerName + "this is from the alias")
+        print(aliasName + "this is from the alias")
 
         customerID = findCustomerIDInTup(aliasName, dbCustomers)
 
-        addAliasToDB(aliasName, customerID, cur)
+        addAliasToDB(customer, customerID, cur)
 
         conn.commit()
 
@@ -174,4 +172,6 @@ def resolveNewCustomersDB(root, invoiceCustomers, aliasesDict, cur, conn):
         addAliasToDB(customer, customerID, cur)
 
         conn.commit()
+      else:
+        print("Nothing happened")
       

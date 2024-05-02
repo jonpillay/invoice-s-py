@@ -34,6 +34,8 @@ def handleInvoiceUpload(root, filename):
     
   cleanedInvoices, customers = cleanInvoiceListRawGenCustomerList(entriesList)
 
+  print(customers)
+
   dbCustomers = getCustomerNamesIDs(cur)
 
   alisesDict = constructCustomerAliasesDict(cur, dbCustomers)
@@ -44,11 +46,9 @@ def handleInvoiceUpload(root, filename):
 
   updatedAliasesDict = constructCustomerAliasesDict(cur, updatedDBCustomers)
 
-  print(updatedAliasesDict)
-
   customerIDict = constructCustomerIDict(cur, updatedAliasesDict)
 
-  # print(customerIDict)
+  print(customerIDict)
 
   # Need function to resolve the new customer names against the database.
   

@@ -21,6 +21,8 @@ def constructCustomerIDict(cur, aliasesDict):
 
     namesList = aliasesDict[customerName]
 
+    namesList.append(customerName)
+
     customerIDict[customerID] = namesList
 
   return customerIDict
