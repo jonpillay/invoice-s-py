@@ -191,4 +191,8 @@ def resolveNewCustomersDB(root, invoiceCustomers, aliasesDict, cur, conn):
         conn.commit()
       else:
         print("Nothing happened")
-      
+
+        
+
+def uploadInvoicesToDB(cur, invoiceList):
+  pass

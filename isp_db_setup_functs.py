@@ -52,6 +52,10 @@ def createCustomersTable(cur):
     )
     --end-sql
     """)
+  
+  sql = ("INSERT OR IGNORE INTO CUSTOMERS (customer_name) VALUES (?)")
+
+  cur.execute(sql, ("CASH",))
 
 
 def createAliasesTable(cur):
@@ -117,3 +121,5 @@ def checkDBStatus(cur, conn):
   
   createCustomersTable(cur)
   createAliasesTable(cur)
+
+  conn.commit()
