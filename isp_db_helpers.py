@@ -15,6 +15,8 @@ def getInvoiceNumsIDs(cur):
 
   return [invoice[0] for invoice in invoiceNumsIDs]
 
+
+
 def fetchInvoiceByNum(invoiceNumber, cur):
 
   sql = f"SELECT id, invoice_num, amount, date_issued, company_name FROM INVOICES WHERE invoice_num={invoiceNumber}"
@@ -24,6 +26,8 @@ def fetchInvoiceByNum(invoiceNumber, cur):
   invoice = cur.fetchall()
 
   return invoice
+
+
 
 def addTransactionsToDB(transactionsTuples, cur):
 
@@ -38,6 +42,7 @@ def addNewCustomerToDB(customerName, cur):
   sql = "INSERT OR IGNORE INTO CUSTOMERS (customer_name) VALUES (?)"
 
   cur.execute(sql, (customerName.strip(),))
+
 
 
 def addNewCustomersToDB(customerList, cur):
@@ -58,6 +63,8 @@ def addNewCustomersToDB(customerList, cur):
 
   cur.executemany(sql, customerTuples)
 
+
+
 def addAliasToDB(aliasName, customerID, cur):
 
   aliasEntry = (aliasName, customerID)
@@ -65,6 +72,8 @@ def addAliasToDB(aliasName, customerID, cur):
   sql = "INSERT OR IGNORE INTO ALIASES (customer_alias, customer_id) VALUES (?,?)"
 
   cur.execute(sql, aliasEntry)
+
+
 
 
 def getDBInvoiceNums(cur):
@@ -78,6 +87,8 @@ def getDBInvoiceNums(cur):
   return [invoice[0] for invoice in invoiceNums]
 
 
+
+
 def getCustomerID(cur, name):
 
   fetchCustomerIDSQL = f"SELECT id FROM CUSTOMERS WHERE customer_name=?"
@@ -87,6 +98,8 @@ def getCustomerID(cur, name):
   customerID = cur.fetchall()
 
   return customerID[0][0]
+
+
 
 
 def getCustomerNamesIDs(cur):
@@ -99,6 +112,8 @@ def getCustomerNamesIDs(cur):
 
   return [(customer[0], customer[1]) for customer in customerNames]
 
+
+
 def getCustomerAliases(cur, customerID):
 
   sql = f"SELECT customer_alias FROM ALIASES WHERE customer_id={customerID}"
@@ -108,6 +123,8 @@ def getCustomerAliases(cur, customerID):
   customerAliases = cur.fetchall()
 
   return [alias[0].upper().strip() for alias in customerAliases]
+
+
 
 def resolveNewCustomersDB(root, invoiceCustomers, aliasesDict, cur, conn):
 
