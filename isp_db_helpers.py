@@ -1,9 +1,10 @@
 import sqlite3
-
 import tkinter as tk
+from datetime import datetime, timedelta, date
 
 from isp_popup_window import openNewCustomerPrompt
 from isp_data_comparers import compareCustomerToAliasesDict, findCustomerIDInTup
+# from isp_data_handlers import genCashTransactionTup
 
 def getInvoiceNumsIDs(cur):
 
@@ -35,6 +36,25 @@ def addInvoicesToDB(invoicesTuples, cur):
   cur.executemany(sql, invoicesTuples)
 
 
+
+def addCashInvoicesAndTransactions(cashInvoiceList, cur, conn):
+
+  for invoice in cashInvoiceList:
+    sql = "INSERT OR IGNORE INTO INVOICES (invoice_num, amount, date_issued, issued_to, customer_id) VALUES (?,?,?,?,?)"
+
+    cur.execute(sql, invoice,)
+
+    conn.commit()
+
+    invoiceID = cur.lastrowid
+
+    invoiceDT = datetime.strptime(invoice[2], "%Y-%m-%d")
+
+    dummyCashPaymentDt = invoiceDT + timedelta(days=1)
+  
+    transactionTup = (invoice[0], invoice[1], dummyCashPaymentDt, invoice[3], "CASH", "CASH TRANSACTION", invoiceID)
+
+    print(transactionTup)
 
 def addTransactionsToDB(transactionsTuples, cur):
 

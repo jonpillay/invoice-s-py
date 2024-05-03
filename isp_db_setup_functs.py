@@ -83,7 +83,7 @@ def createInvoicesTable(cur):
       date_issued DATE,
       issued_to VARCHAR(255),
       customer_id INTEGER,
-      FOREIGN KEY(customer_id) REFERENCES CUSTOMER(id)      
+      FOREIGN KEY(customer_id) REFERENCES CUSTOMERS(id)      
     )
     --end-sql      
     """ )

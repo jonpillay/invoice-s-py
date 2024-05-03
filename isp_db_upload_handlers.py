@@ -6,7 +6,7 @@ from datetime import datetime
 
 from isp_csv_helpers import cleanTransactionRaw, cleanInvoiceListRawGenCustomerList
 from isp_trans_verify import verifyTransactionDetails, verifyAlias
-from isp_db_helpers import getInvoiceNumsIDs, fetchInvoiceByNum, addTransactionsToDB, addNewCustomersToDB, getDBInvoiceNums, getCustomerNamesIDs, resolveNewCustomersDB
+from isp_db_helpers import getInvoiceNumsIDs, fetchInvoiceByNum, addTransactionsToDB, addNewCustomersToDB, getDBInvoiceNums, getCustomerNamesIDs, resolveNewCustomersDB, addCashInvoicesAndTransactions
 from isp_data_handlers import constructCustomerAliasesDict, constructCustomerIDict, prepInvoiceUploadList
 
 
@@ -48,7 +48,10 @@ def handleInvoiceUpload(root, filename):
 
   invoiceUploadTups, cashInvoiceUploadTups = prepInvoiceUploadList(cleanedInvoices, customerIDict)
 
-  
+  addCashInvoicesAndTransactions(cashInvoiceUploadTups, cur, conn)
+
+
+  # addCashInvoiceAndTransaction(cashInvoiceUploadTups, cur, conn)
 
   conn.commit()
 

@@ -1,7 +1,5 @@
 import re
 
-from datetime import datetime, timedelta, date
-
 from isp_dataframes import Transaction, Invoice
 from isp_db_helpers import getCustomerAliases, getCustomerID
 
@@ -58,6 +56,8 @@ def prepInvoiceUploadList(invoiceList, customerAliasIDict):
             invoice.issued_to,
             invoice.customer_id
           )
+
+          print(cashInvoiceTup)
 
           cashInvoiceUploadTups.append(cashInvoiceTup)
 
