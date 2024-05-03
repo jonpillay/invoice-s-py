@@ -50,11 +50,25 @@ def addCashInvoicesAndTransactions(cashInvoiceList, cur, conn):
 
     invoiceDT = datetime.strptime(invoice[2], "%Y-%m-%d")
 
+    print(invoiceDT)
+
     dummyCashPaymentDt = invoiceDT + timedelta(days=1)
   
     transactionTup = (invoice[0], invoice[1], dummyCashPaymentDt, invoice[3], "CASH", "CASH TRANSACTION", invoiceID)
 
-    print(transactionTup)
+    addTransactionToDB(transactionTup, cur)
+
+    conn.commit()
+
+
+
+def addTransactionToDB(transactionTuple, cur):
+  
+  sql = "INSERT INTO TRANSACTIONS (invoice_num, amount, paid_on, company_name, payment_method, og_string, invoice_id) VALUES (?, ?, ?, ?, ?, ?, ?)"
+
+  cur.execute(sql, transactionTuple)
+
+
 
 def addTransactionsToDB(transactionsTuples, cur):
 
@@ -81,8 +95,6 @@ def addNewCustomersToDB(customerList, cur):
     customerTuple = (customer.strip(),)
 
     customerTuples.append(customerTuple)
-
-    # popup for new customers asking if wanting to attatch to existing customer
 
   sql = "INSERT OR IGNORE INTO CUSTOMERS (customer_name) VALUES (?)"
 
