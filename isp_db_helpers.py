@@ -28,6 +28,13 @@ def fetchInvoiceByNum(invoiceNumber, cur):
   return invoice
 
 
+def addInvoicesToDB(invoicesTuples, cur):
+
+  sql = "INSERT INTO invoices (invoice_num, amount, date_issued, issued_to, customer_id) VALUES (?,?,?,?,?)"
+
+  cur.executemany(sql, invoicesTuples)
+
+
 
 def addTransactionsToDB(transactionsTuples, cur):
 
@@ -192,7 +199,7 @@ def resolveNewCustomersDB(root, invoiceCustomers, aliasesDict, cur, conn):
       else:
         print("Nothing happened")
 
-        
+
 
 def uploadInvoicesToDB(cur, invoiceList):
   pass

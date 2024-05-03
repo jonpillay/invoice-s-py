@@ -46,14 +46,9 @@ def handleInvoiceUpload(root, filename):
 
   customerIDict = constructCustomerIDict(cur, updatedAliasesDict)
 
-  prepInvoiceUploadList(cleanedInvoices, customerIDict)
+  invoiceUploadTups, cashInvoiceUploadTups = prepInvoiceUploadList(cleanedInvoices, customerIDict)
 
-  # Need function to resolve the new customer names against the database.
   
-  # for i in cleanedInvoices:
-  #   print(i)
-
-  # addNewCustomersToDB(customers, cur)
 
   conn.commit()
 
