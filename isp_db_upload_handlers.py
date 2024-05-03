@@ -8,7 +8,7 @@ from isp_csv_helpers import cleanTransactionRaw, cleanInvoiceListRawGenCustomerL
 from isp_trans_verify import verifyTransactionDetails, verifyAlias
 from isp_db_helpers import getInvoiceNumsIDs, fetchInvoiceByNum, addTransactionsToDB, addNewCustomersToDB, getDBInvoiceNums, getCustomerNamesIDs, resolveNewCustomersDB, addCashInvoicesAndTransactions, addInvoicesToDB
 from isp_data_handlers import constructCustomerAliasesDict, constructCustomerIDict, prepInvoiceUploadList, genInvoiceDCobj
-
+from isp_dataframes import Transaction
 
 def handleInvoiceUpload(root, filename):
 
@@ -79,8 +79,6 @@ def handleTransactionUpload(filename):
 
       cleanedEntry = cleanTransactionRaw(entry)
 
-      # print(cleanedEntry)
-
       """ Check to see if the Transaction entry has one, numerous, or no invoice number matches """
       
       if len(cleanedEntry[0]) == 0:
@@ -89,12 +87,6 @@ def handleTransactionUpload(filename):
         compRec.append(cleanedEntry)
       else:
         multiRec.append(cleanedEntry)
-
-    matches = []
-    noMatchFromNum = []
-    matchPaymentError = []
-    matchNameError = []
-    transactionUploadList = []
 
     """
       Two database related functions need to be written. One here and one on the invoice upload.
@@ -115,6 +107,14 @@ def handleTransactionUpload(filename):
       the database from new customers (which they all will be first time).
     """
 
+    matches = []
+
+    noMatchFromNum = []
+    matchPaymentError = []
+    matchNameError = []
+
+    transactionUploadList = []
+
     for transaction in compRec:
 
       con = sqlite3.connect(os.getenv("DB_NAME"))
@@ -127,13 +127,27 @@ def handleTransactionUpload(filename):
 
       invoice = genInvoiceDCobj(fetchInvoiceByNum(invoiceNum, cur))
 
-      break
-
-      if len(invoice) == 0:
+      if invoice == None:
         noMatchFromNum.append(transaction)
         continue
       else:
         matches.append(transaction)
+
+      date_paid = datetime.strptime(transaction[2], "%Y-%m-%d")
+
+      transaction = Transaction(
+        invoice_num=transaction[0][0],
+        amount=transaction[1],
+        paid_on=date_paid,
+        paid_by=transaction[3],
+        payment_method=transaction[4],
+        og_string=transaction[5]
+      )
+
+      print(transaction)
+      print(invoice)
+
+      break
 
       detailMatch = verifyTransactionDetails(transaction, invoice)
 

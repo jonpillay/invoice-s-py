@@ -32,7 +32,7 @@ def cleanTransactionRaw(entry):
 
   paidBy = entry[1]
 
-  return [invMatches, payment, formattedDate, customer, paidBy, entry]
+  return [invMatches, payment, formattedDate, customer, paidBy, ' '.join(entry)]
 
 def cleanInvoiceListRawGenCustomerList(entries):
   
