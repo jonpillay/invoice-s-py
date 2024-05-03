@@ -1,4 +1,5 @@
 import re
+from datetime import datetime
 
 from isp_dataframes import Transaction, Invoice
 from isp_db_helpers import getCustomerAliases, getCustomerID
@@ -79,3 +80,19 @@ def prepInvoiceUploadList(invoiceList, customerAliasIDict):
           invoiceUploadTups.append(invoiceTup)
 
   return invoiceUploadTups, cashInvoiceUploadTups
+
+def genInvoiceDCobj(invoice):
+
+  invoiceTup = invoice[0]
+
+  date_issued = datetime.strptime(invoiceTup[3], "%Y-%m-%d")
+
+  invoiceDC = Invoice(
+    invoice_num=invoiceTup[1],
+    amount=invoiceTup[2],
+    date_issued=date_issued,
+    issued_to=4,
+    invoice_id=invoiceTup[0]
+  )
+
+  return invoiceDC

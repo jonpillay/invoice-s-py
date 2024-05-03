@@ -7,7 +7,7 @@ from datetime import datetime
 from isp_csv_helpers import cleanTransactionRaw, cleanInvoiceListRawGenCustomerList
 from isp_trans_verify import verifyTransactionDetails, verifyAlias
 from isp_db_helpers import getInvoiceNumsIDs, fetchInvoiceByNum, addTransactionsToDB, addNewCustomersToDB, getDBInvoiceNums, getCustomerNamesIDs, resolveNewCustomersDB, addCashInvoicesAndTransactions, addInvoicesToDB
-from isp_data_handlers import constructCustomerAliasesDict, constructCustomerIDict, prepInvoiceUploadList
+from isp_data_handlers import constructCustomerAliasesDict, constructCustomerIDict, prepInvoiceUploadList, genInvoiceDCobj
 
 
 def handleInvoiceUpload(root, filename):
@@ -101,7 +101,7 @@ def handleTransactionUpload(filename):
 
       One here needs to go through the entries that have matched with one invoice number and also
       amounts and see if there are instnaces where the name does not match and promt the user if
-      if they want to create a alias assotiation with the customer object in the ds (the alias being
+      if they want to create a alias assotiation with the customer object in the db (the alias being
       a DB object with the FK to customer.
 
       The function needs to loop through the list of entries examining each, but needs to skip associations
@@ -125,7 +125,9 @@ def handleTransactionUpload(filename):
 
       invoiceNum = transaction[0][0]
 
-      invoice = fetchInvoiceByNum(invoiceNum, cur)
+      invoice = genInvoiceDCobj(fetchInvoiceByNum(invoiceNum, cur))
+
+      break
 
       if len(invoice) == 0:
         noMatchFromNum.append(transaction)
@@ -156,8 +158,8 @@ def handleTransactionUpload(filename):
     
     """
 
-    for nameError in matchNameError[0:4]:
-      verifyAlias(nameError[0], nameError[1][0])
+    # for nameError in matchNameError[0:4]:
+    #   verifyAlias(nameError[0], nameError[1][0])
 
     # Need final matching function for transactions that have multiple invoice numbers, which relate to a payment made for invoices
     # between two date. The function should pull relelvant invoices for the transaction cutomer and see if their total matches that paid,
