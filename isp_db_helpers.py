@@ -20,7 +20,7 @@ def getInvoiceNumsIDs(cur):
 
 def fetchInvoiceByNum(invoiceNumber, cur):
 
-  sql = f"SELECT id, invoice_num, amount, date_issued, issued_to FROM INVOICES WHERE invoice_num={invoiceNumber}"
+  sql = f"SELECT id, invoice_num, amount, date_issued, issued_to, customer_id FROM INVOICES WHERE invoice_num={invoiceNumber}"
 
   cur.execute(sql)
 

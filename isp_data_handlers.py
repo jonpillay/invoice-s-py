@@ -91,8 +91,9 @@ def genInvoiceDCobj(invoice):
     invoice_num=invoiceTup[1],
     amount=invoiceTup[2],
     date_issued=date_issued,
-    issued_to=4,
-    invoice_id=invoiceTup[0]
+    issued_to=invoiceTup[4],
+    invoice_id=invoiceTup[0],
+    customer_id=invoiceTup[5]
   )
 
   return invoiceDC

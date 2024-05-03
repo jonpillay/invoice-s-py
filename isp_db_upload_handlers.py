@@ -125,12 +125,13 @@ def handleTransactionUpload(filename):
 
       invoiceNum = transaction[0][0]
 
-      invoice = genInvoiceDCobj(fetchInvoiceByNum(invoiceNum, cur))
+      invoice = fetchInvoiceByNum(invoiceNum, cur)
 
-      if invoice == None:
+      if len(invoice) == 0:
         noMatchFromNum.append(transaction)
         continue
       else:
+        invoice = genInvoiceDCobj(invoice)
         matches.append(transaction)
 
       date_paid = datetime.strptime(transaction[2], "%Y-%m-%d")
@@ -144,21 +145,19 @@ def handleTransactionUpload(filename):
         og_string=transaction[5]
       )
 
-      print(transaction)
-      print(invoice)
+      # print(transaction)
+      # print(invoice)
 
-      break
-
-      detailMatch = verifyTransactionDetails(transaction, invoice)
+      detailMatch = verifyTransactionDetails(transaction, invoice, cur)
 
       if type(detailMatch) == float:
         matchPaymentError.append([transaction, invoice])
       elif type(detailMatch) == str:
         matchNameError.append([transaction, invoice])
       elif detailMatch == True:
-        og_string = " ".join(transaction[5])
-        transactionTuple = (transaction[0][0], transaction[1], transaction[2], transaction[3], transaction[4], og_string, invoice[0][0])
-        transactionUploadList.append(transactionTuple)
+        # og_string = " ".join(transaction[5])
+        # transactionTuple = (transaction[0][0], transaction[1], transaction[2], transaction[3], transaction[4], og_string, invoice[0][0])
+        transactionUploadList.append(transaction)
       else:
         print("cannot match")
 
