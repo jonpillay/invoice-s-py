@@ -71,10 +71,15 @@ def handleTransactionUpload(filename):
   with open(filename) as csv_file:
     CSVreader = csv.reader(csv_file)
 
+    count = 0
+
     for entry in CSVreader:
+      
       try:
         datetime.strptime(entry[0].strip(), '%d %b %Y')
+        count += 1
       except:
+        print("Here")
         continue
 
       cleanedEntry = cleanTransactionRaw(entry)
@@ -161,15 +166,22 @@ def handleTransactionUpload(filename):
       else:
         print("cannot match")
 
+  print(count)
+
+  print(len(matchPaymentError))
+  print(len(matchNameError))
+  print(len(transactionUploadList))
+  print(len(multiRec))
+  print(len(incompRec))
+  print(len(noMatchFromNum))
+
+
+
+
+
+
     # Function for incomp teansactions (no invoice number) to match transactions with invoices via payment amount and then
     # matching and adding aliases (via user promting) to the database so they can be identified automatically on next upload.
-
-    """
-    IMPORTANT
-
-    Need to change flow
-    
-    """
 
     # for nameError in matchNameError[0:4]:
     #   verifyAlias(nameError[0], nameError[1][0])
