@@ -66,7 +66,7 @@ def openNewCustomerPrompt(root, customer, dbCustomers, newCustomerReturn, newAli
 
     promptWindow.wait_window(main_frame)
 
-def openTransactionAliasPrompt(root, invoice, transaction, aliasBool):
+def openTransactionAliasPrompt(root, invoice, transaction, aliasBool, rejectedBool):
     
     promptWindow = tk.Toplevel(root)
     promptWindow.title('New Customer?')
@@ -121,13 +121,21 @@ def openTransactionAliasPrompt(root, invoice, transaction, aliasBool):
     verify_alias_frame = tkb.Frame(decision_buttons_frame)
     verify_alias_frame.grid(row=0, column=0)
 
-    verify_alias_button = tkb.Button(verify_alias_frame, text="Verify", command=())
+    verify_alias_button = tkb.Button(verify_alias_frame, text="Verify", command=lambda: verifyAlias())
     verify_alias_button.grid(row=0, column=0)
 
     reject_alias_frame = tkb.Frame(decision_buttons_frame)
     reject_alias_frame.grid(row=0, column=1)
 
-    reject_alias_button = tkb.Button(reject_alias_frame, text="Reject", command=())
+    reject_alias_button = tkb.Button(reject_alias_frame, text="Reject", command=lambda: rejectAlias())
     reject_alias_button.grid(row=0, column=0)
+
+    def verifyAlias():
+       aliasBool.set(True)
+       promptWindow.destroy()
+
+    def rejectAlias():
+       rejectedBool.set(True)
+       promptWindow.destroy()
 
     promptWindow.wait_window(main_frame)

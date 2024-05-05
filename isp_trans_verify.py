@@ -54,15 +54,17 @@ def resolveNameMismatches(root, cur, conn, matchNameErrors):
         aliasBool = tk.BooleanVar()
         rejectedBool = tk.BooleanVar()
 
-        openTransactionAliasPrompt(root, invoice, transaction, aliasBool)
+        openTransactionAliasPrompt(root, invoice, transaction, aliasBool, rejectedBool)
 
         if aliasBool.get() == True:
 
-          for customer, aliases in alisesDict:
-            if invoice.issued_to in aliases:
+          for customer in alisesDict:
+            if invoice.issued_to in alisesDict[customer]:
               searchName = customer
             else:
               searchName = invoice.issued_to
+
+          print(searchName)
 
           for id, name in dbCustomers:
             if searchName == name:
@@ -73,11 +75,12 @@ def resolveNameMismatches(root, cur, conn, matchNameErrors):
           conn.commit()
 
           nameResolved.append(error)
+          print(nameResolved)
           matchNameErrors.pop(0)
           break
 
-        elif aliasBool == False and rejectedBool == True:
-          
+        elif aliasBool.get() == False and rejectedBool.get() == True:
+
           unMatchable.append(error)
           matchNameErrors.pop(0)
           break
