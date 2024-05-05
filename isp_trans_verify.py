@@ -19,3 +19,22 @@ def verifyAlias(transaction, invoice):
 
   frontendTransaction = Transaction(transaction[0][0], transaction[1], transaction[2], transaction[3], transaction[4], og_string, invoiceIDummy)
   frontendInvoice = Invoice(invoice[0], invoice[1], invoice[2], invoice[3], invoice[4])
+
+def resolveNameMismatches(matchNameErrors):
+
+  errorCount = len(matchNameErrors)
+
+  unMatchable = []
+  nameResolved = []
+
+  while len(nameResolved) + len(unMatchable) < errorCount:
+    for error in matchNameErrors:
+      pass
+      # Prompt user if the name mismatch is an error
+
+      # Prompt should set some TKVars
+
+      # If alias is found, should add alias to DB and rerun check on all elements in matchNameErrors list
+      # First building a new aliases dict with result and resolving for that.
+
+      # If the alias is not a match then the error pair should be put into unMatchable

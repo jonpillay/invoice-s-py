@@ -58,8 +58,6 @@ def prepInvoiceUploadList(invoiceList, customerAliasIDict):
             invoice.customer_id
           )
 
-          print(cashInvoiceTup)
-
           cashInvoiceUploadTups.append(cashInvoiceTup)
 
           break

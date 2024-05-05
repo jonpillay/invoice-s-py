@@ -10,6 +10,7 @@ from isp_db_helpers import getInvoiceNumsIDs, fetchInvoiceByNum, addTransactions
 from isp_data_handlers import constructCustomerAliasesDict, constructCustomerIDict, prepInvoiceUploadList, genInvoiceDCobj
 from isp_dataframes import Transaction
 
+
 def handleInvoiceUpload(root, filename):
 
   conn = sqlite3.connect(os.getenv("DB_NAME"))
@@ -174,6 +175,8 @@ def handleTransactionUpload(filename):
   print(len(multiRec))
   print(len(incompRec))
   print(len(noMatchFromNum))
+
+  
 
 
 
