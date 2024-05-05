@@ -1,8 +1,9 @@
 from isp_dataframes import Transaction, Invoice
-from isp_db_helpers import getCustomerAliases
+from isp_db_helpers import getCustomerAliases, getCustomerNamesIDs, addAliasToDB
 from isp_popup_window import openTransactionAliasPrompt
+from isp_data_handlers import constructCustomerAliasesDict
 
-from tkinter import *
+import tkinter as tk
 
 def verifyTransactionDetails(transaction, invoice, cur):
 
@@ -30,23 +31,61 @@ def resolveNameMismatches(root, cur, conn, matchNameErrors):
   unMatchable = []
   nameResolved = []
 
-  for error in matchNameErrors:
+  while len(nameResolved) + len(unMatchable) < errorCount:
 
-      aliasBool = BooleanVar()
+    dbCustomers = getCustomerNamesIDs(cur)
 
-      print(aliasBool.get())
+    alisesDict = constructCustomerAliasesDict(cur, dbCustomers)
+
+    for error in matchNameErrors:
       
       transaction = error[0]
       invoice = error[1]
 
-      openTransactionAliasPrompt(root, invoice, transaction, aliasBool)
+      if transaction.paid_by in alisesDict[invoice.issued_to]:
+        nameResolved.append(error)
+        matchNameErrors.pop(0)
 
-      print(aliasBool.get())
+        # Whilst I don't think technically needed, I added the break here to reset the loop after popping an element.
+        break
 
-  # while len(nameResolved) + len(unMatchable) < errorCount:
-  #   for error in matchNameErrors:
-  #     print(error)
-  #     break
+      else:
+
+        aliasBool = tk.BooleanVar()
+        rejectedBool = tk.BooleanVar()
+
+        openTransactionAliasPrompt(root, invoice, transaction, aliasBool)
+
+        if aliasBool.get() == True:
+
+          for customer, aliases in alisesDict:
+            if invoice.issued_to in aliases:
+              searchName = customer
+            else:
+              searchName = invoice.issued_to
+
+          for id, name in dbCustomers:
+            if searchName == name:
+              customerID = id
+
+          addAliasToDB(transaction.paid_by, customerID, cur)
+
+          conn.commit()
+
+          nameResolved.append(error)
+          matchNameErrors.pop(0)
+          break
+
+        elif aliasBool == False and rejectedBool == True:
+          
+          unMatchable.append(error)
+          matchNameErrors.pop(0)
+          break
+
+        else:
+          break
+
+
       # Prompt user if the name mismatch is an error
 
       # Prompt should set some TKVars
