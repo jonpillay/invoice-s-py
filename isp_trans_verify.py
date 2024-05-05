@@ -1,5 +1,8 @@
 from isp_dataframes import Transaction, Invoice
 from isp_db_helpers import getCustomerAliases
+from isp_popup_window import openTransactionAliasPrompt
+
+from tkinter import *
 
 def verifyTransactionDetails(transaction, invoice, cur):
 
@@ -20,16 +23,30 @@ def verifyAlias(transaction, invoice):
   frontendTransaction = Transaction(transaction[0][0], transaction[1], transaction[2], transaction[3], transaction[4], og_string, invoiceIDummy)
   frontendInvoice = Invoice(invoice[0], invoice[1], invoice[2], invoice[3], invoice[4])
 
-def resolveNameMismatches(matchNameErrors):
+def resolveNameMismatches(root, cur, conn, matchNameErrors):
 
   errorCount = len(matchNameErrors)
 
   unMatchable = []
   nameResolved = []
 
-  while len(nameResolved) + len(unMatchable) < errorCount:
-    for error in matchNameErrors:
-      pass
+  for error in matchNameErrors:
+
+      aliasBool = BooleanVar()
+
+      print(aliasBool.get())
+      
+      transaction = error[0]
+      invoice = error[1]
+
+      openTransactionAliasPrompt(root, invoice, transaction, aliasBool)
+
+      print(aliasBool.get())
+
+  # while len(nameResolved) + len(unMatchable) < errorCount:
+  #   for error in matchNameErrors:
+  #     print(error)
+  #     break
       # Prompt user if the name mismatch is an error
 
       # Prompt should set some TKVars

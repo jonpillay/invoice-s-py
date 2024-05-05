@@ -5,6 +5,6 @@ def handleInvoiceUploadClick(root):
   filename = getFilename()
   handleInvoiceUpload(root, filename)
 
-def handleTransactionUploadClick():
+def handleTransactionUploadClick(root):
   filename = getFilename()
-  handleTransactionUpload(filename)
+  handleTransactionUpload(root, filename)

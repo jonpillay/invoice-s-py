@@ -5,7 +5,7 @@ import re
 from datetime import datetime
 
 from isp_csv_helpers import cleanTransactionRaw, cleanInvoiceListRawGenCustomerList
-from isp_trans_verify import verifyTransactionDetails, verifyAlias
+from isp_trans_verify import verifyTransactionDetails, verifyAlias, resolveNameMismatches
 from isp_db_helpers import getInvoiceNumsIDs, fetchInvoiceByNum, addTransactionsToDB, addNewCustomersToDB, getDBInvoiceNums, getCustomerNamesIDs, resolveNewCustomersDB, addCashInvoicesAndTransactions, addInvoicesToDB
 from isp_data_handlers import constructCustomerAliasesDict, constructCustomerIDict, prepInvoiceUploadList, genInvoiceDCobj
 from isp_dataframes import Transaction
@@ -61,7 +61,7 @@ def handleInvoiceUpload(root, filename):
   cur.close()
   conn.close()
 
-def handleTransactionUpload(filename):
+def handleTransactionUpload(root, filename):
 
   conn = sqlite3.connect(os.getenv("DB_NAME"))
 
@@ -175,6 +175,8 @@ def handleTransactionUpload(filename):
   print(len(multiRec))
   print(len(incompRec))
   print(len(noMatchFromNum))
+
+  resolveNameMismatches(root, cur, conn, matchNameError)
 
   
 
