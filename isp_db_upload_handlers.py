@@ -5,9 +5,11 @@ import re
 from datetime import datetime
 
 from isp_csv_helpers import cleanTransactionRaw, cleanInvoiceListRawGenCustomerList
-from isp_trans_verify import verifyTransactionDetails, verifyAlias, resolveNameMismatches
+from isp_trans_verify import verifyTransactionDetails, verifyAlias, resolveNameMismatches, verifyTransactionAmount
 from isp_db_helpers import getInvoiceNumsIDs, fetchInvoiceByNum, addTransactionsToDB, addNewCustomersToDB, getDBInvoiceNums, getCustomerNamesIDs, resolveNewCustomersDB, addCashInvoicesAndTransactions, addInvoicesToDB
 from isp_data_handlers import constructCustomerAliasesDict, constructCustomerIDict, prepInvoiceUploadList, genInvoiceDCobj
+from isp_resolvers import resolveNameMismatches
+
 from isp_dataframes import Transaction
 
 
@@ -62,8 +64,6 @@ def handleInvoiceUpload(root, filename):
   conn.close()
 
 def handleTransactionUpload(root, filename):
-
-  conn = sqlite3.connect(os.getenv("DB_NAME"))
 
   compRec = []
   incompRec = []
@@ -169,17 +169,35 @@ def handleTransactionUpload(root, filename):
 
   print(count)
 
-  print(len(matchPaymentError))
-  print(len(matchNameError))
-  print(len(transactionUploadList))
-  print(len(multiRec))
-  print(len(incompRec))
-  print(len(noMatchFromNum))
+  # print(len(matchPaymentError))
+  # print(len(matchNameError))
+  # print(len(transactionUploadList))
+  # print(len(multiRec))
+  # print(len(incompRec))
+  # print(len(noMatchFromNum))
 
-  resolveNameMismatches(root, cur, conn, matchNameError)
+  nameResolved, nameUnresolved = resolveNameMismatches(root, cur, con, matchNameError)
 
+
+  for paymentPair in nameResolved:
+    
+    transaction = paymentPair[0]
+    invoice = paymentPair[1]
+
+    paymentMatch = verifyTransactionAmount(transaction, invoice)
+
+    if paymentMatch == True:
+      transactionUploadList.append(transaction)
+    else:
+      print("here now")
+      matchPaymentError.append(paymentPair)
+
+  print(matchPaymentError)
+  print(len(nameResolved))
+
+  # pass payment errors into resolvePaymentErrors. If user resolves then add InvoiceID to the transaction and return in list
   
-
+  # If the payment does not get passed, then do not add the invoiceID and put in error list for reporting at the end. 
 
 
 
@@ -219,4 +237,4 @@ def handleTransactionUpload(root, filename):
     # print(len(multiRec))
   
   cur.close()
-  conn.close()
+  con.close()

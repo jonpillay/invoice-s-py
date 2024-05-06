@@ -106,7 +106,7 @@ def addNewCustomersToDB(customerList, cur):
 
 def addAliasToDB(aliasName, customerID, cur):
 
-  aliasEntry = (aliasName, customerID)
+  aliasEntry = (aliasName.strip(), customerID)
   
   sql = "INSERT OR IGNORE INTO ALIASES (customer_alias, customer_id) VALUES (?,?)"
 

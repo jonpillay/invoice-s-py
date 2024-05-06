@@ -139,3 +139,12 @@ def openTransactionAliasPrompt(root, invoice, transaction, aliasBool, rejectedBo
        promptWindow.destroy()
 
     promptWindow.wait_window(main_frame)
+
+def openTransactionPaymentErrorPrompt():
+   
+   # Should return a list of verified Transactions ready to be uploaded onto the DB.
+   # Also return of unverified Transactions and Invoices to be reported on.
+   # Invoices may need extra errors bool, so they can have a Transaction assotiated, but also have an error flag.
+   # Means they can also be errorless even if the payment amount is still an error (through user veryfication.)
+
+   pass
