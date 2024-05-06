@@ -82,6 +82,7 @@ def createInvoicesTable(cur):
       amount REAL,
       date_issued DATE,
       issued_to VARCHAR(255),
+      error_flagged INTEGER,
       customer_id INTEGER,
       FOREIGN KEY(customer_id) REFERENCES CUSTOMERS(id)      
     )
