@@ -140,7 +140,7 @@ def openTransactionAliasPrompt(root, invoice, transaction, aliasBool, rejectedBo
 
     promptWindow.wait_window(main_frame)
 
-def openTransactionPaymentErrorPrompt(root, invoice, transaction):
+def openTransactionPaymentErrorPrompt(root, invoice, transaction, checkedBool, resolveBool, resolveString, noteString):
    
    # Should return a list of verified Transactions ready to be uploaded onto the DB.
    # Also return of unverified Transactions and Invoices to be reported on.
@@ -240,19 +240,45 @@ def openTransactionPaymentErrorPrompt(root, invoice, transaction):
     verify_cash_frame = tkb.Frame(decision_buttons_frame)
     verify_cash_frame.grid(row=0, column=0)
 
-    verify_cash_button = tkb.Button(verify_cash_frame, text="Verify With Cash")
+    verify_cash_button = tkb.Button(verify_cash_frame, text="Verify With Cash", command=lambda: verifyWithCASH())
     verify_cash_button.grid(row=0, column=0)
 
     verify_BACS_frame = tkb.Frame(decision_buttons_frame)
     verify_BACS_frame.grid(row=0, column=1)
 
-    verify_BACS_button = tkb.Button(verify_BACS_frame, text="Verify With Bacs")
+    verify_BACS_button = tkb.Button(verify_BACS_frame, text="Verify With Bacs", command=lambda: verifyWithBACS())
     verify_BACS_button.grid(row=0, column=0)
 
     raise_error_frame = tkb.Frame(decision_buttons_frame)
     raise_error_frame.grid(row=0, column=2)
 
-    raise_error_button = tkb.Button(raise_error_frame, text="Raise Error")
+    raise_error_button = tkb.Button(raise_error_frame, text="Raise Error", command=lambda: flagError())
     raise_error_button.grid(row=0, column=0)
+
+    def verifyWithBACS():
+       checkedBool.set(True)
+       resolveBool.set(True)
+
+       resolveString.set("BACS")
+       noteString.set(add_note_entry.get('1.0', 'end'))
+
+       promptWindow.destroy()
+
+    def verifyWithCASH():
+       checkedBool.set(True)
+       resolveBool.set(True)
+
+       resolveString.set("CASH")
+       noteString.set(add_note_entry.get('1.0', 'end'))
+
+       promptWindow.destroy()
+
+    def flagError():
+       checkedBool.set(True)
+       resolveBool.set(False)
+
+       noteString.set(add_note_entry.get('1.0', 'end'))
+
+       promptWindow.destroy()
 
     promptWindow.wait_window(main_frame)

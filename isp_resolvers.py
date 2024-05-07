@@ -108,7 +108,9 @@ def resolvePaymentErrors(root, paymentErrors):
       resolveString = tk.StringVar()
       noteString = tk.StringVar()
 
-      openTransactionPaymentErrorPrompt(root, invoice, transaction)
+      openTransactionPaymentErrorPrompt(root, invoice, transaction, checkedBool, resolveBool, resolveString, noteString)
+
+      print(noteString.get())
 
       if checkedBool.get() == False:
         break
@@ -133,6 +135,8 @@ def resolvePaymentErrors(root, paymentErrors):
         break
       
       elif checkedBool.get() == True and resolveBool.get() == False:
+
+        print("check but error")
 
         errors.append(error)
 

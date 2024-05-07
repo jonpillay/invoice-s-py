@@ -22,7 +22,7 @@ class Invoice:
   amount: float
   date_issued: datetime.date
   issued_to: str
-  error_flagged: bool = False
+  error_flagged: int = None
   invoice_id: int = None
   customer_id: int = None
 

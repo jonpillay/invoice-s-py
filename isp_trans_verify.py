@@ -2,7 +2,7 @@ from isp_dataframes import Transaction, Invoice
 from isp_db_helpers import getCustomerAliases
 
 import tkinter as tk
-import math
+
 
 def verifyTransactionDetails(transaction, invoice, cur):
 
