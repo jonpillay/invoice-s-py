@@ -254,3 +254,5 @@ def openTransactionPaymentErrorPrompt(root, invoice, transaction):
 
     raise_error_button = tkb.Button(raise_error_frame, text="Raise Error")
     raise_error_button.grid(row=0, column=0)
+
+    promptWindow.wait_window(main_frame)

@@ -192,6 +192,9 @@ def handleTransactionUpload(root, filename):
       print("here now")
       matchPaymentError.append(paymentPair)
 
+  for invoice in matchPaymentError:
+    print(invoice[1])
+
   print(matchPaymentError)
   print(len(nameResolved))
 

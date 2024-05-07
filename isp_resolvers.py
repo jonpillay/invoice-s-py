@@ -4,6 +4,7 @@ from isp_popup_window import openTransactionAliasPrompt, openTransactionPaymentE
 from isp_data_handlers import constructCustomerAliasesDict
 
 import tkinter as tk
+import datetime
 
 def resolveNameMismatches(root, cur, conn, matchNameErrors):
 
@@ -85,15 +86,51 @@ def resolveNameMismatches(root, cur, conn, matchNameErrors):
 
 def resolvePaymentErrors(paymentErrors):
 
-  nonErrors = []
+  dummyTransactionUploadTups = []
+
   errors = []
 
-  for error in paymentErrors:
+  while len(paymentErrors) > 0:
 
-    transaction = error[0]
-    invoice = error[1]
+    for error in paymentErrors:
 
-    resolveBool = tk.BooleanVar()
-    checkedBool = tk.BooleanVar()
+      transaction = error[0]
+      invoice = error[1]
 
-    openTransactionPaymentErrorPrompt()
+      checkedBool = tk.BooleanVar()
+      resolveBool = tk.BooleanVar()
+
+      resolveString = tk.StringVar()
+      noteString = tk.StringVar()
+
+      openTransactionPaymentErrorPrompt()
+
+      if checkedBool.get() == False:
+        break
+
+      elif checkedBool.get() == True and resolveBool.get() == True:
+
+        if resolveString.get() == "CASH":
+          methodStr = "DUMMY (CASH)"
+        elif resolveString.get() == "BACS":
+          methodStr = "DUMMY (BACS)"
+        
+        correctionAmount = 0 - (invoice.amount - transaction.amount)
+        
+        dummyTransaction = Transaction(invoice.invoice_num, correctionAmount, datetime.date.now(), transaction.paid_by, methodStr, noteString.get(), invoice.invoice_id, invoice.customer_id)
+
+        uploadTuple = (error, dummyTransaction)
+
+        dummyTransactionUploadTups.append(uploadTuple)
+
+        paymentErrors.pop(0)
+
+        break
+      
+      elif checkedBool.get() == True and resolveBool.get() == False:
+
+        errors.append(error)
+
+        paymentErrors.pop(0)
+
+        break
