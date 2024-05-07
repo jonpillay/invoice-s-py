@@ -5,10 +5,10 @@ import re
 from datetime import datetime
 
 from isp_csv_helpers import cleanTransactionRaw, cleanInvoiceListRawGenCustomerList
-from isp_trans_verify import verifyTransactionDetails, verifyAlias, resolveNameMismatches, verifyTransactionAmount
+from isp_trans_verify import verifyTransactionDetails, verifyAlias, verifyTransactionAmount
 from isp_db_helpers import getInvoiceNumsIDs, fetchInvoiceByNum, addTransactionsToDB, addNewCustomersToDB, getDBInvoiceNums, getCustomerNamesIDs, resolveNewCustomersDB, addCashInvoicesAndTransactions, addInvoicesToDB
 from isp_data_handlers import constructCustomerAliasesDict, constructCustomerIDict, prepInvoiceUploadList, genInvoiceDCobj
-from isp_resolvers import resolveNameMismatches
+from isp_resolvers import resolveNameMismatches, resolvePaymentErrors
 
 from isp_dataframes import Transaction
 
@@ -189,14 +189,16 @@ def handleTransactionUpload(root, filename):
     if paymentMatch == True:
       transactionUploadList.append(transaction)
     else:
-      print("here now")
-      matchPaymentError.append(paymentPair)
+      print(invoice.amount)
+      print("Trans")
+      print(transaction.amount)
 
-  for invoice in matchPaymentError:
-    print(invoice[1])
+      matchPaymentError.append(paymentPair)
 
   print(matchPaymentError)
   print(len(nameResolved))
+
+  resolvePaymentErrors(root, matchPaymentError)
 
   # pass payment errors into resolvePaymentErrors. If user resolves then add InvoiceID to the transaction and return in list
   

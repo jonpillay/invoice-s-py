@@ -84,7 +84,7 @@ def resolveNameMismatches(root, cur, conn, matchNameErrors):
 
   return nameResolved, unMatchable
 
-def resolvePaymentErrors(paymentErrors):
+def resolvePaymentErrors(root, paymentErrors):
 
   dummyTransactionUploadTups = []
 
@@ -97,13 +97,18 @@ def resolvePaymentErrors(paymentErrors):
       transaction = error[0]
       invoice = error[1]
 
+      print(len(str(transaction.amount)))
+      print(len(str(invoice.amount)))
+
+      print(len(paymentErrors))
+
       checkedBool = tk.BooleanVar()
       resolveBool = tk.BooleanVar()
 
       resolveString = tk.StringVar()
       noteString = tk.StringVar()
 
-      openTransactionPaymentErrorPrompt()
+      openTransactionPaymentErrorPrompt(root, invoice, transaction)
 
       if checkedBool.get() == False:
         break

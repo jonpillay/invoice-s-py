@@ -214,7 +214,7 @@ def openTransactionPaymentErrorPrompt(root, invoice, transaction):
     payment_details_invoice_label = tkb.Label(payment_details_frame, text=f"{invoice.amount}")
     payment_details_invoice_label.grid(row=0, column=0)
 
-    payment_details_transaction_label = tkb.Label(payment_details_frame, text=f"{invoice.amount}")
+    payment_details_transaction_label = tkb.Label(payment_details_frame, text=f"{transaction.amount}")
     payment_details_transaction_label.grid(row=0, column=2)
 
     # add note

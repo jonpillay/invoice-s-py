@@ -2,6 +2,7 @@ from isp_dataframes import Transaction, Invoice
 from isp_db_helpers import getCustomerAliases
 
 import tkinter as tk
+import math
 
 def verifyTransactionDetails(transaction, invoice, cur):
 
@@ -15,11 +16,16 @@ def verifyTransactionDetails(transaction, invoice, cur):
     return True
   
 def verifyTransactionAmount(transaction, invoice):
-  if invoice.amount != transaction.amount:
-    return False
-  else:
-    return True
+
+  tol = 1e-10
+  dif  = abs(invoice.amount - transaction.amount)
   
+  if dif < tol:
+    return True
+  else:
+    print(invoice.amount - transaction.amount)
+    return False
+
 def verifyAlias(transaction, invoice):
 
   invoiceIDummy = None
