@@ -103,7 +103,9 @@ def createTransactionsTable(cur):
       payment_method VARCHAR(255),
       og_string VARCHAR(255),
       invoice_id INTEGER,
-      FOREIGN KEY(invoice_id) REFERENCES INVOICES(id)
+      parent_trans INTEGER,
+      FOREIGN KEY(invoice_id) REFERENCES INVOICES(id),
+      FOREIGN KEY(parent_trans) REFERENCES TRANSACTIONS(id)
     )
     --end-sql
     """)

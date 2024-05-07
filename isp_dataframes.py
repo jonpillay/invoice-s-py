@@ -15,6 +15,7 @@ class Transaction:
   og_string: str
   invoice_id: int = None
   customer_id: int = None
+  parent_trans: int = None
 
 @dataclass
 class Invoice:
