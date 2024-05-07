@@ -19,13 +19,13 @@ class Transaction:
 
 @dataclass
 class Invoice:
-  invoice_id: int = None
   invoice_num: int
   amount: float
   date_issued: datetime.date
   issued_to: str
+  error_notes: str = None
   error_flagged: int = None
-  error_notes: str
+  invoice_id: int = None
   customer_id: int = None
 
 @dataclass

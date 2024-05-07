@@ -86,11 +86,11 @@ def genInvoiceDCobj(invoice):
   date_issued = datetime.strptime(invoiceTup[3], "%Y-%m-%d")
 
   invoiceDC = Invoice(
+    invoice_id=invoiceTup[0],
     invoice_num=invoiceTup[1],
     amount=invoiceTup[2],
     date_issued=date_issued,
     issued_to=invoiceTup[4],
-    invoice_id=invoiceTup[0],
     customer_id=invoiceTup[5]
   )
 

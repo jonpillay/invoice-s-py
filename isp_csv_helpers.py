@@ -50,7 +50,12 @@ def cleanInvoiceListRawGenCustomerList(entries):
     if customerName not in uniqueCustomers and not re.search("CASH", customerName):
       uniqueCustomers.append(customerName)
 
-    formattedInvoice = Invoice(int(invoice[0]), float(invoice[4]), formattedDate, customerName)
+    formattedInvoice = Invoice(
+      invoice_num = int(invoice[0]),
+      amount = float(invoice[4]),
+      date_issued = formattedDate,
+      issued_to = customerName
+    )
 
     cleanedInvoices.append(formattedInvoice)
 

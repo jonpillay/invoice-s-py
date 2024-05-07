@@ -195,10 +195,8 @@ def handleTransactionUpload(root, filename):
 
       matchPaymentError.append(paymentPair)
 
-  print(matchPaymentError)
-  print(len(nameResolved))
 
-  resolvePaymentErrors(root, matchPaymentError)
+  dummyTransactionUploadTups, paymentErrors = resolvePaymentErrors(root, matchPaymentError)
 
   # pass payment errors into resolvePaymentErrors. If user resolves then add InvoiceID to the transaction and return in list
   
