@@ -8,7 +8,7 @@ from isp_csv_helpers import cleanTransactionRaw, cleanInvoiceListRawGenCustomerL
 from isp_trans_verify import verifyTransactionDetails, verifyAlias, verifyTransactionAmount
 from isp_db_helpers import getInvoiceNumsIDs, fetchInvoiceByNum, addTransactionsToDB, addNewCustomersToDB, getDBInvoiceNums, getCustomerNamesIDs, resolveNewCustomersDB, addCashInvoicesAndTransactions, addInvoicesToDB
 from isp_data_handlers import constructCustomerAliasesDict, constructCustomerIDict, prepInvoiceUploadList, genInvoiceDCobj
-from isp_resolvers import resolveNameMismatches, resolvePaymentErrors
+from isp_resolvers import resolveNameMismatches, resolvePaymentErrors, resolveMultiInvoiceTransactions
 
 from isp_dataframes import Transaction
 
@@ -189,18 +189,19 @@ def handleTransactionUpload(root, filename):
     if paymentMatch == True:
       transactionUploadList.append(transaction)
     else:
-      print(invoice.amount)
-      print("Trans")
-      print(transaction.amount)
-
       matchPaymentError.append(paymentPair)
 
 
-  dummyTransactionUploadTups, paymentErrors = resolvePaymentErrors(root, matchPaymentError)
 
-  # pass payment errors into resolvePaymentErrors. If user resolves then add InvoiceID to the transaction and return in list
-  
-  # If the payment does not get passed, then do not add the invoiceID and put in error list for reporting at the end. 
+  # for error in multiRec:
+  #   print(error)
+
+  # for incomplete in incompRec:
+  #   print(incomplete)
+ 
+  # dummyTransactionUploadTups, paymentErrors = resolvePaymentErrors(root, matchPaymentError)
+
+  resolveMultiInvoiceTransactions(root, cur, con, multiRec)
 
 
 

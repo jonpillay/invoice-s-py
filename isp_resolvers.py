@@ -1,6 +1,6 @@
 from isp_dataframes import Transaction, Invoice
-from isp_db_helpers import getCustomerAliases, getCustomerNamesIDs, addAliasToDB
-from isp_popup_window import openTransactionAliasPrompt, openTransactionPaymentErrorPrompt
+from isp_db_helpers import getCustomerAliases, getCustomerNamesIDs, addAliasToDB, addNewCustomerToDB, findCustomerIDInTup
+from isp_popup_window import openTransactionAliasPrompt, openTransactionPaymentErrorPrompt, openNewCustomerPrompt
 from isp_data_handlers import constructCustomerAliasesDict
 
 import tkinter as tk
@@ -86,6 +86,64 @@ def resolveNameMismatches(root, cur, conn, matchNameErrors):
 
 
 
+def resolveNamesIntoDB(root, cur, con, namesList):
+
+  while len(namesList) > 0:
+
+    dbCustomers = getCustomerNamesIDs(cur)
+    alisesDict = constructCustomerAliasesDict(cur, dbCustomers)
+
+    for name in namesList:
+      for customer in alisesDict:
+        if name.strip().upper() == customer.strip().upper():
+          namesList.pop(0)
+          break
+        elif name.strip().upper() in alisesDict[customer]:
+          namesList.pop(0)
+          break
+        else:
+          newCustomerReturn = tk.StringVar()
+
+          newAliasReturn = tk.StringVar()
+
+          openNewCustomerPrompt(root, customer, dbCustomers, newCustomerReturn, newAliasReturn)
+
+          customerName = newCustomerReturn.get()
+
+          aliasName = newAliasReturn.get()
+
+
+          if customerName != "" and customerName == customer:
+
+            print("It took us here")
+
+            print(customerName)
+
+            addNewCustomerToDB(customer, cur)
+
+            print(cur.lastrowid)
+
+            con.commit()
+
+          elif aliasName != "":
+
+            print(aliasName + "this is from the alias")
+
+            customerID = findCustomerIDInTup(aliasName, dbCustomers)
+
+            addAliasToDB(customer, customerID, cur)
+
+            con.commit()
+
+          elif customerName != "" and customerName != customer:
+            
+            addNewCustomerToDB(customerName, cur)
+
+            customerID = cur.lastrowid
+
+            con.commit()
+
+
 def resolvePaymentErrors(root, paymentErrors):
 
   dummyTransactionUploadTups = []
@@ -143,3 +201,8 @@ def resolvePaymentErrors(root, paymentErrors):
         break
 
   return dummyTransactionUploadTups, errors
+
+def resolveMultiInvoiceTransactions(root, cur, con, multiRecs):
+  
+  namesList = list(set([rec[3].strip().upper() for rec in multiRecs]))
+  print(namesList)
