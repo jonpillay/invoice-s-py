@@ -2,6 +2,7 @@ from isp_dataframes import Transaction, Invoice
 from isp_db_helpers import getCustomerAliases, getCustomerNamesIDs, addAliasToDB, addNewCustomerToDB, findCustomerIDInTup
 from isp_popup_window import openTransactionAliasPrompt, openTransactionPaymentErrorPrompt, openNewCustomerPrompt
 from isp_data_handlers import constructCustomerAliasesDict
+from isp_data_comparers import compareCustomerToAliasesDict
 
 import tkinter as tk
 import datetime
@@ -81,77 +82,89 @@ def resolveNameMismatches(root, cur, conn, matchNameErrors):
 
 def resolveNamesIntoDB(root, cur, con, namesList):
 
-  while len(namesList) > 0:
+  nameCount = len(namesList)
 
-    dbCustomers = getCustomerNamesIDs(cur)
-    alisesDict = constructCustomerAliasesDict(cur, dbCustomers)
+  resolvedCount = 0
+
+  while nameCount > resolvedCount:
 
     for name in namesList:
-      for customer in alisesDict:
-        if name.strip().upper() == customer.strip().upper():
+
+      dbCustomers = getCustomerNamesIDs(cur)
+      alisesDict = constructCustomerAliasesDict(cur, dbCustomers)
+
+      nameCheck = compareCustomerToAliasesDict(name, alisesDict)
+
+      if nameCheck == True:
+
+        resolvedCount += 1
+
+        continue
+
+      else:
+        newCustomerReturn = tk.StringVar()
+
+        newAliasReturn = tk.StringVar()
+
+        openNewCustomerPrompt(root, name, dbCustomers, newCustomerReturn, newAliasReturn)
+
+        customerName = newCustomerReturn.get()
+
+        aliasName = newAliasReturn.get()
+
+        if customerName != "" and customerName.strip().upper() == name.strip().upper():
+
+          print("It took us here")
+
+          addNewCustomerToDB(name, cur)
+
+          print(cur.lastrowid)
+
+          con.commit()
+
           namesList.pop(0)
+
+          resolvedCount += 1
+
           break
-        elif name.strip().upper() in [alias.strip().upper() for alias in alisesDict[customer]]:
+
+        elif aliasName != "":
+
+          customerID = findCustomerIDInTup(aliasName, dbCustomers)
+
+          addAliasToDB(name, customerID, cur)
+
+          print(cur.lastrowid)
+
+          con.commit()
+
           namesList.pop(0)
+
+          resolvedCount += 1
+
           break
-        else:
-          newCustomerReturn = tk.StringVar()
 
-          newAliasReturn = tk.StringVar()
+        elif customerName != "" and customerName != name:
+          
+          addNewCustomerToDB(customerName, cur)
 
-          openNewCustomerPrompt(root, name, dbCustomers, newCustomerReturn, newAliasReturn)
+          con.commit()
 
-          customerName = newCustomerReturn.get()
+          customerID = cur.lastrowid
 
-          aliasName = newAliasReturn.get()
+          addAliasToDB(name, customerID, cur)
 
-          if customerName != "" and customerName.strip().upper() == name.strip().upper():
+          print(cur.lastrowid)
 
-            print("It took us here")
+          con.commit()
 
-            addNewCustomerToDB(name, cur)
+          namesList.pop(0)
 
-            print(cur.lastrowid)
+          resolvedCount += 1
 
-            con.commit()
+          break
 
-            namesList.pop(0)
-
-            break
-
-          elif aliasName != "":
-
-            customerID = findCustomerIDInTup(aliasName, dbCustomers)
-
-            addAliasToDB(name, customerID, cur)
-
-            print(cur.lastrowid)
-
-            con.commit()
-
-            namesList.pop(0)
-
-            break
-
-          elif customerName != "" and customerName != customer:
-            
-            addNewCustomerToDB(customerName, cur)
-
-            con.commit()
-
-            customerID = cur.lastrowid
-
-            addAliasToDB(name, customerID, cur)
-
-            print(cur.lastrowid)
-
-            con.commit()
-
-            namesList.pop(0)
-
-            break
-
-            # This also needs to add the original invoice name as a customer alias for the newly created customer entry.
+          # This also needs to add the original invoice name as a customer alias for the newly created customer entry.
 
 
 def resolvePaymentErrors(root, paymentErrors):
