@@ -1,8 +1,8 @@
 from isp_dataframes import Transaction, Invoice
-from isp_db_helpers import getCustomerAliases, getCustomerNamesIDs, addAliasToDB, addNewCustomerToDB, findCustomerIDInTup
+from isp_db_helpers import getCustomerID, fetchRangeInvoicesByCustomer, getCustomerNamesIDs, addAliasToDB, addNewCustomerToDB, findCustomerIDInTup
 from isp_popup_window import openTransactionAliasPrompt, openTransactionPaymentErrorPrompt, openNewCustomerPrompt
 from isp_data_handlers import constructCustomerAliasesDict
-from isp_data_comparers import compareCustomerToAliasesDict
+from isp_data_comparers import compareCustomerToAliasesDict, getCustomerDBName
 
 import tkinter as tk
 import datetime
@@ -231,7 +231,27 @@ def resolveMultiInvoiceTransactions(root, cur, con, multiRecs):
   
   namesList = list(set([rec[3].strip().upper() for rec in multiRecs]))
 
-  print(namesList)
-
   resolveNamesIntoDB(root, cur, con, namesList)
 
+  dbCustomers = getCustomerNamesIDs(cur)
+  aliasesDict = constructCustomerAliasesDict(cur, dbCustomers)
+
+  for rec in multiRecs:
+    print(rec)
+    
+    searchCustomer = getCustomerDBName(aliasesDict, rec[3])
+
+    customerID = getCustomerID(cur, searchCustomer)
+
+    print(customerID)
+    
+    invoices = fetchRangeInvoicesByCustomer(rec[0][0], rec[0][1], customerID, cur)
+
+    total = 0
+
+    for invoice in invoices:
+      total += invoice[1]
+
+    print(total)
+
+    break

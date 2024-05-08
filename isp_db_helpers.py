@@ -28,6 +28,25 @@ def fetchInvoiceByNum(invoiceNumber, cur):
 
   return invoice
 
+def fetchRangeInvoices(low, high, cur):
+
+  sql = "SELECT invoice_num, amount, date_issued, issued_to, customer_id FROM invoices WHERE invoice_num BETWEEN ? and ? ORDER BY invoice_num"
+
+  cur.execute(sql, (low, high))
+
+  invoices = cur.fetchall()
+
+  return invoices
+
+def fetchRangeInvoicesByCustomer(low, high, customerID, cur):
+
+  sql = "SELECT invoice_num, amount, date_issued, issued_to, customer_id FROM invoices WHERE invoice_num BETWEEN ? and ? and customer_id=? ORDER BY invoice_num"
+
+  cur.execute(sql, (low, high, customerID))
+
+  invoices = cur.fetchall()
+
+  return invoices
 
 def addInvoicesToDB(invoicesTuples, cur):
 
@@ -139,8 +158,6 @@ def getCustomerID(cur, name):
   return customerID[0][0]
 
 
-
-
 def getCustomerNamesIDs(cur):
 
   fetctInvNumSQL = "SELECT id, customer_name from CUSTOMERS"
@@ -150,6 +167,7 @@ def getCustomerNamesIDs(cur):
   customerNames = cur.fetchall()
 
   return [(customer[0], customer[1]) for customer in customerNames]
+
 
 
 
