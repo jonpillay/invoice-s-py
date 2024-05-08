@@ -91,7 +91,7 @@ def resolveNamesIntoDB(root, cur, con, namesList):
         if name.strip().upper() == customer.strip().upper():
           namesList.pop(0)
           break
-        elif name.strip().upper() in alisesDict[customer]:
+        elif name.strip().upper() in [alias.strip().upper() for alias in alisesDict[customer]]:
           namesList.pop(0)
           break
         else:
@@ -105,35 +105,51 @@ def resolveNamesIntoDB(root, cur, con, namesList):
 
           aliasName = newAliasReturn.get()
 
-          if customerName != "" and customerName == customer:
+          if customerName != "" and customerName.strip().upper() == name.strip().upper():
 
             print("It took us here")
 
-            addNewCustomerToDB(customer, cur)
+            addNewCustomerToDB(name, cur)
 
             print(cur.lastrowid)
 
             con.commit()
+
+            namesList.pop(0)
+
+            break
 
           elif aliasName != "":
 
             customerID = findCustomerIDInTup(aliasName, dbCustomers)
 
-            addAliasToDB(customer, customerID, cur)
+            addAliasToDB(name, customerID, cur)
 
             print(cur.lastrowid)
 
             con.commit()
+
+            namesList.pop(0)
+
+            break
 
           elif customerName != "" and customerName != customer:
             
             addNewCustomerToDB(customerName, cur)
 
+            con.commit()
+
             customerID = cur.lastrowid
+
+            addAliasToDB(name, customerID, cur)
 
             print(cur.lastrowid)
 
             con.commit()
+
+            namesList.pop(0)
+
+            break
 
             # This also needs to add the original invoice name as a customer alias for the newly created customer entry.
 

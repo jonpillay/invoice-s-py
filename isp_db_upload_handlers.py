@@ -189,7 +189,9 @@ def handleTransactionUpload(root, filename):
     else:
       matchPaymentError.append(paymentPair)
 
+  # dummyTransactionUploadTups, paymentErrors = resolvePaymentErrors(root, matchPaymentError)
 
+  con.commit()
 
   # for error in multiRec:
   #   print(error)
@@ -197,7 +199,7 @@ def handleTransactionUpload(root, filename):
   # for incomplete in incompRec:
   #   print(incomplete)
  
-  # dummyTransactionUploadTups, paymentErrors = resolvePaymentErrors(root, matchPaymentError)
+
 
   resolveMultiInvoiceTransactions(root, cur, con, multiRec)
 
