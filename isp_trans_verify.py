@@ -23,7 +23,6 @@ def verifyTransactionAmount(transaction, invoice):
   if dif < tol:
     return True
   else:
-    print(invoice.amount - transaction.amount)
     return False
 
 def verifyAlias(transaction, invoice):

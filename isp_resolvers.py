@@ -53,8 +53,6 @@ def resolveNameMismatches(root, cur, conn, matchNameErrors):
             else:
               searchName = invoice.issued_to
 
-          print(searchName)
-
           for id, name in dbCustomers:
             if searchName == name:
               customerID = id
@@ -76,14 +74,9 @@ def resolveNameMismatches(root, cur, conn, matchNameErrors):
         else:
           break
 
-  print(errorCount)
-  print(len(nameResolved))
-  print(len(unMatchable))
-
   # print(matchNameErrors)
 
   return nameResolved, unMatchable
-
 
 
 def resolveNamesIntoDB(root, cur, con, namesList):
@@ -106,18 +99,15 @@ def resolveNamesIntoDB(root, cur, con, namesList):
 
           newAliasReturn = tk.StringVar()
 
-          openNewCustomerPrompt(root, customer, dbCustomers, newCustomerReturn, newAliasReturn)
+          openNewCustomerPrompt(root, name, dbCustomers, newCustomerReturn, newAliasReturn)
 
           customerName = newCustomerReturn.get()
 
           aliasName = newAliasReturn.get()
 
-
           if customerName != "" and customerName == customer:
 
             print("It took us here")
-
-            print(customerName)
 
             addNewCustomerToDB(customer, cur)
 
@@ -127,11 +117,11 @@ def resolveNamesIntoDB(root, cur, con, namesList):
 
           elif aliasName != "":
 
-            print(aliasName + "this is from the alias")
-
             customerID = findCustomerIDInTup(aliasName, dbCustomers)
 
             addAliasToDB(customer, customerID, cur)
+
+            print(cur.lastrowid)
 
             con.commit()
 
@@ -141,7 +131,11 @@ def resolveNamesIntoDB(root, cur, con, namesList):
 
             customerID = cur.lastrowid
 
+            print(cur.lastrowid)
+
             con.commit()
+
+            # This also needs to add the original invoice name as a customer alias for the newly created customer entry.
 
 
 def resolvePaymentErrors(root, paymentErrors):
@@ -202,7 +196,13 @@ def resolvePaymentErrors(root, paymentErrors):
 
   return dummyTransactionUploadTups, errors
 
+
+
 def resolveMultiInvoiceTransactions(root, cur, con, multiRecs):
   
   namesList = list(set([rec[3].strip().upper() for rec in multiRecs]))
+
   print(namesList)
+
+  resolveNamesIntoDB(root, cur, con, namesList)
+

@@ -167,8 +167,6 @@ def handleTransactionUpload(root, filename):
       else:
         print("cannot match")
 
-  print(count)
-
   # print(len(matchPaymentError))
   # print(len(matchNameError))
   # print(len(transactionUploadList))
