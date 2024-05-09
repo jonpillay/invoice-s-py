@@ -114,11 +114,7 @@ def resolveNamesIntoDB(root, cur, con, namesList):
 
         if customerName != "" and customerName.strip().upper() == name.strip().upper():
 
-          print("It took us here")
-
           addNewCustomerToDB(name, cur)
-
-          print(cur.lastrowid)
 
           con.commit()
 
@@ -242,16 +238,13 @@ def resolveMultiInvoiceTransactions(root, cur, con, multiRecs):
     searchCustomer = getCustomerDBName(aliasesDict, rec[3])
 
     customerID = getCustomerID(cur, searchCustomer)
-
-    print(customerID)
     
     invoices = fetchRangeInvoicesByCustomer(rec[0][0], rec[0][1], customerID, cur)
 
     total = 0
 
     for invoice in invoices:
+      # print(invoice[1])
       total += invoice[1]
 
     print(total)
-
-    break
