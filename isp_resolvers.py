@@ -1,8 +1,9 @@
 from isp_dataframes import Transaction, Invoice
 from isp_db_helpers import getCustomerID, fetchRangeInvoicesByCustomer, getCustomerNamesIDs, addAliasToDB, addNewCustomerToDB, findCustomerIDInTup
 from isp_popup_window import openTransactionAliasPrompt, openTransactionPaymentErrorPrompt, openNewCustomerPrompt
-from isp_data_handlers import constructCustomerAliasesDict
+from isp_data_handlers import constructCustomerAliasesDict, genInvoiceDCobj
 from isp_data_comparers import compareCustomerToAliasesDict, getCustomerDBName
+from isp_multi_invoice_prompt import openMultiInvoicePrompt
 
 import tkinter as tk
 import datetime
@@ -232,8 +233,9 @@ def resolveMultiInvoiceTransactions(root, cur, con, multiRecs):
   dbCustomers = getCustomerNamesIDs(cur)
   aliasesDict = constructCustomerAliasesDict(cur, dbCustomers)
 
+  print(len(multiRecs))
+
   for rec in multiRecs:
-    print(rec)
     
     searchCustomer = getCustomerDBName(aliasesDict, rec[3])
 
@@ -241,10 +243,15 @@ def resolveMultiInvoiceTransactions(root, cur, con, multiRecs):
     
     invoices = fetchRangeInvoicesByCustomer(rec[0][0], rec[0][1], customerID, cur)
 
-    total = 0
+    invoiceOBJs = [genInvoiceDCobj([invoice]) for invoice in invoices]
 
-    for invoice in invoices:
-      # print(invoice[1])
-      total += invoice[1]
+    totalInvoiced = sum([invoice.amount for invoice in invoiceOBJs])
 
-    print(total)
+    if round(totalInvoiced, 2) == rec[1]:
+      openMultiInvoicePrompt(root, rec, invoiceOBJs)
+    else:
+      resolveMultiInvTransErrors()
+
+
+def resolveMultiInvTransErrors():
+  pass

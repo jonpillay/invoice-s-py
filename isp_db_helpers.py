@@ -30,7 +30,7 @@ def fetchInvoiceByNum(invoiceNumber, cur):
 
 def fetchRangeInvoices(low, high, cur):
 
-  sql = "SELECT invoice_num, amount, date_issued, issued_to, customer_id FROM invoices WHERE invoice_num BETWEEN ? and ? ORDER BY invoice_num"
+  sql = "SELECT id, invoice_num, amount, date_issued, issued_to, customer_id FROM invoices WHERE invoice_num BETWEEN ? and ? ORDER BY invoice_num"
 
   cur.execute(sql, (low, high))
 
@@ -40,7 +40,7 @@ def fetchRangeInvoices(low, high, cur):
 
 def fetchRangeInvoicesByCustomer(low, high, customerID, cur):
 
-  sql = "SELECT invoice_num, amount, date_issued, issued_to, customer_id FROM invoices WHERE invoice_num BETWEEN ? and ? and customer_id=? ORDER BY invoice_num"
+  sql = "SELECT id, invoice_num, amount, date_issued, issued_to, customer_id FROM invoices WHERE invoice_num BETWEEN ? and ? and customer_id=? ORDER BY invoice_num"
 
   cur.execute(sql, (low, high, customerID))
 

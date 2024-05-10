@@ -8,9 +8,9 @@ def renderPromptInvoices(parentWindow, invoiceList, gridRow, gridColomn):
   invoiceTable.heading('issued_to', text='Customer')
   invoiceTable.heading('amount', text='Amount (£)')
   invoiceTable.heading('date_issued', text='Issued On')
-  invoiceTable.heading('note', text='Notes')
+  invoiceTable.heading('notes', text='Notes')
 
   invoiceTable.grid(row=gridRow, column=gridColomn)
 
   for i in range(len(invoiceList)):
-    invoiceTable.insert(parent='', index=i, values=(invoiceList[i].invoice_num, invoiceList[i].issued_to, invoiceList[i].amount, invoiceList[i].date_issued, invoiceList[i].error_notes))
+    invoiceTable.insert(parent='', index=0, values=(invoiceList[i].invoice_num, invoiceList[i].issued_to, invoiceList[i].amount, invoiceList[i].date_issued, invoiceList[i].error_notes))
