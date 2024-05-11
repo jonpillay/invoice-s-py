@@ -21,16 +21,16 @@ def openMultiInvoicePrompt(root, transaction, invoiceList):
     title_label.pack(side='top')
 
     main_frame = tkb.Frame(promptWindow)
-    main_frame.pack(side='top', expand=True)
+    main_frame.pack(side='top', expand=True, pady=10)
 
     prompt_frame = tkb.Frame(main_frame)
-    prompt_frame.pack()
+    prompt_frame.pack(pady=10)
 
     prompt_label = tkb.Label(prompt_frame, text=f"Multiple Invoice Transaction from {transaction[3]} for invoices {transaction[0][0]} to {transaction[0][1]} total paid {transaction[1]}")
-    prompt_label.pack()
+    prompt_label.pack(pady=10)
 
     og_string_label = tkb.Label(prompt_frame, text=f"{transaction[5]}")
-    og_string_label.pack()
+    og_string_label.pack(pady=10)
 
     renderPromptMulitTransactions(main_frame, [transaction])
 

@@ -28,18 +28,17 @@ def renderPromptInvoices(parentWindow, invoiceList):
 
     invoiceTable.insert(parent='', index=i, values=(invoiceList[i].invoice_num, invoiceList[i].issued_to, invoiceList[i].amount, formattedDate, invoiceList[i].error_notes))
 
-  invoiceTable.pack()
+  invoiceTable.pack(pady=10)
 
-  # style = ttk.Style()
-  # style.theme_use('clam')
-  # style.configure("Treeview",
-    
-
-  # )
+  style = ttk.Style(invoiceTable)
+  style.theme_use('alt')
+  style.configure("Treeview",
+    rowheight=30
+  )
 
 def renderPromptMulitTransactions(parentWindow, transactionList):
 
-  multiTransactionTable = ttk.Treeview(parentWindow, columns=('low_invoice', 'high_invoice', 'amount', 'paid_on', 'paid_by', 'payment_method'), show='headings', height=len(transactionList))
+  multiTransactionTable = ttk.Treeview(parentWindow, columns=('low_invoice', 'high_invoice', 'paid_by', 'amount', 'paid_on', 'payment_method'), show='headings', height=len(transactionList))
 
 
   multiTransactionTable.column('low_invoice', width=100, anchor='center')
@@ -48,22 +47,28 @@ def renderPromptMulitTransactions(parentWindow, transactionList):
   multiTransactionTable.column('high_invoice', width=100, anchor='center')
   multiTransactionTable.heading('high_invoice', text='To #')
   
+  multiTransactionTable.column('paid_by', width=260, anchor='center')
+  multiTransactionTable.heading('paid_by', text='Paid By')
+  
   multiTransactionTable.column('amount', width=120, anchor='center')
   multiTransactionTable.heading('amount', text='Paid (£)')
 
   multiTransactionTable.column('paid_on', width=110, anchor='center')
   multiTransactionTable.heading('paid_on', text='Date Paid')
 
-  multiTransactionTable.column('paid_by', width=260, anchor='center')
-  multiTransactionTable.heading('paid_by', text='Paid By')
-
   multiTransactionTable.column('payment_method', width=90, anchor='center')
   multiTransactionTable.heading('payment_method', text='Method')
 
-  multiTransactionTable.pack()
+  style = ttk.Style(multiTransactionTable)
+  style.theme_use('alt')
+  style.configure("Treeview",
+    rowheight=30
+  )
+
+  multiTransactionTable.pack(pady=10)
 
   for i in range(len(transactionList)):
 
-    multiTransactionTable.insert(parent='', index=i, values=(transactionList[i][0][0], transactionList[i][0][1], transactionList[i][1], transactionList[i][2], transactionList[i][3], transactionList[i][4]))
+    multiTransactionTable.insert(parent='', index=i, values=(transactionList[i][0][0], transactionList[i][0][1], transactionList[i][3], transactionList[i][1], transactionList[i][2], transactionList[i][4]))
 
 
