@@ -260,9 +260,35 @@ def resolveMultiInvoiceTransactions(root, cur, con, multiRecs):
 
       multiInvoiceErrors.append(errorTuple)
 
-  errorBool = tk.BooleanVar()
+  matchCount = len(multiInvoiceMatches)
 
-  openMultiInvoicePrompt(root, rec, invoiceOBJs)
+  multiVerified = []
+  multiErrorFlagged = []
+
+  while len(multiVerified) + len(multiErrorFlagged) < matchCount:
+
+    for multiInvoice in multiInvoiceMatches:
+
+      checkRec = multiInvoice[0]
+      checkInvoices = multiInvoice[1]
+
+      checkedBool = tk.BooleanVar()
+      verifyBool = tk.BooleanVar()
+
+      openMultiInvoicePrompt(root, checkRec, checkInvoices, checkedBool, verifyBool)
+
+      if checkedBool.get() == False:
+        break
+      else:
+        if verifyBool.get() == True:
+          multiVerified.append(multiInvoice)
+          multiInvoiceMatches.pop(0)
+          break
+        elif verifyBool.get() == False:
+          multiErrorFlagged.append(multiInvoice)
+          multiInvoiceMatches.pop(0)
+          break
+
 
 
 def resolveMultiInvTransErrors():
