@@ -247,10 +247,22 @@ def resolveMultiInvoiceTransactions(root, cur, con, multiRecs):
 
     totalInvoiced = sum([invoice.amount for invoice in invoiceOBJs])
 
+    multiInvoiceMatches = []
+
+    multiInvoiceErrors = []
+
     if round(totalInvoiced, 2) == rec[1]:
-      openMultiInvoicePrompt(root, rec, invoiceOBJs)
+      matchTuple = (rec, invoiceOBJs)
+
+      multiInvoiceMatches.append(matchTuple)
     else:
-      resolveMultiInvTransErrors()
+      errorTuple = (rec, invoiceOBJs)
+
+      multiInvoiceErrors.append(errorTuple)
+
+  errorBool = tk.BooleanVar()
+
+  openMultiInvoicePrompt(root, rec, invoiceOBJs)
 
 
 def resolveMultiInvTransErrors():
