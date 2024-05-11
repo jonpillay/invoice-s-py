@@ -15,7 +15,7 @@ def openMultiInvoicePrompt(root, transaction, invoiceList):
 
       print(f'This is the height {height}')
 
-      promptWindow.geometry(f'1000x{height+100}')
+      promptWindow.geometry(f'1000x{height+200}')
 
     title_label = tkb.Label(promptWindow, text=f"Multiple Invoice Transaction", background='red')
     title_label.pack(side='top')
@@ -30,7 +30,7 @@ def openMultiInvoicePrompt(root, transaction, invoiceList):
     prompt_label.pack(pady=10)
 
     og_string_label = tkb.Label(prompt_frame, wraplength=900, text=f"\"{transaction[5]}\"")
-    og_string_label.pack(pady=10)
+    og_string_label.pack()
     og_string_label.configure(anchor='center', justify='center')
 
     renderPromptMulitTransactions(main_frame, [transaction])
@@ -46,6 +46,18 @@ def openMultiInvoicePrompt(root, transaction, invoiceList):
 
     totals_label = tkb.Label(verification_frame, text=f"Total Invoiced = {total_invoiced} > Total Paid = {transaction[1]}", font=('Helvetica-bold', 11))
     totals_label.pack(pady=10)
+
+    verification_buttons_frame = tkb.Frame(verification_frame)
+    verification_buttons_frame.columnconfigure(0, weight=1)
+    verification_buttons_frame.columnconfigure(1, weight=1)
+
+    verification_buttons_frame.pack(pady=20)
+
+    verify_button = tkb.Button(verification_buttons_frame, text="Verify")
+    verify_button.grid(row=0, column=0, padx=40)
+
+    error_button = tkb.Button(verification_buttons_frame, text="Error")
+    error_button.grid(row=0, column=1, padx=40)
 
     promptWindow.update()
 

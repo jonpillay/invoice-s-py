@@ -28,7 +28,7 @@ def renderPromptInvoices(parentWindow, invoiceList):
 
     invoiceTable.insert(parent='', index=i, values=(invoiceList[i].invoice_num, invoiceList[i].issued_to, invoiceList[i].amount, formattedDate, invoiceList[i].error_notes))
 
-  invoiceTable.pack()
+  invoiceTable.pack(padx=10)
 
   style = ttk.Style(invoiceTable)
   style.theme_use('alt')
@@ -39,7 +39,6 @@ def renderPromptInvoices(parentWindow, invoiceList):
 def renderPromptMulitTransactions(parentWindow, transactionList):
 
   multiTransactionTable = ttk.Treeview(parentWindow, columns=('low_invoice', 'high_invoice', 'paid_by', 'amount', 'paid_on', 'payment_method'), show='headings', height=len(transactionList))
-
 
   multiTransactionTable.column('low_invoice', width=100, anchor='center')
   multiTransactionTable.heading('low_invoice', text='From #')
@@ -65,7 +64,7 @@ def renderPromptMulitTransactions(parentWindow, transactionList):
     rowheight=30
   )
 
-  multiTransactionTable.pack()
+  multiTransactionTable.pack(pady=20)
 
   for i in range(len(transactionList)):
 
