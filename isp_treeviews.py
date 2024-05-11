@@ -1,36 +1,69 @@
 from tkinter import ttk
 
-def renderPromptInvoices(parentWindow, invoiceList, gridRow, gridColumn):
+def renderPromptInvoices(parentWindow, invoiceList):
 
-  invoiceTable = ttk.Treeview(parentWindow, columns = ('invoice_num', 'issued_to', 'amount', 'date_issued', 'notes'), show='headings', height=len(invoiceList))
+  invoiceTable = ttk.Treeview(parentWindow, show='headings', height=len(invoiceList))
 
+  invoiceTable['columns'] = ('invoice_num', 'issued_to', 'amount', 'date_issued', 'notes')
+
+  invoiceTable.column('invoice_num', width=110, anchor='center')
   invoiceTable.heading('invoice_num', text="Invoice Num")
+
+  invoiceTable.column('issued_to', width=270, anchor='center')
   invoiceTable.heading('issued_to', text='Customer')
+  
+  invoiceTable.column('amount', width=110, anchor='center')
   invoiceTable.heading('amount', text='Amount (£)')
+  
+  invoiceTable.column('date_issued', width=110, anchor='center')
   invoiceTable.heading('date_issued', text='Issued On')
+  
+  invoiceTable.column('notes', width=360, anchor='center')
   invoiceTable.heading('notes', text='Notes')
+
+
+  for i in range(len(invoiceList)):
+
+    formattedDate = invoiceList[i].date_issued.strftime("%d/%m/%Y")
+
+    invoiceTable.insert(parent='', index=i, values=(invoiceList[i].invoice_num, invoiceList[i].issued_to, invoiceList[i].amount, formattedDate, invoiceList[i].error_notes))
 
   invoiceTable.pack()
 
-  for i in range(len(invoiceList)):
-    invoiceTable.insert(parent='', index=i, values=(invoiceList[i].invoice_num, invoiceList[i].issued_to, invoiceList[i].amount, invoiceList[i].date_issued, invoiceList[i].error_notes))
+  # style = ttk.Style()
+  # style.theme_use('clam')
+  # style.configure("Treeview",
+    
 
-def renderPromptMulitTransactions(parentWindow, transactionList, gridRow, gridColumn):
+  # )
 
-  multiTransactionTable = ttk.Treeview(parentWindow, columns=('low_invoice', 'high_invoice', 'amount', 'paid_on', 'paid_by', 'payment_method', 'og_string'), show='headings', height=len(transactionList))
+def renderPromptMulitTransactions(parentWindow, transactionList):
 
-  multiTransactionTable.heading('low_invoice', text='From Invoice')
-  multiTransactionTable.heading('high_invoice', text='To Invoice')
+  multiTransactionTable = ttk.Treeview(parentWindow, columns=('low_invoice', 'high_invoice', 'amount', 'paid_on', 'paid_by', 'payment_method'), show='headings', height=len(transactionList))
+
+
+  multiTransactionTable.column('low_invoice', width=100, anchor='center')
+  multiTransactionTable.heading('low_invoice', text='From #')
+
+  multiTransactionTable.column('high_invoice', width=100, anchor='center')
+  multiTransactionTable.heading('high_invoice', text='To #')
+  
+  multiTransactionTable.column('amount', width=120, anchor='center')
   multiTransactionTable.heading('amount', text='Paid (£)')
+
+  multiTransactionTable.column('paid_on', width=110, anchor='center')
   multiTransactionTable.heading('paid_on', text='Date Paid')
+
+  multiTransactionTable.column('paid_by', width=260, anchor='center')
   multiTransactionTable.heading('paid_by', text='Paid By')
+
+  multiTransactionTable.column('payment_method', width=90, anchor='center')
   multiTransactionTable.heading('payment_method', text='Method')
-  multiTransactionTable.heading('og_string', text='Description')
 
   multiTransactionTable.pack()
 
   for i in range(len(transactionList)):
 
-    multiTransactionTable.insert(parent='', index=i, values=(transactionList[i][0][0], transactionList[i][0][1], transactionList[i][1], transactionList[i][2], transactionList[i][3], transactionList[i][4], transactionList[i][5]))
+    multiTransactionTable.insert(parent='', index=i, values=(transactionList[i][0][0], transactionList[i][0][1], transactionList[i][1], transactionList[i][2], transactionList[i][3], transactionList[i][4]))
 
 
