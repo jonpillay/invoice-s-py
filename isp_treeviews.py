@@ -7,7 +7,7 @@ def renderPromptInvoices(parentWindow, invoiceList):
   invoiceTable['columns'] = ('invoice_num', 'issued_to', 'amount', 'date_issued', 'notes')
 
   invoiceTable.column('invoice_num', width=110, anchor='center')
-  invoiceTable.heading('invoice_num', text="Invoice Num")
+  invoiceTable.heading('invoice_num', text="Invoice #")
 
   invoiceTable.column('issued_to', width=270, anchor='center')
   invoiceTable.heading('issued_to', text='Customer')
@@ -28,7 +28,7 @@ def renderPromptInvoices(parentWindow, invoiceList):
 
     invoiceTable.insert(parent='', index=i, values=(invoiceList[i].invoice_num, invoiceList[i].issued_to, invoiceList[i].amount, formattedDate, invoiceList[i].error_notes))
 
-  invoiceTable.pack(pady=10)
+  invoiceTable.pack()
 
   style = ttk.Style(invoiceTable)
   style.theme_use('alt')
@@ -65,7 +65,7 @@ def renderPromptMulitTransactions(parentWindow, transactionList):
     rowheight=30
   )
 
-  multiTransactionTable.pack(pady=10)
+  multiTransactionTable.pack()
 
   for i in range(len(transactionList)):
 
