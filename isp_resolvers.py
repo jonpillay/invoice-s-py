@@ -235,6 +235,10 @@ def resolveMultiInvoiceTransactions(root, cur, con, multiRecs):
 
   print(len(multiRecs))
 
+  multiInvoiceMatches = []
+
+  multiInvoiceErrors = []
+
   for rec in multiRecs:
     
     searchCustomer = getCustomerDBName(aliasesDict, rec[3])
@@ -247,11 +251,8 @@ def resolveMultiInvoiceTransactions(root, cur, con, multiRecs):
 
     totalInvoiced = sum([invoice.amount for invoice in invoiceOBJs])
 
-    multiInvoiceMatches = []
-
-    multiInvoiceErrors = []
-
     if round(totalInvoiced, 2) == rec[1]:
+
       matchTuple = (rec, invoiceOBJs)
 
       multiInvoiceMatches.append(matchTuple)
@@ -288,7 +289,8 @@ def resolveMultiInvoiceTransactions(root, cur, con, multiRecs):
           multiErrorFlagged.append(multiInvoice)
           multiInvoiceMatches.pop(0)
           break
-
+  
+  return multiVerified, multiErrorFlagged, multiInvoiceErrors
 
 
 def resolveMultiInvTransErrors():

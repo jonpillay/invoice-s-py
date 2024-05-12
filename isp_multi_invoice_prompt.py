@@ -3,7 +3,7 @@ import ttkbootstrap as tkb
 
 from isp_treeviews import renderPromptInvoices, renderPromptMulitTransactions
 
-def openMultiInvoicePrompt(root, transaction, invoiceList):
+def openMultiInvoicePrompt(root, transaction, invoiceList, checkedBool, verifyBool):
 
     promptWindow = tk.Toplevel(root)
     promptWindow.title('Invoices Match?')
@@ -12,8 +12,6 @@ def openMultiInvoicePrompt(root, transaction, invoiceList):
     def updateWindowHeight():
       
       height = sum([widget.winfo_height() for widget in promptWindow.winfo_children()])
-
-      print(f'This is the height {height}')
 
       promptWindow.geometry(f'1000x{height+200}')
 
@@ -42,8 +40,6 @@ def openMultiInvoicePrompt(root, transaction, invoiceList):
 
     total_invoiced = round(sum([invoice.amount for invoice in invoiceList]), 2)
 
-    print(total_invoiced)
-
     totals_label = tkb.Label(verification_frame, text=f"Total Invoiced = {total_invoiced} > Total Paid = {transaction[1]}", font=('Helvetica-bold', 11))
     totals_label.pack(pady=10)
 
@@ -53,14 +49,24 @@ def openMultiInvoicePrompt(root, transaction, invoiceList):
 
     verification_buttons_frame.pack(pady=20)
 
-    verify_button = tkb.Button(verification_buttons_frame, text="Verify")
+    verify_button = tkb.Button(verification_buttons_frame, text="Verify", command=lambda: verifyTransaction())
     verify_button.grid(row=0, column=0, padx=40)
 
-    error_button = tkb.Button(verification_buttons_frame, text="Error")
+    error_button = tkb.Button(verification_buttons_frame, text="Error", command=lambda: errorFlagTransaction())
     error_button.grid(row=0, column=1, padx=40)
 
     promptWindow.update()
 
     updateWindowHeight()
+
+    def verifyTransaction():
+       checkedBool.set(True)
+       verifyBool.set(True)
+       promptWindow.destroy()
+
+    def errorFlagTransaction():
+       checkedBool.set(False)
+       verifyBool.set(False)
+       promptWindow.destroy()
 
     promptWindow.wait_window()
