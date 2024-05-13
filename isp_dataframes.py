@@ -18,6 +18,9 @@ class Transaction:
   customer_id: int = None
   parent_trans: int = None
 
+  def as_tuple(self):
+    return tuple(getattr(self, field.name) for field in self.__dataclass_fields__ if getattr(self, field) is not None)
+
 @dataclass
 class Invoice:
   invoice_num: int
@@ -28,6 +31,9 @@ class Invoice:
   error_flagged: int = None
   invoice_id: int = None
   customer_id: int = None
+
+  def as_tuple(self):
+    return tuple(getattr(self, field.name) for field in self.__dataclass_fields__ if getattr(self, field) is not None)
 
 @dataclass
 class Customer:

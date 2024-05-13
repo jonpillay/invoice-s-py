@@ -2,7 +2,7 @@ import re
 from datetime import datetime
 
 from isp_dataframes import Transaction, Invoice
-from isp_db_helpers import getCustomerAliases, getCustomerID
+from isp_db_helpers import getCustomerAliases, getCustomerID, addParentTransactionToDB
 
 def constructCustomerAliasesDict(cur, namesIDsTups):
   
@@ -130,8 +130,8 @@ def genMultiTransactionDCobj(transaction):
 def genMultiTransactionsInvoices(transactionsList, cur, con):
   
   for transaction, invoices in transactionsList:
-    print(transaction)
-    print(invoices)
+    
+    transactionID = addParentTransactionToDB()
 
 
 def prepMatchedTransforDB(transaction, invoice):

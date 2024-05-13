@@ -73,7 +73,7 @@ def addCashInvoicesAndTransactions(cashInvoiceList, cur, conn):
 
     dummyCashPaymentDt = invoiceDT + timedelta(days=1)
   
-    transactionTup = (invoice[0], invoice[1], dummyCashPaymentDt, invoice[3], "CASH", "CASH TRANSACTION", invoiceID)
+    transactionTup = (invoice[0], invoice[1], dummyCashPaymentDt, invoice[3], "CASH", "CASH TRANSACTION", invoiceID, invoice[4])
 
     addTransactionToDB(transactionTup, cur)
 
@@ -81,11 +81,13 @@ def addCashInvoicesAndTransactions(cashInvoiceList, cur, conn):
 
 
 
-def addTransactionToDB(transactionTuple, cur):
+def addTransactionToDB(transactionTuple, cur, con):
   
-  sql = "INSERT INTO TRANSACTIONS (invoice_num, amount, paid_on, company_name, payment_method, og_string, invoice_id) VALUES (?, ?, ?, ?, ?, ?, ?)"
+  sql = "INSERT INTO TRANSACTIONS (invoice_num, amount, paid_on, company_name, payment_method, og_string, invoice_id, customerID) VALUES (?, ?, ?, ?, ?, ?, ?, ?)"
 
   cur.execute(sql, transactionTuple)
+
+  con.commit()
 
 
 
@@ -94,6 +96,21 @@ def addTransactionsToDB(transactionsTuples, cur):
   sql = "INSERT INTO TRANSACTIONS (invoice_num, amount, paid_on, company_name, payment_method, og_string, invoice_id) VALUES (?, ?, ?, ?, ?, ?, ?)"
 
   cur.executemany(sql, transactionsTuples)
+
+
+
+def addParentTransactionToDB(transactionTuple, cur, con):
+  
+  sql = "INSERT INTO TRANSACTIONS (invoice_num, amount, paid_on, company_name, payment_method, og_string, high_invoice, invoice_id, customer_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)"
+
+  cur.execute(sql, transactionTuple)
+
+  con.commit()
+
+  transID = cur.lastrowid
+
+  return transID
+
 
 
 
