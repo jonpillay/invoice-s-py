@@ -7,7 +7,7 @@ from datetime import datetime
 from isp_csv_helpers import cleanTransactionRaw, cleanInvoiceListRawGenCustomerList
 from isp_trans_verify import verifyTransactionDetails, verifyAlias, verifyTransactionAmount
 from isp_db_helpers import getInvoiceNumsIDs, fetchInvoiceByNum, addTransactionsToDB, addNewCustomersToDB, getDBInvoiceNums, getCustomerNamesIDs, resolveNewCustomersDB, addCashInvoicesAndTransactions, addInvoicesToDB
-from isp_data_handlers import constructCustomerAliasesDict, constructCustomerIDict, prepInvoiceUploadList, genInvoiceDCobj, genTransactionDCobj, prepMatchedTransforDB
+from isp_data_handlers import constructCustomerAliasesDict, constructCustomerIDict, prepInvoiceUploadList, genInvoiceDCobj, genTransactionDCobj, genMultiTransactionDCobj, prepMatchedTransforDB
 from isp_resolvers import resolveNameMismatches, resolvePaymentErrors, resolveMultiInvoiceTransactions
 
 from isp_dataframes import Transaction
@@ -93,7 +93,8 @@ def handleTransactionUpload(root, filename):
       elif len(cleanedEntry[0]) == 1:
         compRec.append(cleanedEntry)
       else:
-        multiRec.append(cleanedEntry)
+        transactionDC = genMultiTransactionDCobj(cleanedEntry)
+        multiRec.append(transactionDC)
 
     """
       Two database related functions need to be written. One here and one on the invoice upload.
@@ -167,6 +168,7 @@ def handleTransactionUpload(root, filename):
 
   nameResolved, nameUnresolved = resolveNameMismatches(root, cur, con, matchNameError)
 
+  con.commit()
 
   for paymentPair in nameResolved:
     
@@ -176,21 +178,14 @@ def handleTransactionUpload(root, filename):
     paymentMatch = verifyTransactionAmount(transaction, invoice)
 
     if paymentMatch == True:
+      prepMatchedTransforDB(transaction, invoice)
       transactionUploadList.append((transaction, invoice))
     else:
       matchPaymentError.append(paymentPair)
-
-  # dummyTransactionUploadTups, paymentErrors = resolvePaymentErrors(root, matchPaymentError)
-
-  con.commit()
-
-  # for error in multiRec:
-  #   print(error)
-
-  # for incomplete in incompRec:
-  #   print(incomplete)
  
   multiVerified, multiErrorFlagged, multiInvoiceErrors = resolveMultiInvoiceTransactions(root, cur, con, multiRec)
+
+  # print(multiVerified)
 
 
 

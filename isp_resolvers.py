@@ -226,7 +226,7 @@ def resolvePaymentErrors(root, paymentErrors):
 
 def resolveMultiInvoiceTransactions(root, cur, con, multiRecs):
   
-  namesList = list(set([rec[3].strip().upper() for rec in multiRecs]))
+  namesList = list(set([rec.paid_by.strip().upper() for rec in multiRecs]))
 
   resolveNamesIntoDB(root, cur, con, namesList)
 
@@ -241,17 +241,19 @@ def resolveMultiInvoiceTransactions(root, cur, con, multiRecs):
 
   for rec in multiRecs:
     
-    searchCustomer = getCustomerDBName(aliasesDict, rec[3])
+    searchCustomer = getCustomerDBName(aliasesDict, rec.paid_by)
 
     customerID = getCustomerID(cur, searchCustomer)
     
-    invoices = fetchRangeInvoicesByCustomer(rec[0][0], rec[0][1], customerID, cur)
+    invoices = fetchRangeInvoicesByCustomer(rec.invoice_num, rec.high_invoice, customerID, cur)
 
     invoiceOBJs = [genInvoiceDCobj([invoice]) for invoice in invoices]
 
     totalInvoiced = sum([invoice.amount for invoice in invoiceOBJs])
 
-    if round(totalInvoiced, 2) == rec[1]:
+    # Needs to be a close enough, with a tollerance of maybe 1 pound (tollerance should maybe be se to the amount of invoices being paid for.)
+
+    if round(totalInvoiced, 2) == rec.amount:
 
       matchTuple = (rec, invoiceOBJs)
 
@@ -270,13 +272,13 @@ def resolveMultiInvoiceTransactions(root, cur, con, multiRecs):
 
     for multiInvoice in multiInvoiceMatches:
 
-      checkRec = multiInvoice[0]
+      checkTrans = multiInvoice[0]
       checkInvoices = multiInvoice[1]
 
       checkedBool = tk.BooleanVar()
       verifyBool = tk.BooleanVar()
 
-      openMultiInvoicePrompt(root, checkRec, checkInvoices, checkedBool, verifyBool)
+      openMultiInvoicePrompt(root, checkTrans, checkInvoices, checkedBool, verifyBool)
 
       if checkedBool.get() == False:
         break

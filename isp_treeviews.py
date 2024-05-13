@@ -68,6 +68,4 @@ def renderPromptMulitTransactions(parentWindow, transactionList):
 
   for i in range(len(transactionList)):
 
-    multiTransactionTable.insert(parent='', index=i, values=(transactionList[i][0][0], transactionList[i][0][1], transactionList[i][3], transactionList[i][1], transactionList[i][2], transactionList[i][4]))
-
-
+    multiTransactionTable.insert(parent='', index=i, values=(transactionList[i].invoice_num, transactionList[i].high_invoice, transactionList[i].paid_by, transactionList[i].amount, transactionList[i].paid_on, transactionList[i].payment_method))

@@ -24,10 +24,10 @@ def openMultiInvoicePrompt(root, transaction, invoiceList, checkedBool, verifyBo
     prompt_frame = tkb.Frame(main_frame)
     prompt_frame.pack()
 
-    prompt_label = tkb.Label(prompt_frame, text=f"Multiple Invoice Transaction from {transaction[3]} for invoices {transaction[0][0]} to {transaction[0][1]}\n Total Paid £{transaction[1]}", font=('Helvetica-bold', 11), justify='center')
+    prompt_label = tkb.Label(prompt_frame, text=f"Multiple Invoice Transaction from {transaction.paid_by} for invoices {transaction.invoice_num} to {transaction.high_invoice}\n Total Paid £{transaction.amount}", font=('Helvetica-bold', 11), justify='center')
     prompt_label.pack(pady=10)
 
-    og_string_label = tkb.Label(prompt_frame, wraplength=900, text=f"\"{transaction[5]}\"")
+    og_string_label = tkb.Label(prompt_frame, wraplength=900, text=f"\"{transaction.og_string}\"")
     og_string_label.pack()
     og_string_label.configure(anchor='center', justify='center')
 
@@ -40,7 +40,7 @@ def openMultiInvoicePrompt(root, transaction, invoiceList, checkedBool, verifyBo
 
     total_invoiced = round(sum([invoice.amount for invoice in invoiceList]), 2)
 
-    totals_label = tkb.Label(verification_frame, text=f"Total Invoiced = {total_invoiced} > Total Paid = {transaction[1]}", font=('Helvetica-bold', 11))
+    totals_label = tkb.Label(verification_frame, text=f"Total Invoiced = {total_invoiced} > Total Paid = {transaction.amount}", font=('Helvetica-bold', 11))
     totals_label.pack(pady=10)
 
     verification_buttons_frame = tkb.Frame(verification_frame)

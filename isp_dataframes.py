@@ -13,6 +13,7 @@ class Transaction:
   paid_by: str
   payment_method: str
   og_string: str
+  high_invoice: int = None
   invoice_id: int = None
   customer_id: int = None
   parent_trans: int = None
