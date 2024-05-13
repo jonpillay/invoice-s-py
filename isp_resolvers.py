@@ -233,8 +233,6 @@ def resolveMultiInvoiceTransactions(root, cur, con, multiRecs):
   dbCustomers = getCustomerNamesIDs(cur)
   aliasesDict = constructCustomerAliasesDict(cur, dbCustomers)
 
-  print(len(multiRecs))
-
   multiInvoiceMatches = []
 
   multiInvoiceErrors = []
@@ -270,10 +268,10 @@ def resolveMultiInvoiceTransactions(root, cur, con, multiRecs):
 
   while len(multiVerified) + len(multiErrorFlagged) < matchCount:
 
-    for multiInvoice in multiInvoiceMatches:
+    for checkTrans, checkInvoices in multiInvoiceMatches:
 
-      checkTrans = multiInvoice[0]
-      checkInvoices = multiInvoice[1]
+      # checkTrans = multiInvoice[0]
+      # checkInvoices = multiInvoice[1]
 
       checkedBool = tk.BooleanVar()
       verifyBool = tk.BooleanVar()
@@ -284,11 +282,18 @@ def resolveMultiInvoiceTransactions(root, cur, con, multiRecs):
         break
       else:
         if verifyBool.get() == True:
-          multiVerified.append(multiInvoice)
+          checkTrans.customer_id = checkInvoices[0].customer_id
+
+          verifiedTuple = (checkTrans, checkInvoices)
+
+          multiVerified.append(verifiedTuple)
           multiInvoiceMatches.pop(0)
           break
         elif verifyBool.get() == False:
-          multiErrorFlagged.append(multiInvoice)
+          
+          errorList =[checkTrans, checkInvoices]
+
+          multiErrorFlagged.append(errorList)
           multiInvoiceMatches.pop(0)
           break
   

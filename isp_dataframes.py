@@ -13,13 +13,15 @@ class Transaction:
   paid_by: str
   payment_method: str
   og_string: str
+  error_flagged: int = None
+  error_notes: str = None
   high_invoice: int = None
-  invoice_id: int = None
   customer_id: int = None
+  invoice_id: int = None
   parent_trans: int = None
 
   def as_tuple(self):
-    return tuple(getattr(self, field.name) for field in self.__dataclass_fields__ if getattr(self, field) is not None)
+    return tuple(getattr(self, field) for field in self.__dataclass_fields__ if getattr(self, field) is not None)
 
 @dataclass
 class Invoice:
@@ -27,13 +29,13 @@ class Invoice:
   amount: float
   date_issued: datetime.date
   issued_to: str
-  error_notes: str = None
   error_flagged: int = None
+  error_notes: str = None
   invoice_id: int = None
   customer_id: int = None
 
   def as_tuple(self):
-    return tuple(getattr(self, field.name) for field in self.__dataclass_fields__ if getattr(self, field) is not None)
+    return tuple(getattr(self, field) for field in self.__dataclass_fields__ if getattr(self, field) is not None)
 
 @dataclass
 class Customer:

@@ -1,5 +1,6 @@
 import re
 from datetime import datetime
+import copy
 
 from isp_dataframes import Transaction, Invoice
 from isp_db_helpers import getCustomerAliases, getCustomerID, addParentTransactionToDB
@@ -58,7 +59,7 @@ def prepInvoiceUploadList(invoiceList, customerAliasIDict):
             invoice.customer_id
           )
 
-          cashInvoiceUploadTups.append(cashInvoiceTup)
+          cashInvoiceUploadTups.append(invoice.as_tuple())
 
           break
       
@@ -75,7 +76,7 @@ def prepInvoiceUploadList(invoiceList, customerAliasIDict):
             invoice.customer_id
           )
 
-          invoiceUploadTups.append(invoiceTup)
+          invoiceUploadTups.append(invoice.as_tuple())
 
   return invoiceUploadTups, cashInvoiceUploadTups
 
@@ -127,11 +128,32 @@ def genMultiTransactionDCobj(transaction):
 
   return transactionDC
 
+
+
 def genMultiTransactionsInvoices(transactionsList, cur, con):
+
+  transactionUploadList = []
   
   for transaction, invoices in transactionsList:
     
-    transactionID = addParentTransactionToDB()
+    transactionID = addParentTransactionToDB(transaction.as_tuple(), cur, con)
+
+    for invoice in invoices:
+
+      dummyTransaction = copy.deepcopy(transaction)
+
+      updatedOGstr = "*MULTIDUM* " + dummyTransaction.og_string
+
+      dummyTransaction.invoice_num = invoice.invoice_num
+      dummyTransaction.amount = invoice.amount
+      dummyTransaction.og_string = updatedOGstr
+      dummyTransaction.high_invoice = None
+      dummyTransaction.invoice_id = invoice.invoice_id
+      dummyTransaction.parent_trans = transactionID
+
+      transactionUploadList.append(dummyTransaction)
+
+  return transactionUploadList
 
 
 def prepMatchedTransforDB(transaction, invoice):

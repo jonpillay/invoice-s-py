@@ -81,13 +81,11 @@ def addCashInvoicesAndTransactions(cashInvoiceList, cur, conn):
 
 
 
-def addTransactionToDB(transactionTuple, cur, con):
+def addTransactionToDB(transactionTuple, cur):
   
-  sql = "INSERT INTO TRANSACTIONS (invoice_num, amount, paid_on, company_name, payment_method, og_string, invoice_id, customerID) VALUES (?, ?, ?, ?, ?, ?, ?, ?)"
+  sql = "INSERT INTO TRANSACTIONS (invoice_num, amount, paid_on, company_name, payment_method, og_string, invoice_id, customer_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?)"
 
   cur.execute(sql, transactionTuple)
-
-  con.commit()
 
 
 
@@ -101,7 +99,7 @@ def addTransactionsToDB(transactionsTuples, cur):
 
 def addParentTransactionToDB(transactionTuple, cur, con):
   
-  sql = "INSERT INTO TRANSACTIONS (invoice_num, amount, paid_on, company_name, payment_method, og_string, high_invoice, invoice_id, customer_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)"
+  sql = "INSERT INTO TRANSACTIONS (invoice_num, amount, paid_on, company_name, payment_method, og_string, high_invoice, customer_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?)"
 
   cur.execute(sql, transactionTuple)
 
@@ -113,6 +111,13 @@ def addParentTransactionToDB(transactionTuple, cur, con):
 
 
 
+def addDummyTransactionsToDB(transactionUploadList, con, cur):
+
+  sql = "INSERT INTO TRANSACTIONS (invoice_num, amount, paid_on, company_name, payment_method, og_string, invoice_id, customer_id, parent_trans) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)"
+
+  cur.executemany(sql, transactionUploadList)
+
+  con.commit()
 
 def addNewCustomerToDB(customerName, cur):
 
