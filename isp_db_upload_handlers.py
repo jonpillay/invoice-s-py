@@ -7,7 +7,7 @@ from datetime import datetime
 from isp_csv_helpers import cleanTransactionRaw, cleanInvoiceListRawGenCustomerList
 from isp_trans_verify import verifyTransactionDetails, verifyAlias, verifyTransactionAmount
 from isp_db_helpers import getInvoiceNumsIDs, fetchInvoiceByNum, addTransactionsToDB, addNewCustomersToDB, getDBInvoiceNums, getCustomerNamesIDs, resolveNewCustomersDB, addCashInvoicesAndTransactions, addInvoicesToDB
-from isp_data_handlers import constructCustomerAliasesDict, constructCustomerIDict, prepInvoiceUploadList, genInvoiceDCobj
+from isp_data_handlers import constructCustomerAliasesDict, constructCustomerIDict, prepInvoiceUploadList, genInvoiceDCobj, genTransactionDCobj
 from isp_resolvers import resolveNameMismatches, resolvePaymentErrors, resolveMultiInvoiceTransactions
 
 from isp_dataframes import Transaction
@@ -63,6 +63,8 @@ def handleInvoiceUpload(root, filename):
   cur.close()
   conn.close()
 
+
+
 def handleTransactionUpload(root, filename):
 
   compRec = []
@@ -80,7 +82,6 @@ def handleTransactionUpload(root, filename):
         datetime.strptime(entry[0].strip(), '%d %b %Y')
         count += 1
       except:
-        print("Here")
         continue
 
       cleanedEntry = cleanTransactionRaw(entry)
@@ -134,10 +135,13 @@ def handleTransactionUpload(root, filename):
       invoice = fetchInvoiceByNum(invoiceNum, cur)
 
       if len(invoice) == 0:
-        noMatchFromNum.append(transaction)
+        transactionDC = genTransactionDCobj(transaction)
+        noMatchFromNum.append(transactionDC)
         continue
       else:
         invoice = genInvoiceDCobj(invoice)
+        transactionDC = genTransactionDCobj(transaction)
+
         matches.append(transaction)
 
       date_paid = datetime.strptime(transaction[2], "%Y-%m-%d")
@@ -161,9 +165,8 @@ def handleTransactionUpload(root, filename):
       elif type(detailMatch) == str:
         matchNameError.append([transaction, invoice])
       elif detailMatch == True:
-        # og_string = " ".join(transaction[5])
-        # transactionTuple = (transaction[0][0], transaction[1], transaction[2], transaction[3], transaction[4], og_string, invoice[0][0])
-        transactionUploadList.append(transaction)
+        matchPair = (transaction, invoice)
+        transactionUploadList.append(matchPair)
       else:
         print("cannot match")
 
@@ -185,7 +188,7 @@ def handleTransactionUpload(root, filename):
     paymentMatch = verifyTransactionAmount(transaction, invoice)
 
     if paymentMatch == True:
-      transactionUploadList.append(transaction)
+      transactionUploadList.append((transaction, invoice))
     else:
       matchPaymentError.append(paymentPair)
 
@@ -199,9 +202,7 @@ def handleTransactionUpload(root, filename):
   # for incomplete in incompRec:
   #   print(incomplete)
  
-
-
-  resolveMultiInvoiceTransactions(root, cur, con, multiRec)
+  multiVerified, multiErrorFlagged, multiInvoiceErrors = resolveMultiInvoiceTransactions(root, cur, con, multiRec)
 
 
 
