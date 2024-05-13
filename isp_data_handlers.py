@@ -101,7 +101,7 @@ def genTransactionDCobj(transaction):
   date_paid = datetime.strptime(transaction[2], "%Y-%m-%d")
   
   transactionDC = Transaction(
-    invoice_num=transaction[0][0],
+    invoice_num=int(transaction[0][0]),
     amount=transaction[1],
     paid_on=date_paid,
     paid_by=transaction[3],
@@ -110,3 +110,7 @@ def genTransactionDCobj(transaction):
   )
 
   return transactionDC
+
+def prepMatchedTransforDB(transaction, invoice):
+  transaction.invoice_id = invoice.invoice_id
+  transaction.customer_id = invoice.customer_id

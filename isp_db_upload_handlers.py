@@ -7,7 +7,7 @@ from datetime import datetime
 from isp_csv_helpers import cleanTransactionRaw, cleanInvoiceListRawGenCustomerList
 from isp_trans_verify import verifyTransactionDetails, verifyAlias, verifyTransactionAmount
 from isp_db_helpers import getInvoiceNumsIDs, fetchInvoiceByNum, addTransactionsToDB, addNewCustomersToDB, getDBInvoiceNums, getCustomerNamesIDs, resolveNewCustomersDB, addCashInvoicesAndTransactions, addInvoicesToDB
-from isp_data_handlers import constructCustomerAliasesDict, constructCustomerIDict, prepInvoiceUploadList, genInvoiceDCobj, genTransactionDCobj
+from isp_data_handlers import constructCustomerAliasesDict, constructCustomerIDict, prepInvoiceUploadList, genInvoiceDCobj, genTransactionDCobj, prepMatchedTransforDB
 from isp_resolvers import resolveNameMismatches, resolvePaymentErrors, resolveMultiInvoiceTransactions
 
 from isp_dataframes import Transaction
@@ -130,7 +130,7 @@ def handleTransactionUpload(root, filename):
 
       cur = con.cursor()
 
-      invoiceNum = transaction[0][0]
+      invoiceNum = int(transaction[0][0])
 
       invoice = fetchInvoiceByNum(invoiceNum, cur)
 
@@ -141,22 +141,9 @@ def handleTransactionUpload(root, filename):
       else:
         invoice = genInvoiceDCobj(invoice)
         transactionDC = genTransactionDCobj(transaction)
+        matches.append([transactionDC, invoice])
 
-        matches.append(transaction)
-
-      date_paid = datetime.strptime(transaction[2], "%Y-%m-%d")
-
-      transaction = Transaction(
-        invoice_num=transaction[0][0],
-        amount=transaction[1],
-        paid_on=date_paid,
-        paid_by=transaction[3],
-        payment_method=transaction[4],
-        og_string=transaction[5]
-      )
-
-      # print(transaction)
-      # print(invoice)
+    for transaction, invoice in matches:
 
       detailMatch = verifyTransactionDetails(transaction, invoice, cur)
 
@@ -165,6 +152,7 @@ def handleTransactionUpload(root, filename):
       elif type(detailMatch) == str:
         matchNameError.append([transaction, invoice])
       elif detailMatch == True:
+        prepMatchedTransforDB(transaction, invoice)
         matchPair = (transaction, invoice)
         transactionUploadList.append(matchPair)
       else:
