@@ -127,6 +127,13 @@ def genMultiTransactionDCobj(transaction):
 
   return transactionDC
 
+def genMultiTransactionsInvoices(transactionsList, cur, con):
+  
+  for transaction, invoices in transactionsList:
+    print(transaction)
+    print(invoices)
+
+
 def prepMatchedTransforDB(transaction, invoice):
   transaction.invoice_id = invoice.invoice_id
   transaction.customer_id = invoice.customer_id

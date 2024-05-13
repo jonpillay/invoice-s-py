@@ -7,7 +7,7 @@ from datetime import datetime
 from isp_csv_helpers import cleanTransactionRaw, cleanInvoiceListRawGenCustomerList
 from isp_trans_verify import verifyTransactionDetails, verifyAlias, verifyTransactionAmount
 from isp_db_helpers import getInvoiceNumsIDs, fetchInvoiceByNum, addTransactionsToDB, addNewCustomersToDB, getDBInvoiceNums, getCustomerNamesIDs, resolveNewCustomersDB, addCashInvoicesAndTransactions, addInvoicesToDB
-from isp_data_handlers import constructCustomerAliasesDict, constructCustomerIDict, prepInvoiceUploadList, genInvoiceDCobj, genTransactionDCobj, genMultiTransactionDCobj, prepMatchedTransforDB
+from isp_data_handlers import constructCustomerAliasesDict, constructCustomerIDict, prepInvoiceUploadList, genInvoiceDCobj, genTransactionDCobj, genMultiTransactionDCobj, prepMatchedTransforDB, genMultiTransactionsInvoices
 from isp_resolvers import resolveNameMismatches, resolvePaymentErrors, resolveMultiInvoiceTransactions
 
 from isp_dataframes import Transaction
@@ -185,7 +185,7 @@ def handleTransactionUpload(root, filename):
  
   multiVerified, multiErrorFlagged, multiInvoiceErrors = resolveMultiInvoiceTransactions(root, cur, con, multiRec)
 
-  # print(multiVerified)
+  genMultiTransactionsInvoices(multiVerified, cur, con)
 
 
 
