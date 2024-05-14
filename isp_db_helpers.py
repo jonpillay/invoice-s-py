@@ -111,13 +111,17 @@ def addParentTransactionToDB(transactionTuple, cur, con):
 
 
 
-def addDummyTransactionsToDB(transactionUploadList, con, cur):
+def addDummyTransactionsToDB(transactionUploadList, cur, con):
 
-  sql = "INSERT INTO TRANSACTIONS (invoice_num, amount, paid_on, company_name, payment_method, og_string, invoice_id, customer_id, parent_trans) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)"
+  print(transactionUploadList)
+
+  sql = "INSERT INTO TRANSACTIONS (invoice_num, amount, paid_on, company_name, payment_method, og_string, customer_id, invoice_id, parent_trans) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)"
 
   cur.executemany(sql, transactionUploadList)
 
   con.commit()
+
+
 
 def addNewCustomerToDB(customerName, cur):
 
