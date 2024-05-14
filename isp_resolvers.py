@@ -249,7 +249,7 @@ def resolveMultiInvoiceTransactions(root, cur, con, multiRecs):
 
     totalInvoiced = sum([invoice.amount for invoice in invoiceOBJs])
 
-    # Needs to be a close enough, with a tollerance of maybe 1 pound (tollerance should maybe be se to the amount of invoices being paid for.)
+    # Needs to be a close enough, with a tollerance of maybe 1 pound (tollerance should maybe be set relatively to the amount of invoices being paid for.)
 
     if round(totalInvoiced, 2) == rec.amount:
 

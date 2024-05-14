@@ -191,6 +191,23 @@ def handleTransactionUpload(root, filename):
 
   addDummyTransactionsToDB(dummyTransactionTuples, cur, con)
 
+  """
+  What we have left...
+
+  incompRec = Transactions without an invoice number attatched
+  
+  noMatchFromNum = Transactions with one invoice number, but invoice can't be found
+
+  nameUnresolved = names that haven't been varified by the user, invoice, transaction pairs
+
+  multiErrorFlagged = multiTransaction with inoices that do add up, but have been flagged
+
+  multiInvoiceError = multiTransaction with invoices that either don't add up (out of tol range) or have been flagged
+  as having payment error
+
+
+  """
+
 
     # Function for incomp teansactions (no invoice number) to match transactions with invoices via payment amount and then
     # matching and adding aliases (via user promting) to the database so they can be identified automatically on next upload.
