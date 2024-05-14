@@ -194,17 +194,23 @@ def handleTransactionUpload(root, filename):
   """
   What we have left...
 
-  incompRec = Transactions without an invoice number attatched
-  
-  noMatchFromNum = Transactions with one invoice number, but invoice can't be found
-
   nameUnresolved = names that haven't been varified by the user, invoice, transaction pairs
+    - namesUnresolved comes from user verification. Atm still hasn't been amount checked. Amounts need to be checked.
 
-  multiErrorFlagged = multiTransaction with inoices that do add up, but have been flagged
+  matchPaymentError = single invoice transactions that have payment error, names do match
+    - Need to prompt user if to correct amount with dummy transaction, or add to error list
 
-  multiInvoiceError = multiTransaction with invoices that either don't add up (out of tol range) or have been flagged
-  as having payment error
+  incompRec = Transactions without an invoice number attatched
+    - Needs to be matched via customer name and amount (and date, needs to be after invoice issued)
+  
+  multiErrorFlagged = multiTransaction with invoices that do add up, within tol, but have been flagged
 
+  multiInvoiceError = multiTransaction with invoices that either don't add up (out of tol range)
+
+    - Both of the multi invoice errors need to be left until last and an algo written to try and match invoices left
+
+  noMatchFromNum = Transactions with one invoice number, but invoice can't be found
+    - Need to match via customer name and amount
 
   """
 

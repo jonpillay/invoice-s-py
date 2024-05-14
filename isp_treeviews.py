@@ -36,6 +36,39 @@ def renderPromptInvoices(parentWindow, invoiceList):
     rowheight=30
   )
 
+def renderPromptTransactions(parentWindow, transactionList):
+
+  transactionTable = ttk.Treeview(parentWindow, columns=('low_invoice', 'paid_by', 'amount', 'paid_on', 'payment_method'), show='headings', height=len(transactionList))
+
+  transactionTable.column('low_invoice', width=100, anchor='center')
+  transactionTable.heading('low_invoice', text='From #')
+  
+  transactionTable.column('paid_by', width=260, anchor='center')
+  transactionTable.heading('paid_by', text='Paid By')
+  
+  transactionTable.column('amount', width=120, anchor='center')
+  transactionTable.heading('amount', text='Paid (£)')
+
+  transactionTable.column('paid_on', width=110, anchor='center')
+  transactionTable.heading('paid_on', text='Date Paid')
+
+  transactionTable.column('payment_method', width=90, anchor='center')
+  transactionTable.heading('payment_method', text='Method')
+
+  style = ttk.Style(transactionTable)
+  style.theme_use('alt')
+  style.configure("Treeview",
+    rowheight=30
+  )
+
+  transactionTable.pack(pady=20)
+
+  for i in range(len(transactionList)):
+
+    transactionTable.insert(parent='', index=i, values=(transactionList[i].invoice_num, transactionList[i].high_invoice, transactionList[i].paid_by, transactionList[i].amount, transactionList[i].paid_on, transactionList[i].payment_method))
+
+
+
 def renderPromptMulitTransactions(parentWindow, transactionList):
 
   multiTransactionTable = ttk.Treeview(parentWindow, columns=('low_invoice', 'high_invoice', 'paid_by', 'amount', 'paid_on', 'payment_method'), show='headings', height=len(transactionList))

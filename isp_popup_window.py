@@ -1,6 +1,8 @@
 import tkinter as tk
 import ttkbootstrap as tkb
 
+from isp_treeviews import renderPromptTransactions
+
 def openNewCustomerPrompt(root, customer, dbCustomers, newCustomerReturn, newAliasReturn):
     
     customerNames = []
