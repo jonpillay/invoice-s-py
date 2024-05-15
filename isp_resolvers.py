@@ -1,7 +1,7 @@
 from isp_dataframes import Transaction, Invoice
 from isp_db_helpers import getCustomerID, fetchRangeInvoicesByCustomer, getCustomerNamesIDs, addAliasToDB, addNewCustomerToDB, findCustomerIDInTup
 from isp_popup_window import openTransactionAliasPrompt, openTransactionPaymentErrorPrompt, openNewCustomerPrompt
-from isp_data_handlers import constructCustomerAliasesDict, genInvoiceDCobj
+from isp_data_handlers import constructCustomerAliasesDict, genInvoiceDCobj, prepMatchedTransforDB
 from isp_data_comparers import compareCustomerToAliasesDict, getCustomerDBName
 from isp_multi_invoice_prompt import openMultiInvoicePrompt
 
@@ -28,9 +28,7 @@ def resolveNameMismatches(root, cur, conn, matchNameErrors):
 
       if transaction.paid_by in alisesDict[invoice.issued_to]:
 
-        for id, name in dbCustomers:
-            if invoice.issued_to == name:
-              customerID = id
+        prepMatchedTransforDB(error[0], error[1])
 
         nameResolved.append(error)
         matchNameErrors.pop(0)
@@ -53,13 +51,11 @@ def resolveNameMismatches(root, cur, conn, matchNameErrors):
             else:
               searchName = invoice.issued_to
 
-          for id, name in dbCustomers:
-            if searchName == name:
-              customerID = id
-
-          addAliasToDB(transaction.paid_by, customerID, cur)
+          addAliasToDB(transaction.paid_by, invoice.customer_id, cur)
 
           conn.commit()
+
+          prepMatchedTransforDB(error[0], error[1])
 
           nameResolved.append(error)
           matchNameErrors.pop(0)

@@ -166,7 +166,11 @@ def handleTransactionUpload(root, filename):
   # print(len(incompRec))
   # print(len(noMatchFromNum))
 
-  nameResolved, errorPayments = resolveNameMismatches(root, cur, con, matchNameError)
+  nameResolved, namesUnresolved = resolveNameMismatches(root, cur, con, matchNameError)
+
+  transactionUploadList.extend(nameResolved)
+
+  print(transactionUploadList)
 
   con.commit()
 
@@ -191,7 +195,7 @@ def handleTransactionUpload(root, filename):
 
   addDummyTransactionsToDB(dummyTransactionTuples, cur, con)
 
-  print(errorPayments)
+  print(namesUnresolved)
   # print(matchPaymentError)
 
   """
