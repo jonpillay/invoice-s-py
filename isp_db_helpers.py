@@ -89,7 +89,7 @@ def addTransactionToDB(transactionTuple, cur):
 
 def addTransactionsToDB(transactionsTuples, cur):
 
-  sql = "INSERT INTO TRANSACTIONS (invoice_num, amount, paid_on, company_name, payment_method, og_string, invoice_id) VALUES (?, ?, ?, ?, ?, ?, ?)"
+  sql = "INSERT INTO TRANSACTIONS (invoice_num, amount, paid_on, company_name, payment_method, og_string, customer_id, invoice_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?)"
 
   cur.executemany(sql, transactionsTuples)
 

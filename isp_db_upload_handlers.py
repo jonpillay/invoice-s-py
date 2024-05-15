@@ -159,33 +159,17 @@ def handleTransactionUpload(root, filename):
       else:
         print("cannot match")
 
-  # print(len(matchPaymentError))
-  # print(len(matchNameError))
-  # print(len(transactionUploadList))
-  # print(len(multiRec))
-  # print(len(incompRec))
-  # print(len(noMatchFromNum))
-
+  print(matchPaymentError)
+  print(noMatchFromNum)
   nameResolved, namesUnresolved = resolveNameMismatches(root, cur, con, matchNameError)
 
   transactionUploadList.extend(nameResolved)
 
-  print(transactionUploadList)
+  transactionUpload = [payPair[0].as_tuple() for payPair in transactionUploadList]
+
+  addTransactionsToDB(transactionUpload, cur)
 
   con.commit()
-
-  for paymentPair in nameResolved:
-    
-    transaction = paymentPair[0]
-    invoice = paymentPair[1]
-
-    paymentMatch = verifyTransactionAmount(transaction, invoice, 1e-10)
-
-    if paymentMatch == True:
-      prepMatchedTransforDB(transaction, invoice)
-      transactionUploadList.append((transaction, invoice))
-    else:
-      matchPaymentError.append(paymentPair)
  
   multiVerified, multiErrorFlagged, multiInvoiceErrors = resolveMultiInvoiceTransactions(root, cur, con, multiRec)
 
@@ -195,7 +179,7 @@ def handleTransactionUpload(root, filename):
 
   addDummyTransactionsToDB(dummyTransactionTuples, cur, con)
 
-  print(namesUnresolved)
+  con.commit()
   # print(matchPaymentError)
 
   """
