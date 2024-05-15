@@ -69,8 +69,6 @@ def addCashInvoicesAndTransactions(cashInvoiceList, cur, conn):
 
     invoiceDT = datetime.strptime(invoice[2], "%Y-%m-%d")
 
-    print(invoiceDT)
-
     dummyCashPaymentDt = invoiceDT + timedelta(days=1)
   
     transactionTup = (invoice[0], invoice[1], dummyCashPaymentDt, invoice[3], "CASH", "CASH TRANSACTION", invoiceID, invoice[4])
@@ -112,8 +110,6 @@ def addParentTransactionToDB(transactionTuple, cur, con):
 
 
 def addDummyTransactionsToDB(transactionUploadList, cur, con):
-
-  print(transactionUploadList)
 
   sql = "INSERT INTO TRANSACTIONS (invoice_num, amount, paid_on, company_name, payment_method, og_string, customer_id, invoice_id, parent_trans) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)"
 
@@ -240,10 +236,6 @@ def resolveNewCustomersDB(root, invoiceCustomers, aliasesDict, cur, conn):
       """
 
       if customerName != "" and customerName == customer:
-
-        print("It took us here")
-
-        print(customerName)
 
         addNewCustomerToDB(customer, cur)
 

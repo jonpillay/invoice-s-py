@@ -3,27 +3,29 @@ from isp_db_helpers import getCustomerAliases
 
 import tkinter as tk
 
-
-def verifyTransactionDetails(transaction, invoice, cur):
-
-  customerAliases = getCustomerAliases(cur, invoice.customer_id)
-
-  if invoice.issued_to != transaction.paid_by or invoice.issued_to not in customerAliases:
-    return f"Name Mismatch {transaction.paid_by} to {invoice.issued_to}"
-  elif invoice.amount != transaction.amount:
-    return invoice.amount - transaction.amount
-  else:
-    return True
   
-def verifyTransactionAmount(transaction, invoice):
+def verifyTransactionAmount(transaction, invoice, tol):
 
-  tol = 1e-10
   dif  = abs(invoice.amount - transaction.amount)
   
   if dif < tol:
     return True
   else:
     return False
+
+
+def verifyTransactionDetails(transaction, invoice, cur):
+
+  customerAliases = getCustomerAliases(cur, invoice.customer_id)
+
+  amountVerified = verifyTransactionAmount(transaction, invoice, 0.01)
+
+  if amountVerified == True and invoice.issued_to != transaction.paid_by or amountVerified == True and invoice.issued_to not in customerAliases:
+    return f"Name Mismatch {transaction.paid_by} to {invoice.issued_to}"
+  elif amountVerified == False:
+    return invoice.amount - transaction.amount
+  else:
+    return True
 
 def verifyAlias(transaction, invoice):
 

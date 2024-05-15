@@ -1,5 +1,38 @@
 from tkinter import ttk
 
+def renderSimplePromptInvoices(parentWindow, invoiceList):
+
+  invoiceTable = ttk.Treeview(parentWindow, show='headings', height=len(invoiceList))
+
+  invoiceTable['columns'] = ('invoice_num', 'issued_to', 'amount', 'date_issued')
+
+  invoiceTable.column('invoice_num', width=110, anchor='center')
+  invoiceTable.heading('invoice_num', text="Invoice #")
+
+  invoiceTable.column('issued_to', width=270, anchor='center')
+  invoiceTable.heading('issued_to', text='Customer')
+  
+  invoiceTable.column('amount', width=110, anchor='center')
+  invoiceTable.heading('amount', text='Amount (£)')
+  
+  invoiceTable.column('date_issued', width=110, anchor='center')
+  invoiceTable.heading('date_issued', text='Issued On')
+
+
+  for i in range(len(invoiceList)):
+
+    formattedDate = invoiceList[i].date_issued.strftime("%d/%m/%Y")
+
+    invoiceTable.insert(parent='', index=i, values=(invoiceList[i].invoice_num, invoiceList[i].issued_to, invoiceList[i].amount, formattedDate))
+
+  invoiceTable.pack()
+
+  style = ttk.Style(invoiceTable)
+  style.theme_use('alt')
+  style.configure("Treeview",
+    rowheight=30
+  )
+
 def renderPromptInvoices(parentWindow, invoiceList):
 
   invoiceTable = ttk.Treeview(parentWindow, show='headings', height=len(invoiceList))
@@ -61,11 +94,13 @@ def renderPromptTransactions(parentWindow, transactionList):
     rowheight=30
   )
 
-  transactionTable.pack(pady=20)
+  transactionTable.pack(pady=10)
 
   for i in range(len(transactionList)):
 
-    transactionTable.insert(parent='', index=i, values=(transactionList[i].invoice_num, transactionList[i].high_invoice, transactionList[i].paid_by, transactionList[i].amount, transactionList[i].paid_on, transactionList[i].payment_method))
+    formattedDate = transactionList[i].paid_on.strftime("%d/%m/%Y")
+
+    transactionTable.insert(parent='', index=i, values=(transactionList[i].invoice_num, transactionList[i].paid_by, transactionList[i].amount, formattedDate, transactionList[i].payment_method))
 
 
 
@@ -101,4 +136,6 @@ def renderPromptMulitTransactions(parentWindow, transactionList):
 
   for i in range(len(transactionList)):
 
-    multiTransactionTable.insert(parent='', index=i, values=(transactionList[i].invoice_num, transactionList[i].high_invoice, transactionList[i].paid_by, transactionList[i].amount, transactionList[i].paid_on, transactionList[i].payment_method))
+    formattedDate = transactionList[i].paid_on.strftime("%d/%m/%Y")
+
+    multiTransactionTable.insert(parent='', index=i, values=(transactionList[i].invoice_num, transactionList[i].high_invoice, transactionList[i].paid_by, transactionList[i].amount, formattedDate, transactionList[i].payment_method))

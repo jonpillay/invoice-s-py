@@ -166,7 +166,7 @@ def handleTransactionUpload(root, filename):
   # print(len(incompRec))
   # print(len(noMatchFromNum))
 
-  nameResolved, nameUnresolved = resolveNameMismatches(root, cur, con, matchNameError)
+  nameResolved, errorPayments = resolveNameMismatches(root, cur, con, matchNameError)
 
   con.commit()
 
@@ -175,7 +175,7 @@ def handleTransactionUpload(root, filename):
     transaction = paymentPair[0]
     invoice = paymentPair[1]
 
-    paymentMatch = verifyTransactionAmount(transaction, invoice)
+    paymentMatch = verifyTransactionAmount(transaction, invoice, 1e-10)
 
     if paymentMatch == True:
       prepMatchedTransforDB(transaction, invoice)
@@ -190,6 +190,9 @@ def handleTransactionUpload(root, filename):
   dummyTransactionTuples = [dummyTrans.as_tuple() for dummyTrans in dummyTransactions]
 
   addDummyTransactionsToDB(dummyTransactionTuples, cur, con)
+
+  print(errorPayments)
+  # print(matchPaymentError)
 
   """
   What we have left...
