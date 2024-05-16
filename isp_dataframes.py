@@ -7,12 +7,12 @@ from dataclasses import dataclass, field
 
 @dataclass
 class Transaction:
-  invoice_num: int
   amount: float
   paid_on: datetime.date
   paid_by: str
   payment_method: str
   og_string: str
+  invoice_num: int = None
   error_flagged: int = None
   error_notes: str = None
   high_invoice: int = None

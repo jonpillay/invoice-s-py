@@ -28,6 +28,20 @@ def fetchInvoiceByNum(invoiceNumber, cur):
 
   return invoice
 
+
+def fetchUnpaidInvoiceByNum(invoiceNumber, cur):
+
+  sql = f"SELECT INVOICES.id, INVOICES.invoice_num, INVOICES.amount, INVOICES.date_issued, INVOICES.issued_to, INVOICES.customer_id FROM INVOICES LEFT JOIN TRANSACTIONS ON INVOICES.id = TRANSACTIONS.invoice_id WHERE INVOICES.invoice_num={invoiceNumber} AND TRANSACTIONS.invoice_id IS NULL"
+
+  cur.execute(sql)
+
+  invoice = cur.fetchall()
+
+  print(invoice)
+
+  return invoice
+
+
 def fetchRangeInvoices(low, high, cur):
 
   sql = "SELECT id, invoice_num, amount, date_issued, issued_to, customer_id FROM invoices WHERE invoice_num BETWEEN ? and ? ORDER BY invoice_num"
@@ -38,6 +52,8 @@ def fetchRangeInvoices(low, high, cur):
 
   return invoices
 
+
+
 def fetchRangeInvoicesByCustomer(low, high, customerID, cur):
 
   sql = "SELECT id, invoice_num, amount, date_issued, issued_to, customer_id FROM invoices WHERE invoice_num BETWEEN ? and ? and customer_id=? ORDER BY invoice_num"
@@ -47,6 +63,8 @@ def fetchRangeInvoicesByCustomer(low, high, customerID, cur):
   invoices = cur.fetchall()
 
   return invoices
+
+
 
 def addInvoicesToDB(invoicesTuples, cur):
 

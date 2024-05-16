@@ -3,7 +3,7 @@ from datetime import datetime
 import copy
 
 from isp_dataframes import Transaction, Invoice
-from isp_db_helpers import getCustomerAliases, getCustomerID, addParentTransactionToDB
+from isp_db_helpers import getCustomerAliases, getCustomerID, addParentTransactionToDB, fetchUnpaidInvoiceByNum
 
 def constructCustomerAliasesDict(cur, namesIDsTups):
   
@@ -112,6 +112,20 @@ def genTransactionDCobj(transaction):
 
   return transactionDC
 
+def genNoNumTransactionDCobj(transaction):
+
+  date_paid = datetime.strptime(transaction[2], "%Y-%m-%d")
+  
+  transactionDC = Transaction(
+    amount=transaction[1],
+    paid_on=date_paid,
+    paid_by=transaction[3],
+    payment_method=transaction[4],
+    og_string=transaction[5]
+  )
+
+  return transactionDC
+
 def genMultiTransactionDCobj(transaction):
 
   date_paid = datetime.strptime(transaction[2], "%Y-%m-%d")
@@ -159,3 +173,36 @@ def genMultiTransactionsInvoices(transactionsList, cur, con):
 def prepMatchedTransforDB(transaction, invoice):
   transaction.invoice_id = invoice.invoice_id
   transaction.customer_id = invoice.customer_id
+
+
+def reMatchPaymentErrors(matchPaymentErrors, incompRec, cur):
+  # print(matchPaymentErrors[0])
+  # print(matchPaymentErrors[1])
+
+  rematched = []
+
+  transactionList = [paymenError[0] for paymenError in matchPaymentErrors]
+
+  for transaction in transactionList:
+    invoice = fetchUnpaidInvoiceByNum(transaction.invoice_num, cur)
+
+    if len(invoice) > 0:
+
+      invoiceDC = genInvoiceDCobj(invoice)
+
+      matched = [transaction, invoiceDC]
+
+      rematched.append(matched)
+    else:
+
+      if transaction.error_notes == None:
+        existNote = ""
+      else:
+        existNote = transaction.error_notes        
+
+      transaction.error_flagged = 1
+      transaction.error_notes = " ".join(["INVOICE NUM ERROR", existNote])
+
+      incompRec.append(transaction)
+  
+  return rematched, incompRec

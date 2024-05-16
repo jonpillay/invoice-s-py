@@ -6,8 +6,8 @@ from datetime import datetime
 
 from isp_csv_helpers import cleanTransactionRaw, cleanInvoiceListRawGenCustomerList
 from isp_trans_verify import verifyTransactionDetails, verifyAlias, verifyTransactionAmount
-from isp_db_helpers import getInvoiceNumsIDs, fetchInvoiceByNum, addTransactionsToDB, addNewCustomersToDB, getDBInvoiceNums, getCustomerNamesIDs, resolveNewCustomersDB, addCashInvoicesAndTransactions, addInvoicesToDB, addDummyTransactionsToDB
-from isp_data_handlers import constructCustomerAliasesDict, constructCustomerIDict, prepInvoiceUploadList, genInvoiceDCobj, genTransactionDCobj, genMultiTransactionDCobj, prepMatchedTransforDB, genMultiTransactionsInvoices
+from isp_db_helpers import getInvoiceNumsIDs, fetchInvoiceByNum, fetchUnpaidInvoiceByNum, addTransactionsToDB, addNewCustomersToDB, getDBInvoiceNums, getCustomerNamesIDs, resolveNewCustomersDB, addCashInvoicesAndTransactions, addInvoicesToDB, addDummyTransactionsToDB
+from isp_data_handlers import constructCustomerAliasesDict, constructCustomerIDict, prepInvoiceUploadList, genInvoiceDCobj, genTransactionDCobj, genMultiTransactionDCobj, prepMatchedTransforDB, genMultiTransactionsInvoices, reMatchPaymentErrors, genNoNumTransactionDCobj
 from isp_resolvers import resolveNameMismatches, resolvePaymentErrors, resolveMultiInvoiceTransactions
 
 from isp_dataframes import Transaction
@@ -55,14 +55,10 @@ def handleInvoiceUpload(root, filename):
 
   addInvoicesToDB(invoiceUploadTups, cur)
 
-
-  # addCashInvoiceAndTransaction(cashInvoiceUploadTups, cur, conn)
-
   conn.commit()
 
   cur.close()
   conn.close()
-
 
 
 def handleTransactionUpload(root, filename):
@@ -89,31 +85,14 @@ def handleTransactionUpload(root, filename):
       """ Check to see if the Transaction entry has one, numerous, or no invoice number matches """
       
       if len(cleanedEntry[0]) == 0:
-        incompRec.append(cleanedEntry)
+        transDC = genNoNumTransactionDCobj(cleanedEntry)
+        incompRec.append(transDC)
       elif len(cleanedEntry[0]) == 1:
         compRec.append(cleanedEntry)
       else:
         transactionDC = genMultiTransactionDCobj(cleanedEntry)
         multiRec.append(transactionDC)
 
-    """
-      Two database related functions need to be written. One here and one on the invoice upload.
-
-      One here needs to go through the entries that have matched with one invoice number and also
-      amounts and see if there are instnaces where the name does not match and promt the user if
-      if they want to create a alias assotiation with the customer object in the db (the alias being
-      a DB object with the FK to customer.
-
-      The function needs to loop through the list of entries examining each, but needs to skip associations
-      already made in run of the function. A list of tuples should also be made to compare before prompting the
-      user.
-
-      With this added verifyTransactionDetails() below can also verify via aliases. Leaving only actual naming errors
-      to be flagged (which you would assume there would be none - payment + invoice are varified).
-
-      The other function that needs to be added (first) is in the invoiceUpload to build a list of Customer objects in
-      the database from new customers (which they all will be first time).
-    """
 
     matches = []
 
@@ -159,8 +138,7 @@ def handleTransactionUpload(root, filename):
       else:
         print("cannot match")
 
-  print(matchPaymentError)
-  print(noMatchFromNum)
+
   nameResolved, namesUnresolved = resolveNameMismatches(root, cur, con, matchNameError)
 
   transactionUploadList.extend(nameResolved)
@@ -180,7 +158,21 @@ def handleTransactionUpload(root, filename):
   addDummyTransactionsToDB(dummyTransactionTuples, cur, con)
 
   con.commit()
-  # print(matchPaymentError)
+
+  print(len(multiVerified))
+  print(len(transactionUpload))
+  print(incompRec)
+  print(len(noMatchFromNum))
+  print(len(multiInvoiceErrors))
+
+  paymentErrors, incompRec = reMatchPaymentErrors(matchPaymentError, incompRec, cur)
+
+  # Need to work on matchPaymentError here, List match payment error needs to match the Transaction with invoices that do not
+  # already have an Transaction asotiated with them. The original fetchInvoiceByNum needs to be reworked to do the same,
+  # as matching with invoices already paid will not work.
+
+  # From there the system need to user prompt about the detail mismatches, either the pair are unrealted or a payment error that
+  # can be corrected via a new negative (or positive) transaction.
 
   """
   What we have left...

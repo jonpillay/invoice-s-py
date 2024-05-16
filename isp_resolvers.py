@@ -125,8 +125,6 @@ def resolveNamesIntoDB(root, cur, con, namesList):
 
           addAliasToDB(name, customerID, cur)
 
-          print(cur.lastrowid)
-
           con.commit()
 
           namesList.pop(0)
@@ -144,8 +142,6 @@ def resolveNamesIntoDB(root, cur, con, namesList):
           customerID = cur.lastrowid
 
           addAliasToDB(name, customerID, cur)
-
-          print(cur.lastrowid)
 
           con.commit()
 
