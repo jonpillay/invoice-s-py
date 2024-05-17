@@ -70,74 +70,74 @@ def openNewCustomerPrompt(root, customer, dbCustomers, newCustomerReturn, newAli
 
 def openTransactionAliasPrompt(root, invoice, transaction, aliasBool, rejectedBool):
     
-   promptWindow = tk.Toplevel(root)
-   promptWindow.title('New Customer?')
-   promptWindow.geometry('800x500')
+  promptWindow = tk.Toplevel(root)
+  promptWindow.title('New Customer?')
+  promptWindow.geometry('800x500')
 
-   promptWindow.rowconfigure(0, weight=1)
-   promptWindow.rowconfigure(1, weight=20)
-   promptWindow.columnconfigure(0, weight=1)
+  promptWindow.rowconfigure(0, weight=1)
+  promptWindow.rowconfigure(1, weight=20)
+  promptWindow.columnconfigure(0, weight=1)
 
-   title_label = tkb.Label(promptWindow, text=f"Add new alias for {invoice.issued_to}?", background='red')
-   title_label.grid(row=0, column=0, sticky='nesw')
+  title_label = tkb.Label(promptWindow, text=f"Add new alias for {invoice.issued_to}?", background='red')
+  title_label.grid(row=0, column=0, sticky='nesw')
 
-   main_frame = tkb.Frame(promptWindow)
-   main_frame.grid(row=1, column=0, sticky='nesw')
+  main_frame = tkb.Frame(promptWindow)
+  main_frame.grid(row=1, column=0, sticky='nesw')
 
-   main_frame.rowconfigure(0, weight=2)
-   main_frame.rowconfigure(1, weight=1)
+  main_frame.rowconfigure(0, weight=2)
+  main_frame.rowconfigure(1, weight=1)
 
-   main_frame.columnconfigure(0, weight=1)
+  main_frame.columnconfigure(0, weight=1)
 
-   detail_frame = tkb.Frame(main_frame)
-   detail_frame.grid(row=0, column=0, sticky='nesw')
+  detail_frame = tkb.Frame(main_frame)
+  detail_frame.grid(row=0, column=0, sticky='nesw')
 
-   transaction_label = tkb.Label(detail_frame, text=f"Transaction From {transaction.paid_by}", justify='center', font=('Helvetica-bold', 11))
-   transaction_label.pack(pady=10)
+  transaction_label = tkb.Label(detail_frame, text=f"Transaction From {transaction.paid_by}", justify='center', font=('Helvetica-bold', 11))
+  transaction_label.pack(pady=10)
 
-   renderPromptTransactions(detail_frame, [transaction])
+  renderPromptTransactions(detail_frame, [transaction])
 
-   invoice_label = tkb.Label(detail_frame, text=f"Invoice From {invoice.issued_to}", justify='center', font=('Helvetica-bold', 11))
-   invoice_label.pack(pady=10)
+  invoice_label = tkb.Label(detail_frame, text=f"Invoice From {invoice.issued_to}", justify='center', font=('Helvetica-bold', 11))
+  invoice_label.pack(pady=10)
 
-   renderSimplePromptInvoices(detail_frame, [invoice])
+  renderSimplePromptInvoices(detail_frame, [invoice])
 
-   prompt_frame = tkb.Frame(main_frame)
-   prompt_frame.rowconfigure(0, weight=1)
-   prompt_frame.rowconfigure(1, weight=1)
-   prompt_frame.columnconfigure(0, weight=1)
-   prompt_frame.grid(row=1, column=0)
+  prompt_frame = tkb.Frame(main_frame)
+  prompt_frame.rowconfigure(0, weight=1)
+  prompt_frame.rowconfigure(1, weight=1)
+  prompt_frame.columnconfigure(0, weight=1)
+  prompt_frame.grid(row=1, column=0)
 
-   prompt_label = tkb.Label(prompt_frame, text=f"Would you like to make {transaction.paid_by} an alias for {invoice.issued_to}?")
-   prompt_label.grid(row=0, column=0)
+  prompt_label = tkb.Label(prompt_frame, text=f"Would you like to make {transaction.paid_by} an alias for {invoice.issued_to}?")
+  prompt_label.grid(row=0, column=0)
 
-   decision_buttons_frame = tkb.Frame(prompt_frame)
-   decision_buttons_frame.grid(row=1, column=0)
-   decision_buttons_frame.rowconfigure(0, weight=1)
-   decision_buttons_frame.columnconfigure(0, weight=1)
-   decision_buttons_frame.columnconfigure(1, weight=1)
+  decision_buttons_frame = tkb.Frame(prompt_frame)
+  decision_buttons_frame.grid(row=1, column=0)
+  decision_buttons_frame.rowconfigure(0, weight=1)
+  decision_buttons_frame.columnconfigure(0, weight=1)
+  decision_buttons_frame.columnconfigure(1, weight=1)
 
-   verify_alias_frame = tkb.Frame(decision_buttons_frame)
-   verify_alias_frame.grid(row=0, column=0, pady=10)
+  verify_alias_frame = tkb.Frame(decision_buttons_frame)
+  verify_alias_frame.grid(row=0, column=0, pady=10)
 
-   verify_alias_button = tkb.Button(verify_alias_frame, text="Verify", command=lambda: verifyAlias())
-   verify_alias_button.grid(row=0, column=0)
+  verify_alias_button = tkb.Button(verify_alias_frame, text="Verify", command=lambda: verifyAlias())
+  verify_alias_button.grid(row=0, column=0)
 
-   reject_alias_frame = tkb.Frame(decision_buttons_frame)
-   reject_alias_frame.grid(row=0, column=1)
+  reject_alias_frame = tkb.Frame(decision_buttons_frame)
+  reject_alias_frame.grid(row=0, column=1)
 
-   reject_alias_button = tkb.Button(reject_alias_frame, text="Reject", command=lambda: rejectAlias())
-   reject_alias_button.grid(row=0, column=0)
+  reject_alias_button = tkb.Button(reject_alias_frame, text="Reject", command=lambda: rejectAlias())
+  reject_alias_button.grid(row=0, column=0)
 
-   def verifyAlias():
-      aliasBool.set(True)
-      promptWindow.destroy()
+  def verifyAlias():
+    aliasBool.set(True)
+    promptWindow.destroy()
 
-   def rejectAlias():
-      rejectedBool.set(True)
-      promptWindow.destroy()
+  def rejectAlias():
+    rejectedBool.set(True)
+    promptWindow.destroy()
 
-   promptWindow.wait_window(main_frame)
+  promptWindow.wait_window(main_frame)
 
 def openTransactionPaymentErrorPrompt(root, invoice, transaction, checkedBool, resolveBool, resolveString, noteString):
    
@@ -226,8 +226,6 @@ def openTransactionPaymentErrorPrompt(root, invoice, transaction, checkedBool, r
   raise_error_button = tkb.Button(raise_error_frame, text="Raise Error", command=lambda: flagError())
   raise_error_button.grid(row=0, column=0)
 
-  promptWindow.wait_window(main_frame)
-
   def verifyWithBACS():
     checkedBool.set(True)
     resolveBool.set(True)
@@ -253,4 +251,6 @@ def openTransactionPaymentErrorPrompt(root, invoice, transaction, checkedBool, r
     noteString.set(add_note_entry.get('1.0', 'end'))
 
     promptWindow.destroy()
+
+  promptWindow.wait_window(main_frame)
 

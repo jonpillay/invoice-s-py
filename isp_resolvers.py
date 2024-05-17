@@ -6,7 +6,7 @@ from isp_data_comparers import compareCustomerToAliasesDict, getCustomerDBName
 from isp_multi_invoice_prompt import openMultiInvoicePrompt
 
 import tkinter as tk
-import datetime
+from datetime import datetime
 
 def resolveNameMismatches(root, cur, conn, matchNameErrors):
 
@@ -181,15 +181,27 @@ def resolvePaymentErrors(root, paymentErrors):
 
       elif checkedBool.get() == True and resolveBool.get() == True:
 
+        prepMatchedTransforDB(error[0], error[1])
+
         if resolveString.get() == "CASH":
-          methodStr = "DUMMY (CASH)"
+          methodStr = "CORDUM (CASH)"
         elif resolveString.get() == "BACS":
-          methodStr = "DUMMY (BACS)"
+          methodStr = "CORDUM (BACS)"
         
         correctionAmount = 0 - (invoice.amount - transaction.amount)
-        
-        dummyTransaction = Transaction(invoice.invoice_num, correctionAmount, datetime.date.now(), transaction.paid_by, methodStr, noteString.get(), invoice.invoice_id, invoice.customer_id)
 
+        dummyTransaction = Transaction(
+          invoice_num=transaction.invoice_num,
+          amount=correctionAmount,
+          paid_on=datetime.today().strftime('%Y-%m-%d'),
+          paid_by=transaction.paid_by,
+          payment_method=methodStr,
+          og_string=transaction.og_string,
+          error_notes=noteString.get(),
+          invoice_id=transaction.invoice_id,
+          customer_id=transaction.customer_id
+        )
+        
         uploadTuple = (error, dummyTransaction)
 
         dummyTransactionUploadTups.append(uploadTuple)

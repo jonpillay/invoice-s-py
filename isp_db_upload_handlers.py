@@ -167,9 +167,9 @@ def handleTransactionUpload(root, filename):
 
   paymentErrors, incompRec = reMatchPaymentErrors(matchPaymentError, incompRec, cur)
 
-  print(paymentErrors)
+  correctedErrors, incorrectInvoiceNums = resolvePaymentErrors(root, paymentErrors)
 
-  resolvePaymentErrors(root, paymentErrors)
+  print(correctedErrors)
 
   # Need to work on matchPaymentError here, List match payment error needs to match the Transaction with invoices that do not
   # already have an Transaction asotiated with them. The original fetchInvoiceByNum needs to be reworked to do the same,
