@@ -74,40 +74,46 @@ def addInvoicesToDB(invoicesTuples, cur):
 
 
 
-def addCashInvoicesAndTransactions(cashInvoiceList, cur, conn):
+def addCashInvoicesAndTransactions(cashInvoiceList, cur, con):
 
   for invoice in cashInvoiceList:
     sql = "INSERT OR IGNORE INTO INVOICES (invoice_num, amount, date_issued, issued_to, customer_id) VALUES (?,?,?,?,?)"
 
-    cur.execute(sql, invoice,)
+    cur.execute(sql, invoice.as_tuple(),)
 
-    conn.commit()
+    con.commit()
 
     invoiceID = cur.lastrowid
 
-    invoiceDT = datetime.strptime(invoice[2], "%Y-%m-%d")
+    invoiceDT = datetime.strptime(invoice.date_issued, "%Y-%m-%d")
 
     dummyCashPaymentDt = invoiceDT + timedelta(days=1)
   
-    transactionTup = (invoice[0], invoice[1], dummyCashPaymentDt, invoice[3], "CASH", "CASH TRANSACTION", invoiceID, invoice[4])
+    transactionTup = (invoice.amount, dummyCashPaymentDt, invoice.issued_to, "CASH", "CASH TRANSACTION", invoice.invoice_num, invoice.customer_id, invoiceID)
 
-    addTransactionToDB(transactionTup, cur)
+    addTransactionToDB(transactionTup, con, cur)
 
-    conn.commit()
+    con.commit()
 
 
 
-def addTransactionToDB(transactionTuple, cur):
+def addTransactionToDB(transactionTuple, con, cur):
   
-  sql = "INSERT INTO TRANSACTIONS (invoice_num, amount, paid_on, company_name, payment_method, og_string, invoice_id, customer_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?)"
+  sql = "INSERT INTO TRANSACTIONS (amount, paid_on, company_name, payment_method, og_string, invoice_num, customer_id, invoice_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?)"
 
   cur.execute(sql, transactionTuple)
+
+  con.commit()
+
+  transID = cur.lastrowid
+
+  return transID
 
 
 
 def addTransactionsToDB(transactionsTuples, cur):
 
-  sql = "INSERT INTO TRANSACTIONS (invoice_num, amount, paid_on, company_name, payment_method, og_string, customer_id, invoice_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?)"
+  sql = "INSERT INTO TRANSACTIONS (amount, paid_on, company_name, payment_method, og_string, invoice_num, customer_id, invoice_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?)"
 
   cur.executemany(sql, transactionsTuples)
 
@@ -115,7 +121,7 @@ def addTransactionsToDB(transactionsTuples, cur):
 
 def addParentTransactionToDB(transactionTuple, cur, con):
   
-  sql = "INSERT INTO TRANSACTIONS (invoice_num, amount, paid_on, company_name, payment_method, og_string, high_invoice, customer_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?)"
+  sql = "INSERT INTO TRANSACTIONS (amount, paid_on, company_name, payment_method, og_string, invoice_num, high_invoice, customer_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?)"
 
   cur.execute(sql, transactionTuple)
 
@@ -129,7 +135,16 @@ def addParentTransactionToDB(transactionTuple, cur, con):
 
 def addDummyTransactionsToDB(transactionUploadList, cur, con):
 
-  sql = "INSERT INTO TRANSACTIONS (invoice_num, amount, paid_on, company_name, payment_method, og_string, customer_id, invoice_id, parent_trans) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)"
+  sql = "INSERT INTO TRANSACTIONS (amount, paid_on, company_name, payment_method, og_string, invoice_num, customer_id, invoice_id, parent_trans) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)"
+
+  cur.executemany(sql, transactionUploadList)
+
+  con.commit()
+
+
+def addDummyNoteTransactionsToDB(transactionUploadList, con, cur):
+
+  sql = "INSERT INTO TRANSACTIONS (amount, paid_on, company_name, payment_method, og_string, error_notes, invoice_num, customer_id, invoice_id, parent_trans) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
 
   cur.executemany(sql, transactionUploadList)
 
@@ -285,7 +300,21 @@ def resolveNewCustomersDB(root, invoiceCustomers, aliasesDict, cur, conn):
       else:
         print("Nothing happened")
 
+def addCorrectedTransactionPairsDB(correctedErrors, con, cur):
+
+  for transactionPair in correctedErrors:
+  
+    parentTransaction = transactionPair[0]
+    correctionTransation = transactionPair[1]
+
+    print(parentTransaction)
+
+    parentID = addTransactionToDB(parentTransaction.as_tuple(), con, cur)
+
+    correctionTransation.parent_trans = parentID
+
+    print(correctionTransation)
+    print(correctionTransation.as_tuple())
 
 
-def uploadInvoicesToDB(cur, invoiceList):
-  pass
+    addDummyNoteTransactionsToDB([correctionTransation.as_tuple()], con, cur)

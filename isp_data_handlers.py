@@ -51,15 +51,15 @@ def prepInvoiceUploadList(invoiceList, customerAliasIDict):
 
           invoice.customer_id = id
 
-          cashInvoiceTup =  (
-            invoice.invoice_num,
-            invoice.amount,
-            invoice.date_issued,
-            invoice.issued_to,
-            invoice.customer_id
-          )
+          # cashInvoiceTup =  (
+          #   invoice.invoice_num,
+          #   invoice.amount,
+          #   invoice.date_issued,
+          #   invoice.issued_to,
+          #   invoice.customer_id
+          # )
 
-          cashInvoiceUploadTups.append(invoice.as_tuple())
+          cashInvoiceUploadTups.append(invoice)
 
           break
       
