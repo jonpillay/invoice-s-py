@@ -1,7 +1,7 @@
 from isp_dataframes import Transaction, Invoice
 from isp_db_helpers import getCustomerID, fetchRangeInvoicesByCustomer, getCustomerNamesIDs, addAliasToDB, addNewCustomerToDB, findCustomerIDInTup
 from isp_popup_window import openTransactionAliasPrompt, openTransactionPaymentErrorPrompt, openNewCustomerPrompt
-from isp_data_handlers import constructCustomerAliasesDict, genInvoiceDCobj, prepMatchedTransforDB
+from isp_data_handlers import constructCustomerAliasesDict, genInvoiceDCobj, prepMatchedTransforDB, constructCustomerIDict
 from isp_data_comparers import compareCustomerToAliasesDict, getCustomerDBName
 from isp_multi_invoice_prompt import openMultiInvoicePrompt
 
@@ -300,6 +300,49 @@ def resolveMultiInvoiceTransactions(root, cur, con, multiRecs):
           break
   
   return multiVerified, multiErrorFlagged, multiInvoiceErrors
+
+
+
+def resolveNoMatchTransactions(root, misMatched, cur, con):
+
+  customerIDMemo = []
+  matched = []
+  unMatchable = []
+
+  misMatchedCount = len(misMatched)
+
+  while len(matched) + len(misMatched) < misMatchedCount:
+
+    for transaction in misMatched:
+
+      for id, customers in customerIDMemo:
+        if transaction.paid_by in customers:
+          transaction.customer_id = id
+      
+      if transaction.customer_id == None:
+        
+        DBCustomers = getCustomerNamesIDs(cur)
+
+        AliasesDict = constructCustomerAliasesDict(cur, DBCustomers)
+
+        customerIDict = constructCustomerIDict(cur, AliasesDict)
+
+        for id in customerIDict:
+          if transaction.paid_by in customerIDict[id]:
+            transaction.customer_id = id
+
+      if transaction.customer_id == None:
+
+        errorStr = f"{datetime.today().strftime('%Y-%m-%d')} CUSTOMER NOT IN DATABASE"
+
+        transaction.error_flagged = 1
+        transaction.error_notes = errorStr
+
+        unMatchable.append(transaction)
+
+        misMatched.pop(0)
+
+        break
 
 
 def resolveMultiInvTransErrors():

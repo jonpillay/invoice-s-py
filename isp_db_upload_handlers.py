@@ -171,9 +171,13 @@ def handleTransactionUpload(root, filename):
 
   correctedTransactions = [(errorPair[0][0], errorPair[1]) for errorPair in correctedErrors]
 
-  print(correctedTransactions)
-
   addCorrectedTransactionPairsDB(correctedTransactions, con, cur)
+
+  incompRec.extend(incorrectInvoiceNums)
+
+  incompRec.sort(key=lambda Transaction: Transaction.paid_by)
+
+  print(incompRec)
 
   # Need to work on matchPaymentError here, List match payment error needs to match the Transaction with invoices that do not
   # already have an Transaction asotiated with them. The original fetchInvoiceByNum needs to be reworked to do the same,
