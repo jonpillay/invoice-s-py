@@ -1,9 +1,10 @@
 from isp_dataframes import Transaction, Invoice
-from isp_db_helpers import getCustomerID, fetchRangeInvoicesByCustomer, getCustomerNamesIDs, addAliasToDB, addNewCustomerToDB, findCustomerIDInTup
+from isp_db_helpers import getCustomerID, fetchRangeInvoicesByCustomer, getCustomerNamesIDs, addAliasToDB, addNewCustomerToDB, findCustomerIDInTup, fetchInvoicesByCustomerDateRange
 from isp_popup_window import openTransactionAliasPrompt, openTransactionPaymentErrorPrompt, openNewCustomerPrompt
-from isp_data_handlers import constructCustomerAliasesDict, genInvoiceDCobj, prepMatchedTransforDB, constructCustomerIDict
+from isp_data_handlers import constructCustomerAliasesDict, genInvoiceDCobj, genNoNumTransactionDCobj, prepMatchedTransforDB, constructCustomerIDict, getCustomerIDForTrans
 from isp_data_comparers import compareCustomerToAliasesDict, getCustomerDBName
 from isp_multi_invoice_prompt import openMultiInvoicePrompt
+from isp_trans_verify import verifyTransactionAmount
 
 import tkinter as tk
 from datetime import datetime
@@ -73,6 +74,7 @@ def resolveNameMismatches(root, cur, conn, matchNameErrors):
   # print(matchNameErrors)
 
   return nameResolved, unMatchable
+
 
 
 def resolveNamesIntoDB(root, cur, con, namesList):
@@ -212,11 +214,11 @@ def resolvePaymentErrors(root, paymentErrors):
       
       elif checkedBool.get() == True and resolveBool.get() == False:
 
-        invoice.error_flagged = 1
+        transaction.error_flagged = 1
 
-        invoice.error_notes = noteString.get()
+        transaction.error_notes = noteString.get()
 
-        errors.append(error)
+        errors.append(transaction)
 
         paymentErrors.pop(0)
 
@@ -303,47 +305,32 @@ def resolveMultiInvoiceTransactions(root, cur, con, multiRecs):
 
 
 
-def resolveNoMatchTransactions(root, misMatched, cur, con):
+def resolveNoMatchTransactions(root, incompTransactions, cur, con):
 
-  customerIDMemo = []
-  matched = []
-  unMatchable = []
+  matched, newCustomers = getCustomerIDForTrans(root, incompTransactions, cur, con)
 
-  misMatchedCount = len(misMatched)
+  for transaction in matched:
 
-  while len(matched) + len(misMatched) < misMatchedCount:
+    print(transaction)
 
-    for transaction in misMatched:
+    candInvoices = fetchInvoicesByCustomerDateRange(transaction.paid_on, datetime.today().strftime('%Y-%m-%d'), transaction.customer_id, cur)
 
-      for id, customers in customerIDMemo:
-        if transaction.paid_by in customers:
-          transaction.customer_id = id
-      
-      if transaction.customer_id == None:
-        
-        DBCustomers = getCustomerNamesIDs(cur)
+    formattedInvoices = []
 
-        AliasesDict = constructCustomerAliasesDict(cur, DBCustomers)
+    for invoice in candInvoices:
 
-        customerIDict = constructCustomerIDict(cur, AliasesDict)
+      formattedInvoices.append(genInvoiceDCobj([invoice]))
 
-        for id in customerIDict:
-          if transaction.paid_by in customerIDict[id]:
-            transaction.customer_id = id
+    paymentMatches = []
 
-      if transaction.customer_id == None:
+    for possMatch in formattedInvoices:
 
-        errorStr = f"{datetime.today().strftime('%Y-%m-%d')} CUSTOMER NOT IN DATABASE"
+      amountMatchBool = verifyTransactionAmount(transaction, possMatch, 0.01)
 
-        transaction.error_flagged = 1
-        transaction.error_notes = errorStr
+      if amountMatchBool == True:
+        paymentMatches.append(possMatch)
 
-        unMatchable.append(transaction)
-
-        misMatched.pop(0)
-
-        break
-
+    print(paymentMatches)
 
 def resolveMultiInvTransErrors():
   pass

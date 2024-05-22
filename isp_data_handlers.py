@@ -3,7 +3,9 @@ from datetime import datetime
 import copy
 
 from isp_dataframes import Transaction, Invoice
-from isp_db_helpers import getCustomerAliases, getCustomerID, addParentTransactionToDB, fetchUnpaidInvoiceByNum
+from isp_db_helpers import getCustomerAliases, getCustomerID, addParentTransactionToDB, fetchUnpaidInvoiceByNum, getCustomerNamesIDs, resolveNewCustomersDB, resolveNameIntoDB
+
+
 
 def constructCustomerAliasesDict(cur, namesIDsTups):
   
@@ -206,3 +208,57 @@ def reMatchPaymentErrors(matchPaymentErrors, incompRec, cur):
       incompRec.append(transaction)
   
   return rematched, incompRec
+
+
+
+def getCustomerIDForTrans(root, transList, cur, con):
+
+  customerIDMemo = []
+  matched = []
+  newCustomers = []
+
+  misMatchedCount = len(transList)
+
+  while len(matched) + len(newCustomers) < misMatchedCount:
+
+    for transaction in transList:
+
+      for id, customers in customerIDMemo:
+        if transaction.paid_by in customers:
+          transaction.customer_id = id
+          matched.append(transaction)
+          transList.pop(0)
+
+      
+      if transaction.customer_id is None:
+        
+        DBCustomers = getCustomerNamesIDs(cur)
+
+        AliasesDict = constructCustomerAliasesDict(cur, DBCustomers)
+
+        customerIDict = constructCustomerIDict(cur, AliasesDict)
+
+        for id in customerIDict:
+          if transaction.paid_by in customerIDict[id]:
+            transaction.customer_id = id
+            matched.append(transaction)
+            transList.pop(0)
+
+
+      if transaction.customer_id is None:
+
+        customerID = resolveNameIntoDB(root, transaction.paid_by, DBCustomers, cur, con)
+
+        errorStr = f"{datetime.today().strftime('%Y-%m-%d')} CUSTOMER ADDED TO DATABASE"
+
+        transaction.customer_id = customerID
+        transaction.error_flagged = 1
+        transaction.error_notes = errorStr
+
+        newCustomers.append(transaction)
+
+        transList.pop(0)
+
+        break
+
+    return matched, newCustomers

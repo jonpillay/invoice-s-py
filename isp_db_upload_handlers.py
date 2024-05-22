@@ -8,7 +8,7 @@ from isp_csv_helpers import cleanTransactionRaw, cleanInvoiceListRawGenCustomerL
 from isp_trans_verify import verifyTransactionDetails, verifyAlias, verifyTransactionAmount
 from isp_db_helpers import getInvoiceNumsIDs, fetchInvoiceByNum, fetchUnpaidInvoiceByNum, addTransactionsToDB, addNewCustomersToDB, getDBInvoiceNums, getCustomerNamesIDs, resolveNewCustomersDB, addCashInvoicesAndTransactions, addInvoicesToDB, addDummyTransactionsToDB, addCorrectedTransactionPairsDB
 from isp_data_handlers import constructCustomerAliasesDict, constructCustomerIDict, prepInvoiceUploadList, genInvoiceDCobj, genTransactionDCobj, genMultiTransactionDCobj, prepMatchedTransforDB, genMultiTransactionsInvoices, reMatchPaymentErrors, genNoNumTransactionDCobj
-from isp_resolvers import resolveNameMismatches, resolvePaymentErrors, resolveMultiInvoiceTransactions
+from isp_resolvers import resolveNameMismatches, resolvePaymentErrors, resolveMultiInvoiceTransactions, resolveNoMatchTransactions
 
 from isp_dataframes import Transaction
 
@@ -159,12 +159,6 @@ def handleTransactionUpload(root, filename):
 
   con.commit()
 
-  # print(len(multiVerified))
-  # print(len(transactionUpload))
-
-  # print(len(noMatchFromNum))
-  # print(len(multiInvoiceErrors))
-
   paymentErrors, incompRec = reMatchPaymentErrors(matchPaymentError, incompRec, cur)
 
   correctedErrors, incorrectInvoiceNums = resolvePaymentErrors(root, paymentErrors)
@@ -177,7 +171,9 @@ def handleTransactionUpload(root, filename):
 
   incompRec.sort(key=lambda Transaction: Transaction.paid_by)
 
-  print(incompRec)
+  resolveNoMatchTransactions(root, incompRec, cur, con)
+
+  
 
   # Need to work on matchPaymentError here, List match payment error needs to match the Transaction with invoices that do not
   # already have an Transaction asotiated with them. The original fetchInvoiceByNum needs to be reworked to do the same,
@@ -223,25 +219,6 @@ def handleTransactionUpload(root, filename):
 
     # addTransactionsToDB(transactionUploadList, cur)
 
-
-      # print(invoice)
-      # print(i)
-
-      
-    
-
-    # for entry in compRec:
-
-    #   con = sqlite3.connect(os.getenv("DB_NAME"))
-
-    #   match = compareInvNumbers()
-
-    #   print(match)
-
-    # for i in incompRec:
-    #   print(i)
-    # print(len(compRec))
-    # print(len(multiRec))
   
   cur.close()
   con.close()

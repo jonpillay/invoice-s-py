@@ -37,8 +37,6 @@ def fetchUnpaidInvoiceByNum(invoiceNumber, cur):
 
   invoice = cur.fetchall()
 
-  print(invoice)
-
   return invoice
 
 
@@ -59,6 +57,20 @@ def fetchRangeInvoicesByCustomer(low, high, customerID, cur):
   sql = "SELECT id, invoice_num, amount, date_issued, issued_to, customer_id FROM invoices WHERE invoice_num BETWEEN ? and ? and customer_id=? ORDER BY invoice_num"
 
   cur.execute(sql, (low, high, customerID))
+
+  invoices = cur.fetchall()
+
+  return invoices
+
+
+
+# Needs to fetch invoices by customer and also only before the transaction was paid
+
+def fetchInvoicesByCustomerDateRange(lowDate, highDate, customerID, cur):
+
+  sql = "SELECT id, invoice_num, amount, date_issued, issued_to, customer_id FROM invoices WHERE date_issued BETWEEN ? and ? and customer_id=? ORDER BY invoice_num"
+
+  cur.execute(sql, (lowDate, highDate, customerID))
 
   invoices = cur.fetchall()
 
@@ -307,14 +319,56 @@ def addCorrectedTransactionPairsDB(correctedErrors, con, cur):
     parentTransaction = transactionPair[0]
     correctionTransation = transactionPair[1]
 
-    print(parentTransaction)
-
     parentID = addTransactionToDB(parentTransaction.as_tuple(), con, cur)
 
     correctionTransation.parent_trans = parentID
 
-    print(correctionTransation)
-    print(correctionTransation.as_tuple())
-
-
     addDummyNoteTransactionsToDB([correctionTransation.as_tuple()], con, cur)
+
+
+
+def resolveNameIntoDB(root, name, dbCustomers, cur, con):
+
+  newCustomerReturn = tk.StringVar()
+
+  newAliasReturn = tk.StringVar()
+
+  openNewCustomerPrompt(root, name, dbCustomers, newCustomerReturn, newAliasReturn)
+
+  customerName = newCustomerReturn.get()
+
+  aliasName = newAliasReturn.get()
+
+  if customerName != "" and customerName.strip().upper() == name.strip().upper():
+
+    addNewCustomerToDB(name, cur)
+
+    con.commit()
+
+    customerID = cur.lastrowid
+
+    return customerID
+
+  elif aliasName != "":
+
+    customerID = findCustomerIDInTup(aliasName, dbCustomers)
+
+    addAliasToDB(name, customerID, cur)
+
+    con.commit()
+
+    return customerID
+
+  elif customerName != "" and customerName != name:
+    
+    addNewCustomerToDB(customerName, cur)
+
+    con.commit()
+
+    customerID = cur.lastrowid
+
+    addAliasToDB(name, customerID, cur)
+
+    con.commit()
+
+    return customerID
