@@ -213,21 +213,25 @@ def reMatchPaymentErrors(matchPaymentErrors, incompRec, cur):
 
 def getCustomerIDForTrans(root, transList, cur, con):
 
-  customerIDMemo = []
+  customerIDMemo = {}
   matched = []
   newCustomers = []
 
   misMatchedCount = len(transList)
 
+  print(misMatchedCount)
+
   while len(matched) + len(newCustomers) < misMatchedCount:
 
     for transaction in transList:
 
-      for id, customers in customerIDMemo:
-        if transaction.paid_by in customers:
+      for id in customerIDMemo:
+        if transaction.paid_by in customerIDMemo[id]:
+          print("here")
           transaction.customer_id = id
           matched.append(transaction)
           transList.pop(0)
+          break
 
       
       if transaction.customer_id is None:
@@ -238,11 +242,15 @@ def getCustomerIDForTrans(root, transList, cur, con):
 
         customerIDict = constructCustomerIDict(cur, AliasesDict)
 
+        customerIDMemo = dict(customerIDict)
+
         for id in customerIDict:
           if transaction.paid_by in customerIDict[id]:
+            print("here though")
             transaction.customer_id = id
             matched.append(transaction)
             transList.pop(0)
+            break
 
 
       if transaction.customer_id is None:
@@ -256,9 +264,9 @@ def getCustomerIDForTrans(root, transList, cur, con):
         transaction.error_notes = errorStr
 
         newCustomers.append(transaction)
-
+        print("heat me now!")
         transList.pop(0)
 
         break
 
-    return matched, newCustomers
+  return matched, newCustomers

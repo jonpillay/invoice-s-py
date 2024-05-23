@@ -1,5 +1,5 @@
 from isp_dataframes import Transaction, Invoice
-from isp_db_helpers import getCustomerID, fetchRangeInvoicesByCustomer, getCustomerNamesIDs, addAliasToDB, addNewCustomerToDB, findCustomerIDInTup, fetchInvoicesByCustomerDateRange
+from isp_db_helpers import getCustomerID, fetchRangeInvoicesByCustomer, getCustomerNamesIDs, addAliasToDB, addNewCustomerToDB, findCustomerIDInTup, fetchUnpaidInvoicesByCustomerDateRange, fetchInvoicesByCustomerBeforeDate
 from isp_popup_window import openTransactionAliasPrompt, openTransactionPaymentErrorPrompt, openNewCustomerPrompt
 from isp_data_handlers import constructCustomerAliasesDict, genInvoiceDCobj, genNoNumTransactionDCobj, prepMatchedTransforDB, constructCustomerIDict, getCustomerIDForTrans
 from isp_data_comparers import compareCustomerToAliasesDict, getCustomerDBName
@@ -307,13 +307,17 @@ def resolveMultiInvoiceTransactions(root, cur, con, multiRecs):
 
 def resolveNoMatchTransactions(root, incompTransactions, cur, con):
 
+  noMatches = []
+
   matched, newCustomers = getCustomerIDForTrans(root, incompTransactions, cur, con)
 
   for transaction in matched:
 
-    print(transaction)
+    candInvoices = fetchInvoicesByCustomerBeforeDate(transaction.paid_on, transaction.customer_id, cur)
 
-    candInvoices = fetchInvoicesByCustomerDateRange(transaction.paid_on, datetime.today().strftime('%Y-%m-%d'), transaction.customer_id, cur)
+    if len(candInvoices) == 0:
+      noMatches.append(transaction)
+      continue
 
     formattedInvoices = []
 
@@ -331,6 +335,7 @@ def resolveNoMatchTransactions(root, incompTransactions, cur, con):
         paymentMatches.append(possMatch)
 
     print(paymentMatches)
+    print("")
 
 def resolveMultiInvTransErrors():
   pass

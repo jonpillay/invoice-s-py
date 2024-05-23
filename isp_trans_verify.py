@@ -8,7 +8,7 @@ def verifyTransactionAmount(transaction, invoice, tol):
 
   dif  = abs(invoice.amount - transaction.amount)
   
-  if dif < tol:
+  if dif <= tol:
     return True
   else:
     return False
