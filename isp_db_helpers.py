@@ -338,7 +338,7 @@ def addCorrectedTransactionPairsDB(correctedErrors, con, cur):
 
 
 
-def resolveNameIntoDB(root, name, dbCustomers, cur, con):
+def resolveNameIntoDB(root, name, dbCustomers, newCustomerBool, cur, con):
 
   newCustomerReturn = tk.StringVar()
 
@@ -357,6 +357,8 @@ def resolveNameIntoDB(root, name, dbCustomers, cur, con):
     con.commit()
 
     customerID = cur.lastrowid
+
+    newCustomerBool.set(True)
 
     return customerID
 

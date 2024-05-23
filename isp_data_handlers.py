@@ -1,3 +1,4 @@
+import tkinter as tk
 import re
 from datetime import datetime
 import copy
@@ -214,20 +215,23 @@ def reMatchPaymentErrors(matchPaymentErrors, incompRec, cur):
 def getCustomerIDForTrans(root, transList, cur, con):
 
   customerIDMemo = {}
+  newCustomerNames = []
+
   matched = []
-  newCustomers = []
+  newCustomerTransactions = []
 
   misMatchedCount = len(transList)
 
-  print(misMatchedCount)
-
-  while len(matched) + len(newCustomers) < misMatchedCount:
+  while len(matched) + len(newCustomerTransactions) < misMatchedCount:
 
     for transaction in transList:
 
+      if transaction.paid_by in newCustomerNames:
+        newCustomerTransactions.append(transaction)
+
       for id in customerIDMemo:
         if transaction.paid_by in customerIDMemo[id]:
-          print("here")
+
           transaction.customer_id = id
           matched.append(transaction)
           transList.pop(0)
@@ -246,7 +250,7 @@ def getCustomerIDForTrans(root, transList, cur, con):
 
         for id in customerIDict:
           if transaction.paid_by in customerIDict[id]:
-            print("here though")
+
             transaction.customer_id = id
             matched.append(transaction)
             transList.pop(0)
@@ -255,18 +259,27 @@ def getCustomerIDForTrans(root, transList, cur, con):
 
       if transaction.customer_id is None:
 
-        customerID = resolveNameIntoDB(root, transaction.paid_by, DBCustomers, cur, con)
+        newCustomerBool = tk.BooleanVar()
 
-        errorStr = f"{datetime.today().strftime('%Y-%m-%d')} CUSTOMER ADDED TO DATABASE"
+        customerID = resolveNameIntoDB(root, transaction.paid_by, DBCustomers, newCustomerBool, cur, con)
 
-        transaction.customer_id = customerID
-        transaction.error_flagged = 1
-        transaction.error_notes = errorStr
+        if newCustomerBool.get() == True:
 
-        newCustomers.append(transaction)
-        print("heat me now!")
+          errorStr = f"{datetime.today().strftime('%Y-%m-%d')} CUSTOMER ADDED TO DATABASE"
+
+          transaction.customer_id = customerID
+          transaction.error_flagged = 1
+          transaction.error_notes = errorStr
+
+          newCustomerNames.append(transaction.paid_by)
+          newCustomerTransactions.append(transaction)
+        
+        else:
+          transaction.customer_id = customerID
+          matched.append(transaction)
+
         transList.pop(0)
 
         break
 
-  return matched, newCustomers
+  return matched, newCustomerTransactions
