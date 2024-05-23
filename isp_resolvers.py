@@ -307,11 +307,12 @@ def resolveMultiInvoiceTransactions(root, cur, con, multiRecs):
 
 def resolveNoMatchTransactions(root, incompTransactions, cur, con):
 
+  matched = []
   noMatches = []
 
-  matched, newCustomers = getCustomerIDForTrans(root, incompTransactions, cur, con)
+  existingCustomerTransactions, newCustomersTransactions = getCustomerIDForTrans(root, incompTransactions, cur, con)
 
-  for transaction in matched:
+  for transaction in existingCustomerTransactions:
 
     candInvoices = fetchInvoicesByCustomerBeforeDate(transaction.paid_on, transaction.customer_id, cur)
 
@@ -334,8 +335,7 @@ def resolveNoMatchTransactions(root, incompTransactions, cur, con):
       if amountMatchBool == True:
         paymentMatches.append(possMatch)
 
-    print(paymentMatches)
-    print("")
+    
+    matched.append([transaction, paymentMatches])
 
-def resolveMultiInvTransErrors():
-  pass
+  return matched, noMatches, newCustomersTransactions

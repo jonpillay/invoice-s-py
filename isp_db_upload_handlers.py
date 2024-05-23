@@ -1,3 +1,4 @@
+import tkinter as tk
 import csv
 import sqlite3
 import os
@@ -9,6 +10,7 @@ from isp_trans_verify import verifyTransactionDetails, verifyAlias, verifyTransa
 from isp_db_helpers import getInvoiceNumsIDs, fetchInvoiceByNum, fetchUnpaidInvoiceByNum, addTransactionsToDB, addNewCustomersToDB, getDBInvoiceNums, getCustomerNamesIDs, resolveNewCustomersDB, addCashInvoicesAndTransactions, addInvoicesToDB, addDummyTransactionsToDB, addCorrectedTransactionPairsDB
 from isp_data_handlers import constructCustomerAliasesDict, constructCustomerIDict, prepInvoiceUploadList, genInvoiceDCobj, genTransactionDCobj, genMultiTransactionDCobj, prepMatchedTransforDB, genMultiTransactionsInvoices, reMatchPaymentErrors, genNoNumTransactionDCobj
 from isp_resolvers import resolveNameMismatches, resolvePaymentErrors, resolveMultiInvoiceTransactions, resolveNoMatchTransactions
+from isp_multi_invoice_prompt import openSelectBetweenInvoices
 
 from isp_dataframes import Transaction
 
@@ -171,7 +173,14 @@ def handleTransactionUpload(root, filename):
 
   incompRec.sort(key=lambda Transaction: Transaction.paid_by)
 
-  resolveNoMatchTransactions(root, incompRec, cur, con)
+  matched, noMatches, newCustomersTransactions = resolveNoMatchTransactions(root, incompRec, cur, con)
+
+  for matchPair in matched:
+    if len(matchPair[1]) > 1:
+
+      chosenInvoiceID = tk.IntVar()
+
+      openSelectBetweenInvoices(root, matchPair[0], matchPair[1], chosenInvoiceID)
 
   
 
