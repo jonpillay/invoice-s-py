@@ -140,11 +140,8 @@ def openSelectBetweenInvoices(root, transaction, invoiceList, invoiceIDVar):
   verification_frame = tkb.Frame(main_frame)
   verification_frame.pack(pady=10)
 
-  total_invoiced = round(sum([invoice.amount for invoice in invoiceList]), 2)
-
   totals_label = tkb.Label(verification_frame, text=f"Select One Invoice", font=('Helvetica-bold', 11))
   totals_label.pack(pady=10)
-
 
   verify_button = tkb.Button(main_frame, text="Select Invoice to Pay", command=lambda: selectInvoice())
   verify_button.pack()
@@ -159,9 +156,8 @@ def openSelectBetweenInvoices(root, transaction, invoiceList, invoiceIDVar):
 
       invoiceDetails = invoiceTable.item(selectedRow)
 
-      print(invoiceDetails)
+      invoiceIDVar.set(invoiceDetails.get("values")[0])
 
-      # promptWindow.destroy()
-
-
+      promptWindow.destroy()
+      
   promptWindow.wait_window()

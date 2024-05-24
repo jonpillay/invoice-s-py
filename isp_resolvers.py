@@ -335,7 +335,9 @@ def resolveNoMatchTransactions(root, incompTransactions, cur, con):
       if amountMatchBool == True:
         paymentMatches.append(possMatch)
 
-    
-    matched.append([transaction, paymentMatches])
+    if len(paymentMatches) == 0:
+      noMatches.append(transaction)
+    else:
+      matched.append([transaction, paymentMatches])
 
   return matched, noMatches, newCustomersTransactions

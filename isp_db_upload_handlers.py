@@ -175,14 +175,46 @@ def handleTransactionUpload(root, filename):
 
   matched, noMatches, newCustomersTransactions = resolveNoMatchTransactions(root, incompRec, cur, con)
 
+
+  print("")
+  print("This is matched before selection between invoices")
+  print("")
+
+
+  for boo in matched:
+    print(boo)
+
   for matchPair in matched:
     if len(matchPair[1]) > 1:
 
-      chosenInvoiceID = tk.IntVar()
+      chosenInvoiceID = tk.IntVar(value=0)
 
       openSelectBetweenInvoices(root, matchPair[0], matchPair[1], chosenInvoiceID)
 
-  
+      invoiceID = chosenInvoiceID.get()
+
+      if invoiceID == 0:
+        noMatches.append(matchPair[0])
+      else:
+        matchInvoice = [matchedInvoice for matchedInvoice in matchPair[1] if matchedInvoice.invoice_num == invoiceID]
+        matchPair.pop(1)
+        matchPair.append(matchInvoice)
+
+  print("")
+  print("This is matched after selection between invoices")
+  print("")
+
+  for i in matched:
+    print(i)
+
+  print("")
+  print("This is no matches")
+  print("")
+
+  for b in noMatches:
+    print(b)
+
+
 
   # Need to work on matchPaymentError here, List match payment error needs to match the Transaction with invoices that do not
   # already have an Transaction asotiated with them. The original fetchInvoiceByNum needs to be reworked to do the same,
