@@ -3,7 +3,7 @@ from isp_db_helpers import getCustomerID, fetchRangeInvoicesByCustomer, getCusto
 from isp_popup_window import openTransactionAliasPrompt, openTransactionPaymentErrorPrompt, openNewCustomerPrompt
 from isp_data_handlers import constructCustomerAliasesDict, genInvoiceDCobj, genNoNumTransactionDCobj, prepMatchedTransforDB, constructCustomerIDict, getCustomerIDForTrans
 from isp_data_comparers import compareCustomerToAliasesDict, getCustomerDBName
-from isp_multi_invoice_prompt import openMultiInvoicePrompt
+from isp_multi_invoice_prompt import openMultiInvoicePrompt, openVerifyCloseEnoughtMatch
 from isp_trans_verify import verifyTransactionAmount
 
 import tkinter as tk
@@ -334,9 +334,30 @@ def resolveNoMatchTransactions(root, incompTransactions, cur, con):
 
       if amountMatchBool == True:
         paymentMatches.append(possMatch)
+        continue
 
     if len(paymentMatches) == 0:
-      noMatches.append(transaction)
+
+      for possNoneExactMatch in formattedInvoices:
+
+        closeMatchBool = verifyTransactionAmount(transaction, possNoneExactMatch, 1)
+
+        if closeMatchBool == True:
+          # open popup to see if close enough (within £1) pairs should be matched
+
+          matchVerifiedBool = tk.BooleanVar()
+
+          openVerifyCloseEnoughtMatch(root, transaction, possNoneExactMatch, matchVerifiedBool)
+
+          if matchVerifiedBool.get() == True:
+            #do something
+
+            paymentMatches.append(possNoneExactMatch)
+
+      if len(paymentMatches) == 0: 
+
+        noMatches.append(transaction)
+
     else:
       matched.append([transaction, paymentMatches])
 

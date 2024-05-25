@@ -71,10 +71,10 @@ def renderPromptInvoices(parentWindow, invoiceList):
 
 def renderPromptTransactions(parentWindow, transactionList):
 
-  transactionTable = ttk.Treeview(parentWindow, columns=('low_invoice', 'paid_by', 'amount', 'paid_on', 'payment_method'), show='headings', height=len(transactionList))
+  transactionTable = ttk.Treeview(parentWindow, columns=('invoice_num', 'paid_by', 'amount', 'paid_on', 'payment_method'), show='headings', height=len(transactionList))
 
-  transactionTable.column('low_invoice', width=100, anchor='center')
-  transactionTable.heading('low_invoice', text='From #')
+  transactionTable.column('invoice_num', width=100, anchor='center')
+  transactionTable.heading('invoice_num', text='Invoice #')
   
   transactionTable.column('paid_by', width=260, anchor='center')
   transactionTable.heading('paid_by', text='Paid By')
