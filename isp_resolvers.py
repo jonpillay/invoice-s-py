@@ -249,7 +249,7 @@ def resolveMultiInvoiceTransactions(root, cur, con, multiRecs):
     
     invoices = fetchRangeInvoicesByCustomer(rec.invoice_num, rec.high_invoice, customerID, cur)
 
-    invoiceOBJs = [genInvoiceDCobj([invoice]) for invoice in invoices]
+    invoiceOBJs = [genInvoiceDCobj(invoice) for invoice in invoices]
 
     totalInvoiced = sum([invoice.amount for invoice in invoiceOBJs])
 
@@ -324,7 +324,7 @@ def resolveNoMatchTransactions(root, incompTransactions, cur, con):
 
     for invoice in candInvoices:
 
-      formattedInvoices.append(genInvoiceDCobj([invoice]))
+      formattedInvoices.append(genInvoiceDCobj(invoice))
 
     paymentMatches = []
 

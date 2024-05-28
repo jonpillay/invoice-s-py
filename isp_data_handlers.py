@@ -85,17 +85,15 @@ def prepInvoiceUploadList(invoiceList, customerAliasIDict):
 
 def genInvoiceDCobj(invoice):
 
-  invoiceTup = invoice[0]
-
-  date_issued = datetime.strptime(invoiceTup[3], "%Y-%m-%d")
+  date_issued = datetime.strptime(invoice[3], "%Y-%m-%d")
 
   invoiceDC = Invoice(
-    invoice_id=invoiceTup[0],
-    invoice_num=invoiceTup[1],
-    amount=invoiceTup[2],
+    invoice_id=invoice[0],
+    invoice_num=invoice[1],
+    amount=invoice[2],
     date_issued=date_issued,
-    issued_to=invoiceTup[4],
-    customer_id=invoiceTup[5]
+    issued_to=invoice[4],
+    customer_id=invoice[5]
   )
 
   return invoiceDC
@@ -199,7 +197,7 @@ def reMatchPaymentErrors(matchPaymentErrors, incompRec, cur):
 
     if len(invoice) > 0:
 
-      invoiceDC = genInvoiceDCobj(invoice)
+      invoiceDC = genInvoiceDCobj(invoice[0])
 
       matched = [transaction, invoiceDC]
 

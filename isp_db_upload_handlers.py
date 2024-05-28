@@ -102,11 +102,7 @@ def handleTransactionUpload(root, filename):
 
   compRec = sorted(unsortedCompRec, key=lambda transaction:transaction.paid_on)
   incompRec = sorted(unsortedIncompRec, key=lambda transaction:transaction.paid_on)
-  multiRec = unsortedMultiRec.sort(key=lambda transaction:transaction.paid_on)
-
-  print(incompRec)
-
-  exit()
+  multiRec = sorted(unsortedMultiRec, key=lambda transaction:transaction.paid_on)
 
   matches = []
 
@@ -125,17 +121,14 @@ def handleTransactionUpload(root, filename):
 
     cur = con.cursor()
 
-    invoiceNum = int(transaction[0][0])
+    invoiceNum = transaction.invoice_num
 
     invoice = fetchInvoiceByNum(invoiceNum, cur)
 
     if len(invoice) == 0:
-      transactionDC = genTransactionDCobj(transaction)
       noMatchFromNum.append(transactionDC)
-      continue
     else:
-      invoice = genInvoiceDCobj(invoice)
-      transactionDC = genTransactionDCobj(transaction)
+      invoice = genInvoiceDCobj(invoice[0])
       matches.append([transactionDC, invoice])
 
   for transaction, invoice in matches:
@@ -168,6 +161,7 @@ def handleTransactionUpload(root, filename):
 
   transactionUploadList = []
 
+
   # Start of multi-invoice transaction verification.
  
   multiVerified, multiErrorFlagged, multiInvoiceErrors = resolveMultiInvoiceTransactions(root, cur, con, multiRec)
@@ -179,6 +173,9 @@ def handleTransactionUpload(root, filename):
   addDummyTransactionsToDB(dummyTransactionTuples, cur, con)
 
   con.commit()
+
+
+  # Resolve Payment Errors
 
   reMatched, incompRec = reMatchPaymentErrors(matchPaymentError, incompRec, cur)
 
@@ -199,6 +196,7 @@ def handleTransactionUpload(root, filename):
   finalPaymentMatches = []
 
   for matchPair in matched:
+    
     if len(matchPair[1]) > 1:
 
       chosenInvoiceID = tk.IntVar(value=0)
