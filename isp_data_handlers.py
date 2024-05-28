@@ -147,11 +147,15 @@ def genMultiTransactionDCobj(transaction):
 
 
 
-def genMultiTransactionsInvoices(transactionsList, cur, con):
+def genMultiTransactionsInvoices(transactionsList, cur, con):  
 
   transactionUploadList = []
+
+  uploadedMultiTransactionPairs = []
   
   for transaction, invoices in transactionsList:
+
+    splitTransactions = [transaction]
     
     transactionID = addParentTransactionToDB(transaction.as_tuple(), cur, con)
 
@@ -169,8 +173,11 @@ def genMultiTransactionsInvoices(transactionsList, cur, con):
       dummyTransaction.parent_trans = transactionID
 
       transactionUploadList.append(dummyTransaction)
+      splitTransactions.append(dummyTransaction)
 
-  return transactionUploadList
+    uploadedMultiTransactionPairs.append([splitTransactions, invoices])
+
+  return transactionUploadList, uploadedMultiTransactionPairs
 
 
 def prepMatchedTransforDB(transaction, invoice):
@@ -187,6 +194,7 @@ def reMatchPaymentErrors(matchPaymentErrors, incompRec, cur):
   transactionList = [paymenError[0] for paymenError in matchPaymentErrors]
 
   for transaction in transactionList:
+    
     invoice = fetchUnpaidInvoiceByNum(transaction.invoice_num, cur)
 
     if len(invoice) > 0:

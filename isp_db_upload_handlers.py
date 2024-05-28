@@ -102,6 +102,7 @@ def handleTransactionUpload(root, filename):
     matchPaymentError = []
     matchNameError = []
 
+    upLoadedPairs = []
     transactionUploadList = []
 
     for transaction in compRec:
@@ -150,10 +151,16 @@ def handleTransactionUpload(root, filename):
   addTransactionsToDB(transactionUpload, cur)
 
   con.commit()
+
+  upLoadedPairs.extend(transactionUploadList)
+
+  transactionUploadList = []
+
+  # Start of multi-invoice transaction verification.
  
   multiVerified, multiErrorFlagged, multiInvoiceErrors = resolveMultiInvoiceTransactions(root, cur, con, multiRec)
 
-  dummyTransactions = genMultiTransactionsInvoices(multiVerified, cur, con)
+  dummyTransactions, uploadedMultiTransactionPairs = genMultiTransactionsInvoices(multiVerified, cur, con)
 
   dummyTransactionTuples = [dummyTrans.as_tuple() for dummyTrans in dummyTransactions]
 
@@ -161,20 +168,23 @@ def handleTransactionUpload(root, filename):
 
   con.commit()
 
-  paymentErrors, incompRec = reMatchPaymentErrors(matchPaymentError, incompRec, cur)
+  reMatched, incompRec = reMatchPaymentErrors(matchPaymentError, incompRec, cur)
 
-  correctedErrors, incorrectInvoiceNums = resolvePaymentErrors(root, paymentErrors)
+  correctedErrors, incorrectInvoiceNums = resolvePaymentErrors(root, reMatched)
 
   correctedTransactions = [(errorPair[0][0], errorPair[1]) for errorPair in correctedErrors]
 
   addCorrectedTransactionPairsDB(correctedTransactions, con, cur)
 
+  con.commit()
+
   incompRec.extend(incorrectInvoiceNums)
 
   incompRec.sort(key=lambda Transaction: Transaction.paid_by)
 
-  matched, noExactMatches, newCustomersTransactions = resolveNoMatchTransactions(root, incompRec, cur, con)
+  matched, noMatches, newCustomersTransactions = resolveNoMatchTransactions(root, incompRec, cur, con)
 
+  finalPaymentMatches = []
 
   for matchPair in matched:
     if len(matchPair[1]) > 1:
@@ -186,59 +196,66 @@ def handleTransactionUpload(root, filename):
       invoiceID = chosenInvoiceID.get()
 
       if invoiceID == 0:
-        noExactMatches.append(matchPair[0])
+        noMatches.append(matchPair[0])
       else:
         matchInvoice = [matchedInvoice for matchedInvoice in matchPair[1] if matchedInvoice.invoice_num == invoiceID]
         matchPair.pop(1)
-        matchPair.append(matchInvoice)
+        matchPair.append(matchInvoice[0])
+        finalPaymentMatches.append(matchPair)
+    elif len(matchPair[1]) == 1:
+      matchInvoice = matchPair[1][0]
+      matchPair.pop(1)
+      matchPair.append(matchInvoice)
+      finalPaymentMatches.append(matchPair)
 
-  # Check if there are any Transactions/Invoices that match payment within a tollerance range (in this case, £1)
+  for transaction, invoice in finalPaymentMatches:
+    prepMatchedTransforDB(transaction, invoice)
+    transaction.invoice_num = invoice.invoice_num
+    transaction.invoice_id = invoice.invoice_id
+    transaction.customer_id = invoice.customer_id
+    transaction.error_flagged = None
+    transaction.error_notes = None
 
+  transactionUpload = [payPair[0].as_tuple() for payPair in finalPaymentMatches]
 
+  addTransactionsToDB(transactionUpload, cur)
 
-  # Need to work on matchPaymentError here, List match payment error needs to match the Transaction with invoices that do not
-  # already have an Transaction asotiated with them. The original fetchInvoiceByNum needs to be reworked to do the same,
-  # as matching with invoices already paid will not work.
+  con.commit()
 
-  # From there the system need to user prompt about the detail mismatches, either the pair are unrealted or a payment error that
-  # can be corrected via a new negative (or positive) transaction.
+  upLoadedPairs.extend(finalPaymentMatches)
+
+  transactionUploadList = []
+
+  for e in upLoadedPairs:
+    print(e)
+    print("")
+
+  # print("No Matches")
+  # print("")
+  # for i in noMatches:
+  #   print(i)
+  #   print("")
+
+  # print("")
+  # print("Match Pairs")
+  # print("")
+  # for i in finalPaymentMatches:
+  #   print(i)
+  #   print("")
 
   """
-  What we have left...
+    We have left -
 
-  nameUnresolved = names that haven't been varified by the user, invoice, transaction pairs
-    - namesUnresolved comes from user verification. Atm still hasn't been amount checked. Amounts need to be checked.
+    upLoadedPairs = all the Transaction and Invoice pairs that have been matched and uploaded
 
-  matchPaymentError = single invoice transactions that have payment error, names do match
-    - Need to prompt user if to correct amount with dummy transaction, or add to error list
+    uploadedMultiTransactionPairs - two lists containing original multi transaction
+    with dummy transactions and all invoices paired
 
-  incompRec = Transactions without an invoice number attatched
-    - Needs to be matched via customer name and amount (and date, needs to be after invoice issued)
-  
-  multiErrorFlagged = multiTransaction with invoices that do add up, within tol, but have been flagged
-
-  multiInvoiceError = multiTransaction with invoices that either don't add up (out of tol range)
-
-    - Both of the multi invoice errors need to be left until last and an algo written to try and match invoices left
-
-  noMatchFromNum = Transactions with one invoice number, but invoice can't be found
-    - Need to match via customer name and amount
+    newCustomersTransactions - Transactions that have come in without a matching invoice
+    and new customers added to DB so assumed no invoice exists on DB
 
   """
 
-
-    # Function for incomp teansactions (no invoice number) to match transactions with invoices via payment amount and then
-    # matching and adding aliases (via user promting) to the database so they can be identified automatically on next upload.
-
-    # for nameError in matchNameError[0:4]:
-    #   verifyAlias(nameError[0], nameError[1][0])
-
-    # Need final matching function for transactions that have multiple invoice numbers, which relate to a payment made for invoices
-    # between two date. The function should pull relelvant invoices for the transaction cutomer and see if their total matches that paid,
-    # with the help of tha aliases table in relation to customers, hopefully this should yeild a full match set.
-
-
-    # addTransactionsToDB(transactionUploadList, cur)
 
   
   cur.close()

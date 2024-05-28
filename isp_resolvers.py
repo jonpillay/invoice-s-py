@@ -355,9 +355,9 @@ def resolveNoMatchTransactions(root, incompTransactions, cur, con):
             paymentMatches.append(possNoneExactMatch)
 
       if len(paymentMatches) == 0: 
-
         noMatches.append(transaction)
-
+      else:
+        matched.append([transaction, paymentMatches])
     else:
       matched.append([transaction, paymentMatches])
 
