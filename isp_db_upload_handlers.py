@@ -63,11 +63,13 @@ def handleInvoiceUpload(root, filename):
   conn.close()
 
 
+
+
 def handleTransactionUpload(root, filename):
 
-  compRec = []
-  incompRec = []
-  multiRec = []
+  unsortedCompRec = []
+  unsortedIncompRec = []
+  unsortedMultiRec = []
 
   with open(filename) as csv_file:
     CSVreader = csv.reader(csv_file)
@@ -88,13 +90,28 @@ def handleTransactionUpload(root, filename):
       
       if len(cleanedEntry[0]) == 0:
         transDC = genNoNumTransactionDCobj(cleanedEntry)
-        incompRec.append(transDC)
+        unsortedIncompRec.append(transDC)
       elif len(cleanedEntry[0]) == 1:
-        compRec.append(cleanedEntry)
+        transDC = genTransactionDCobj(cleanedEntry)
+        unsortedCompRec.append(transDC)
       else:
         transactionDC = genMultiTransactionDCobj(cleanedEntry)
-        multiRec.append(transactionDC)
+        unsortedMultiRec.append(transactionDC)
 
+  # Sort lists by date_paid
+
+  def getDate(transaction):
+    return transaction.paid_on
+
+  # compRec = unsortedCompRec.sort(key=getDate, reverse=True)
+  incompRec = unsortedIncompRec.sort(key=getDate, reverse=True)
+  multiRec = unsortedMultiRec.sort(key=getDate, reverse=True)
+
+  compRec = sorted(unsortedCompRec, key=lambda transaction:transaction.paid_on)
+
+  print(compRec)
+
+  exit()
 
     matches = []
 
