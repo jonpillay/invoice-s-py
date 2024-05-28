@@ -100,63 +100,58 @@ def handleTransactionUpload(root, filename):
 
   # Sort lists by date_paid
 
-  def getDate(transaction):
-    return transaction.paid_on
-
-  # compRec = unsortedCompRec.sort(key=getDate, reverse=True)
-  incompRec = unsortedIncompRec.sort(key=getDate, reverse=True)
-  multiRec = unsortedMultiRec.sort(key=getDate, reverse=True)
-
   compRec = sorted(unsortedCompRec, key=lambda transaction:transaction.paid_on)
+  incompRec = sorted(unsortedIncompRec, key=lambda transaction:transaction.paid_on)
+  multiRec = unsortedMultiRec.sort(key=lambda transaction:transaction.paid_on)
 
-  print(compRec)
+  print(incompRec)
 
   exit()
 
-    matches = []
+  matches = []
 
-    noMatchFromNum = []
-    matchPaymentError = []
-    matchNameError = []
+  noMatchFromNum = []
+  matchPaymentError = []
+  matchNameError = []
 
-    upLoadedPairs = []
-    transactionUploadList = []
+  upLoadedPairs = []
+  transactionUploadList = []
 
-    for transaction in compRec:
+  for transaction in compRec:
 
-      con = sqlite3.connect(os.getenv("DB_NAME"))
+    con = sqlite3.connect(os.getenv("DB_NAME"))
 
-      con.execute('PRAGMA foreign_keys = ON')
+    con.execute('PRAGMA foreign_keys = ON')
 
-      cur = con.cursor()
+    cur = con.cursor()
 
-      invoiceNum = int(transaction[0][0])
+    invoiceNum = int(transaction[0][0])
 
-      invoice = fetchInvoiceByNum(invoiceNum, cur)
+    invoice = fetchInvoiceByNum(invoiceNum, cur)
 
-      if len(invoice) == 0:
-        transactionDC = genTransactionDCobj(transaction)
-        noMatchFromNum.append(transactionDC)
-        continue
-      else:
-        invoice = genInvoiceDCobj(invoice)
-        transactionDC = genTransactionDCobj(transaction)
-        matches.append([transactionDC, invoice])
+    if len(invoice) == 0:
+      transactionDC = genTransactionDCobj(transaction)
+      noMatchFromNum.append(transactionDC)
+      continue
+    else:
+      invoice = genInvoiceDCobj(invoice)
+      transactionDC = genTransactionDCobj(transaction)
+      matches.append([transactionDC, invoice])
 
-    for transaction, invoice in matches:
+  for transaction, invoice in matches:
 
-      detailMatch = verifyTransactionDetails(transaction, invoice, cur)
+    detailMatch = verifyTransactionDetails(transaction, invoice, cur)
 
-      if type(detailMatch) == float:
-        matchPaymentError.append([transaction, invoice])
-      elif type(detailMatch) == str:
-        matchNameError.append([transaction, invoice])
-      elif detailMatch == True:
-        prepMatchedTransforDB(transaction, invoice)
-        matchPair = (transaction, invoice)
-        transactionUploadList.append(matchPair)
-      else:
-        print("cannot match")
+    if type(detailMatch) == float:
+      matchPaymentError.append([transaction, invoice])
+    elif type(detailMatch) == str:
+      matchNameError.append([transaction, invoice])
+    elif detailMatch == True:
+      prepMatchedTransforDB(transaction, invoice)
+      matchPair = (transaction, invoice)
+      transactionUploadList.append(matchPair)
+    else:
+      print("cannot match")
 
 
   nameResolved, namesUnresolved = resolveNameMismatches(root, cur, con, matchNameError)
