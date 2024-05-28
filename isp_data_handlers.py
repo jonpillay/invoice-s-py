@@ -289,3 +289,15 @@ def getCustomerIDForTrans(root, transList, cur, con):
         break
 
   return matched, newCustomerTransactions
+
+def prepNewlyMatchedTransactionForDB(transaction, invoice):
+
+  prepMatchedTransforDB(transaction, invoice)
+  
+  transaction.invoice_num = invoice.invoice_num
+  transaction.invoice_id = invoice.invoice_id
+  transaction.customer_id = invoice.customer_id
+  transaction.error_flagged = None
+  transaction.error_notes = None
+
+  return transaction

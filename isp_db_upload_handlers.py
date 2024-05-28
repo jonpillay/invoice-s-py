@@ -193,46 +193,9 @@ def handleTransactionUpload(root, filename):
 
   matched, noMatches, newCustomersTransactions = resolveNoMatchTransactions(root, incompRec, cur, con)
 
-  finalPaymentMatches = []
+  print(matched)
 
-  for matchPair in matched:
-    
-    if len(matchPair[1]) > 1:
-
-      chosenInvoiceID = tk.IntVar(value=0)
-
-      openSelectBetweenInvoices(root, matchPair[0], matchPair[1], chosenInvoiceID)
-
-      invoiceID = chosenInvoiceID.get()
-
-      if invoiceID == 0:
-        noMatches.append(matchPair[0])
-      else:
-        matchInvoice = [matchedInvoice for matchedInvoice in matchPair[1] if matchedInvoice.invoice_num == invoiceID]
-        matchPair.pop(1)
-        matchPair.append(matchInvoice[0])
-        finalPaymentMatches.append(matchPair)
-    elif len(matchPair[1]) == 1:
-      matchInvoice = matchPair[1][0]
-      matchPair.pop(1)
-      matchPair.append(matchInvoice)
-      finalPaymentMatches.append(matchPair)
-
-  for transaction, invoice in finalPaymentMatches:
-    prepMatchedTransforDB(transaction, invoice)
-    transaction.invoice_num = invoice.invoice_num
-    transaction.invoice_id = invoice.invoice_id
-    transaction.customer_id = invoice.customer_id
-    transaction.error_flagged = None
-    transaction.error_notes = None
-
-  transactionUpload = [payPair[0].as_tuple() for payPair in finalPaymentMatches]
-
-  addTransactionsToDB(transactionUpload, cur)
-
-  con.commit()
-
-  upLoadedPairs.extend(finalPaymentMatches)
+  upLoadedPairs.extend(matched)
 
   transactionUploadList = []
 
