@@ -13,6 +13,8 @@ def resolveNameMismatches(root, cur, conn, matchNameErrors):
 
   errorCount = len(matchNameErrors)
 
+  print(errorCount)
+
   unMatchable = []
   nameResolved = []
 
@@ -20,14 +22,17 @@ def resolveNameMismatches(root, cur, conn, matchNameErrors):
 
     dbCustomers = getCustomerNamesIDs(cur)
 
-    alisesDict = constructCustomerAliasesDict(cur, dbCustomers)
+    aliasesDict = constructCustomerAliasesDict(cur, dbCustomers)
 
     for error in matchNameErrors:
       
       transaction = error[0]
       invoice = error[1]
 
-      if transaction.paid_by in alisesDict[invoice.issued_to]:
+      if transaction.paid_by in aliasesDict[invoice.issued_to]:
+
+        print(transaction.paid_by)
+        print(aliasesDict[invoice.issued_to])
 
         prepMatchedTransforDB(error[0], error[1])
 
@@ -46,11 +51,11 @@ def resolveNameMismatches(root, cur, conn, matchNameErrors):
 
         if aliasBool.get() == True:
 
-          for customer in alisesDict:
-            if invoice.issued_to in alisesDict[customer]:
-              searchName = customer
-            else:
-              searchName = invoice.issued_to
+          # for customer in alisesDict:
+          #   if invoice.issued_to in alisesDict[customer]:
+          #     searchName = customer
+          #   else:
+          #     searchName = invoice.issued_to
 
           addAliasToDB(transaction.paid_by, invoice.customer_id, cur)
 
@@ -158,11 +163,13 @@ def resolveNamesIntoDB(root, cur, con, namesList):
 
 def resolvePaymentErrors(root, paymentErrors):
 
+  errorCount = len(paymentErrors)
+
   dummyTransactionUploadTups = []
 
   errors = []
 
-  while len(paymentErrors) > 0:
+  while len(dummyTransactionUploadTups) + len(errors) < errorCount:
 
     for error in paymentErrors:
 
@@ -176,7 +183,6 @@ def resolvePaymentErrors(root, paymentErrors):
       noteString = tk.StringVar()
 
       openTransactionPaymentErrorPrompt(root, invoice, transaction, checkedBool, resolveBool, resolveString, noteString)
-
 
       if checkedBool.get() == False:
         break
@@ -216,7 +222,7 @@ def resolvePaymentErrors(root, paymentErrors):
 
         transaction.error_flagged = 1
 
-        transaction.error_notes = noteString.get()
+        transaction.error_notes = f"Transaction Invoice # Error - {noteString.get()}"
 
         errors.append(transaction)
 

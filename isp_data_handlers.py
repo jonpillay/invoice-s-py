@@ -183,11 +183,12 @@ def prepMatchedTransforDB(transaction, invoice):
   transaction.customer_id = invoice.customer_id
 
 
-def reMatchPaymentErrors(matchPaymentErrors, incompRec, cur):
+def reMatchPaymentErrors(matchPaymentErrors, cur):
   # print(matchPaymentErrors[0])
   # print(matchPaymentErrors[1])
 
   rematched = []
+  noMatch = []
 
   transactionList = [paymenError[0] for paymenError in matchPaymentErrors]
 
@@ -212,16 +213,16 @@ def reMatchPaymentErrors(matchPaymentErrors, incompRec, cur):
       transaction.error_flagged = 1
       transaction.error_notes = " ".join(["INVOICE NUM ERROR", existNote])
 
-      incompRec.append(transaction)
+      noMatch.append(transaction)
   
-  return rematched, incompRec
+  return rematched, noMatch
 
 
 
 def getCustomerIDForTrans(root, transList, cur, con):
 
   customerIDMemo = {}
-  newCustomerNames = []
+  newCustomerNamesMemo = []
 
   matched = []
   newCustomerTransactions = []
@@ -232,7 +233,7 @@ def getCustomerIDForTrans(root, transList, cur, con):
 
     for transaction in transList:
 
-      if transaction.paid_by in newCustomerNames:
+      if transaction.paid_by in newCustomerNamesMemo:
         newCustomerTransactions.append(transaction)
 
       for id in customerIDMemo:
@@ -293,7 +294,7 @@ def getCustomerIDForTrans(root, transList, cur, con):
 def prepNewlyMatchedTransactionForDB(transaction, invoice):
 
   prepMatchedTransforDB(transaction, invoice)
-  
+
   transaction.invoice_num = invoice.invoice_num
   transaction.invoice_id = invoice.invoice_id
   transaction.customer_id = invoice.customer_id

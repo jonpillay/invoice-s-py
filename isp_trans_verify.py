@@ -20,6 +20,10 @@ def verifyTransactionDetails(transaction, invoice, cur):
 
   amountVerified = verifyTransactionAmount(transaction, invoice, 0.01)
 
+  # print(transaction.invoice_num)
+  # print(invoice.invoice_num)
+  # print("")
+
   if amountVerified == True and invoice.issued_to != transaction.paid_by or amountVerified == True and invoice.issued_to not in customerAliases:
     return f"Name Mismatch {transaction.paid_by} to {invoice.issued_to}"
   elif amountVerified == False:

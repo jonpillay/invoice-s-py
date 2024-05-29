@@ -203,7 +203,7 @@ def addNewCustomersToDB(customerList, cur):
 
 def addAliasToDB(aliasName, customerID, cur):
 
-  aliasEntry = (aliasName.strip(), customerID)
+  aliasEntry = (aliasName.strip().upper(), customerID)
   
   sql = "INSERT OR IGNORE INTO ALIASES (customer_alias, customer_id) VALUES (?,?)"
 

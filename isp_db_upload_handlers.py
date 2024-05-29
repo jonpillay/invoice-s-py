@@ -100,17 +100,31 @@ def handleTransactionUpload(root, filename):
 
   # Sort lists by date_paid
 
+  # comprec is transactions with a single invoice number
   compRec = sorted(unsortedCompRec, key=lambda transaction:transaction.paid_on)
+
+  # incomprec are transactions with now invoice nuumber
   incompRec = sorted(unsortedIncompRec, key=lambda transaction:transaction.paid_on)
+
+  # multirec are transactions with 2 or more invoice numbers
   multiRec = sorted(unsortedMultiRec, key=lambda transaction:transaction.paid_on)
 
-  matches = []
+  print(len(compRec)+len(incompRec)+len(multiRec))
+  #records are complete at this point
 
+  # final lists
+
+  upLoadedPairs = []
+  noMatchFinal = []
+
+  # working lists
+
+  matches = []
   noMatchFromNum = []
+
   matchPaymentError = []
   matchNameError = []
 
-  upLoadedPairs = []
   transactionUploadList = []
 
   for transaction in compRec:
@@ -123,13 +137,20 @@ def handleTransactionUpload(root, filename):
 
     invoiceNum = transaction.invoice_num
 
+    # fetch invoice via number on transaction
+
     invoice = fetchInvoiceByNum(invoiceNum, cur)
 
     if len(invoice) == 0:
-      noMatchFromNum.append(transactionDC)
+      noMatchFromNum.append(transaction)
     else:
       invoice = genInvoiceDCobj(invoice[0])
-      matches.append([transactionDC, invoice])
+      matches.append([transaction, invoice])
+
+  # for transaction, invoice in matches:
+  #   print(transaction.invoice_num)
+  #   print(invoice.invoice_num)
+  #   print("")
 
   for transaction, invoice in matches:
 
@@ -146,8 +167,14 @@ def handleTransactionUpload(root, filename):
     else:
       print("cannot match")
 
+  print(len(matchPaymentError)+len(matchNameError)+len(transactionUploadList)+len(noMatchFromNum)+len(incompRec)+len(multiRec))
+  # records are complete at this point
 
+  # resolve name mismatches
   nameResolved, namesUnresolved = resolveNameMismatches(root, cur, con, matchNameError)
+  
+  print(len(matchPaymentError)+len(nameResolved)+len(transactionUploadList)+len(noMatchFromNum)+len(incompRec)+len(multiRec))
+  # records are complete at this point
 
   transactionUploadList.extend(nameResolved)
 
@@ -177,9 +204,15 @@ def handleTransactionUpload(root, filename):
 
   # Resolve Payment Errors
 
-  reMatched, incompRec = reMatchPaymentErrors(matchPaymentError, incompRec, cur)
+
+  # rematch payment errors against updated DB
+  reMatched, noMatch = reMatchPaymentErrors(matchPaymentError, cur)
+
+  incompRec.extend(noMatch)
 
   correctedErrors, incorrectInvoiceNums = resolvePaymentErrors(root, reMatched)
+
+  incompRec.extend(incorrectInvoiceNums)
 
   correctedTransactions = [(errorPair[0][0], errorPair[1]) for errorPair in correctedErrors]
 
@@ -187,13 +220,15 @@ def handleTransactionUpload(root, filename):
 
   con.commit()
 
-  incompRec.extend(incorrectInvoiceNums)
+  uploadedRec = [(uploadedPair[0][0], uploadedPair[0[1]]) for uploadedPair in correctedErrors]
+
+  upLoadedPairs.extend(uploadedRec)
+
+  # Start of Matching Transactions with errorness invoice_numbers
 
   incompRec.sort(key=lambda Transaction: Transaction.paid_by)
 
   matched, noMatches, newCustomersTransactions = resolveNoMatchTransactions(root, incompRec, cur, con)
-
-  print(matched)
 
   upLoadedPairs.extend(matched)
 
