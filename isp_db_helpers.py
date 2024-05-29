@@ -65,7 +65,7 @@ def fetchRangeInvoicesByCustomer(low, high, customerID, cur):
 
 def fetchUnpaidInvoicesByCustomerBeforeDate(beforeDate, customerID, cur):
 
-  sql = "SELECT INVOICES.id, INVOICES.invoice_num, INVOICES.amount, INVOICES.date_issued, INVOICES.issued_to, INVOICES.customer_id FROM INVOICES LEFT JOIN TRANSACTIONS ON INVOICES.id = TRANSACTIONS.invoice_id WHERE date_issued < ? and customer_id=? ORDER BY invoice_num"
+  sql = "SELECT INVOICES.id, INVOICES.invoice_num, INVOICES.amount, INVOICES.date_issued, INVOICES.issued_to, INVOICES.customer_id FROM INVOICES LEFT JOIN TRANSACTIONS ON INVOICES.id = TRANSACTIONS.invoice_id WHERE date_issued < ? and INVOICES.customer_id=? ORDER BY INVOICES.invoice_num"
 
   cur.execute(sql, (beforeDate, customerID))
 
@@ -79,7 +79,7 @@ def fetchUnpaidInvoicesByCustomerBeforeDate(beforeDate, customerID, cur):
 
 def fetchUnpaidInvoicesByCustomerDateRange(lowDate, highDate, customerID, cur):
 
-  sql = "SELECT INVOICES.id, INVOICES.invoice_num, INVOICES.amount, INVOICES.date_issued, INVOICES.issued_to, INVOICES.customer_id FROM INVOICES LEFT JOIN TRANSACTIONS ON INVOICES.id = TRANSACTIONS.invoice_id WHERE date_issued BETWEEN ? and ? and customer_id=? ORDER BY invoice_num"
+  sql = "SELECT INVOICES.id, INVOICES.invoice_num, INVOICES.amount, INVOICES.date_issued, INVOICES.issued_to, INVOICES.customer_id FROM INVOICES LEFT JOIN TRANSACTIONS ON INVOICES.id = TRANSACTIONS.invoice_id WHERE INVOICES.date_issued BETWEEN ? and ? and INVOICES.customer_id=? ORDER BY INVOICES.invoice_num"
 
   cur.execute(sql, (lowDate, highDate, customerID))
 

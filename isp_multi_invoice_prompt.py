@@ -6,7 +6,7 @@ import sqlite3
 import os
 
 from isp_treeviews import renderPromptInvoices, renderPromptTransactions, renderPromptMulitTransactions
-from isp_db_helpers import fetchInvoicesByCustomerBeforeDate
+from isp_db_helpers import fetchUnpaidInvoicesByCustomerBeforeDate
 from isp_data_handlers import genInvoiceDCobj
 from isp_trans_verify import verifyTransactionAmount
 
@@ -81,19 +81,9 @@ def openMultiInvoicePrompt(root, transaction, invoiceList, checkedBool, verifyBo
 
 
 
-def openSelectBetweenInvoices(root, transaction, invoiceIDVar):
+def openSelectBetweenInvoices(root, transaction, candInvoices, invoiceIDVar):
 
-  conn = sqlite3.connect(os.getenv("DB_NAME"))
-
-  conn.execute('PRAGMA foreign_keys = ON')
-
-  cur = conn.cursor()
-
-  rawInvoiceList = fetchInvoicesByCustomerBeforeDate(transaction.paid_on, transaction.customer_id, cur)
-
-  invoiceListDCs = [genInvoiceDCobj(invoice) for invoice in rawInvoiceList]
-
-  invoiceList = [invoice for invoice in invoiceListDCs if verifyTransactionAmount(transaction, invoice, 0.01) == True] 
+  invoiceList = candInvoices
 
   promptWindow = tk.Toplevel(root)
   promptWindow.title('Invoices Match?')
