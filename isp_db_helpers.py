@@ -20,9 +20,9 @@ def getInvoiceNumsIDs(cur):
 
 def fetchInvoiceByNum(invoiceNumber, cur):
 
-  sql = f"SELECT id, invoice_num, amount, date_issued, issued_to, customer_id FROM INVOICES WHERE invoice_num={invoiceNumber}"
+  sql = "SELECT id, invoice_num, amount, date_issued, issued_to, customer_id FROM INVOICES WHERE invoice_num=?"
 
-  cur.execute(sql)
+  cur.execute(sql, (invoiceNumber,))
 
   invoice = cur.fetchall()
 
@@ -31,9 +31,9 @@ def fetchInvoiceByNum(invoiceNumber, cur):
 
 def fetchUnpaidInvoiceByNum(invoiceNumber, cur):
 
-  sql = f"SELECT INVOICES.id, INVOICES.invoice_num, INVOICES.amount, INVOICES.date_issued, INVOICES.issued_to, INVOICES.customer_id FROM INVOICES LEFT JOIN TRANSACTIONS ON INVOICES.id = TRANSACTIONS.invoice_id WHERE INVOICES.invoice_num={invoiceNumber} AND TRANSACTIONS.invoice_id IS NULL"
+  sql = "SELECT INVOICES.id, INVOICES.invoice_num, INVOICES.amount, INVOICES.date_issued, INVOICES.issued_to, INVOICES.customer_id FROM INVOICES LEFT JOIN TRANSACTIONS ON INVOICES.id = TRANSACTIONS.invoice_id WHERE INVOICES.invoice_num=? AND TRANSACTIONS.invoice_id IS NULL"
 
-  cur.execute(sql)
+  cur.execute(sql, (invoiceNumber,))
 
   invoice = cur.fetchall()
 
@@ -63,9 +63,9 @@ def fetchRangeInvoicesByCustomer(low, high, customerID, cur):
   return invoices
 
 
-def fetchInvoicesByCustomerBeforeDate(beforeDate, customerID, cur):
+def fetchUnpaidInvoicesByCustomerBeforeDate(beforeDate, customerID, cur):
 
-  sql = "SELECT id, invoice_num, amount, date_issued, issued_to, customer_id FROM invoices WHERE date_issued < ? and customer_id=? ORDER BY invoice_num"
+  sql = "SELECT INVOICES.id, INVOICES.invoice_num, INVOICES.amount, INVOICES.date_issued, INVOICES.issued_to, INVOICES.customer_id FROM INVOICES LEFT JOIN TRANSACTIONS ON INVOICES.id = TRANSACTIONS.invoice_id WHERE date_issued < ? and customer_id=? ORDER BY invoice_num"
 
   cur.execute(sql, (beforeDate, customerID))
 
@@ -79,7 +79,7 @@ def fetchInvoicesByCustomerBeforeDate(beforeDate, customerID, cur):
 
 def fetchUnpaidInvoicesByCustomerDateRange(lowDate, highDate, customerID, cur):
 
-  sql = "SELECT id, invoice_num, amount, date_issued, issued_to, customer_id FROM invoices WHERE date_issued BETWEEN ? and ? and customer_id=? ORDER BY invoice_num"
+  sql = "SELECT INVOICES.id, INVOICES.invoice_num, INVOICES.amount, INVOICES.date_issued, INVOICES.issued_to, INVOICES.customer_id FROM INVOICES LEFT JOIN TRANSACTIONS ON INVOICES.id = TRANSACTIONS.invoice_id WHERE date_issued BETWEEN ? and ? and customer_id=? ORDER BY invoice_num"
 
   cur.execute(sql, (lowDate, highDate, customerID))
 

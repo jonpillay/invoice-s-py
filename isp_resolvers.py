@@ -163,6 +163,8 @@ def resolveNamesIntoDB(root, cur, con, namesList):
 
 def resolvePaymentErrors(root, paymentErrors):
 
+  print("Start of resolvePaymentErrors")
+
   errorCount = len(paymentErrors)
 
   dummyTransactionUploadTups = []
@@ -354,14 +356,18 @@ def resolveNoMatchTransactions(root, incompTransactions, cur, con):
 
         chosenInvoiceID = tk.IntVar(value=0)
 
-        openSelectBetweenInvoices(root, transaction, paymentMatches, chosenInvoiceID)
+        openSelectBetweenInvoices(root, transaction, chosenInvoiceID)
 
         invoiceID = chosenInvoiceID.get()
 
         if invoiceID == 0:
           noMatches.append(transaction)
+          existingCustomerTransactions.pop(0)
+          break
         else:
           matchInvoice = [matchedInvoice for matchedInvoice in paymentMatches if matchedInvoice.invoice_num == invoiceID][0]
+
+          print(matchInvoice)
 
           invoice = matchInvoice
 
@@ -375,6 +381,7 @@ def resolveNoMatchTransactions(root, incompTransactions, cur, con):
 
           existingCustomerTransactions.pop(0)
 
+          break
 
       if len(paymentMatches) == 0:
 

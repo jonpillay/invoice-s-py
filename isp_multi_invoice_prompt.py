@@ -81,7 +81,7 @@ def openMultiInvoicePrompt(root, transaction, invoiceList, checkedBool, verifyBo
 
 
 
-def openSelectBetweenInvoices(root, transaction, invoiceList, invoiceIDVar):
+def openSelectBetweenInvoices(root, transaction, invoiceIDVar):
 
   conn = sqlite3.connect(os.getenv("DB_NAME"))
 

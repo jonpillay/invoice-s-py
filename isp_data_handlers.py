@@ -235,6 +235,8 @@ def getCustomerIDForTrans(root, transList, cur, con):
 
       if transaction.paid_by in newCustomerNamesMemo:
         newCustomerTransactions.append(transaction)
+        transList.pop(0)
+        break
 
       for id in customerIDMemo:
         if transaction.paid_by in customerIDMemo[id]:
@@ -278,7 +280,7 @@ def getCustomerIDForTrans(root, transList, cur, con):
           transaction.error_flagged = 1
           transaction.error_notes = errorStr
 
-          newCustomerNames.append(transaction.paid_by)
+          newCustomerNamesMemo.append(transaction.paid_by)
           newCustomerTransactions.append(transaction)
         
         else:

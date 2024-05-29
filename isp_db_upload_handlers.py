@@ -210,6 +210,8 @@ def handleTransactionUpload(root, filename):
 
   incompRec.extend(noMatch)
 
+  print(len(reMatched))
+
   correctedErrors, incorrectInvoiceNums = resolvePaymentErrors(root, reMatched)
 
   incompRec.extend(incorrectInvoiceNums)
@@ -220,7 +222,7 @@ def handleTransactionUpload(root, filename):
 
   con.commit()
 
-  uploadedRec = [(uploadedPair[0][0], uploadedPair[0[1]]) for uploadedPair in correctedErrors]
+  uploadedRec = [(uploadedPair[0][0], uploadedPair[0][1]) for uploadedPair in correctedErrors]
 
   upLoadedPairs.extend(uploadedRec)
 
