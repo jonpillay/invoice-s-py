@@ -226,9 +226,14 @@ def handleTransactionUpload(root, filename):
 
   upLoadedPairs.extend(uploadedRec)
 
+
+
   # Start of Matching Transactions with errorness invoice_numbers
 
   incompRec.sort(key=lambda Transaction: Transaction.paid_by)
+
+  for i in incompRec:
+    print(i)
 
   matched, noMatches, newCustomersTransactions = resolveNoMatchTransactions(root, incompRec, cur, con)
 

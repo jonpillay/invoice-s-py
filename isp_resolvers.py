@@ -334,6 +334,7 @@ def resolveNoMatchTransactions(root, incompTransactions, cur, con):
       if len(candInvoices) == 0:
         noMatches.append(transaction)
         existingCustomerTransactions.pop(0)
+        print("here innit")
         break
 
       formattedInvoices = [genInvoiceDCobj(curInvoice) for curInvoice in candInvoices]
@@ -376,8 +377,6 @@ def resolveNoMatchTransactions(root, incompTransactions, cur, con):
 
           paidInvoiceMemo.append(selectedInvoice.invoice_num)
 
-          invoice = selectedInvoice
-
           preppedTransaction = prepNewlyMatchedTransactionForDB(transaction, selectedInvoice)
 
           transactionTuple = preppedTransaction.as_tuple()
@@ -392,7 +391,7 @@ def resolveNoMatchTransactions(root, incompTransactions, cur, con):
 
       if len(paymentMatches) == 0:
 
-        closeEnoughMatched = [closeEnoughInvoice for closeEnoughInvoice in formattedInvoices if verifyTransactionAmount(transaction, closeEnoughInvoice, 1) == True and closeEnoughInvoice.invoice_num not in paidInvoiceMemo]
+        closeEnoughMatched = [closeEnoughInvoice for closeEnoughInvoice in formattedInvoices if verifyTransactionAmount(transaction, closeEnoughInvoice, 100) == True and closeEnoughInvoice.invoice_num not in paidInvoiceMemo]
 
         if len(closeEnoughMatched) == 1:
 
@@ -448,10 +447,6 @@ def resolveNoMatchTransactions(root, incompTransactions, cur, con):
             existingCustomerTransactions.pop(0)
 
             break
-          
-          existingCustomerTransactions.pop(0)
-
-          break
         
 
 
