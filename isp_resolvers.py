@@ -391,7 +391,7 @@ def resolveNoMatchTransactions(root, incompTransactions, cur, con):
 
       if len(paymentMatches) == 0:
 
-        closeEnoughMatched = [closeEnoughInvoice for closeEnoughInvoice in formattedInvoices if verifyTransactionAmount(transaction, closeEnoughInvoice, 100) == True and closeEnoughInvoice.invoice_num not in paidInvoiceMemo]
+        closeEnoughMatched = [closeEnoughInvoice for closeEnoughInvoice in formattedInvoices if verifyTransactionAmount(transaction, closeEnoughInvoice, 1) == True and closeEnoughInvoice.invoice_num not in paidInvoiceMemo]
 
         if len(closeEnoughMatched) == 1:
 
@@ -425,7 +425,7 @@ def resolveNoMatchTransactions(root, incompTransactions, cur, con):
 
           openSelectBetweenCloseEnoughInvoices(root, transaction, closeEnoughMatched, invoiceIDVar)
 
-          invoiceID = chosenInvoiceID.get()
+          invoiceID = invoiceIDVar.get()
 
           if invoiceID == 0:
             noMatches.append(transaction)
@@ -448,9 +448,164 @@ def resolveNoMatchTransactions(root, incompTransactions, cur, con):
 
             break
         
+        if len(closeEnoughMatched) == 0:
+          noMatches.append(transaction)
+          existingCustomerTransactions.pop(0)
+          break
 
 
   [print(i) for i in matched]
   [print(i) for i in noMatches]  
+
+  return matched, noMatches, newCustomersTransactions
+
+
+
+
+def resolveNoMatchTransactions2(root, incompTransactions, cur, con):
+
+  existingCustomerTransactions, newCustomersTransactions = getCustomerIDForTrans(root, incompTransactions, cur, con)
+
+  matched = []
+  noMatches = []
+
+  transactionCount = len(existingCustomerTransactions)
+
+  paidInvoiceMemo = []
+
+  while len(existingCustomerTransactions) > 0:
+
+    transaction = existingCustomerTransactions[0]
+
+    candInvoices = fetchUnpaidInvoicesByCustomerBeforeDate(transaction.paid_on, transaction.customer_id, cur)
+
+    if len(candInvoices) == 0:
+      noMatches.append(transaction)
+      existingCustomerTransactions.pop(0)
+      print("here innit")
+      continue
+
+    formattedInvoices = [genInvoiceDCobj(curInvoice) for curInvoice in candInvoices]
+
+    paymentMatches = [customerInvoice for customerInvoice in formattedInvoices if verifyTransactionAmount(transaction, customerInvoice, 0.01) == True and customerInvoice.invoice_num not in paidInvoiceMemo]
+
+    print(paymentMatches)
+
+    if len(paymentMatches) == 1:
+
+      matchedInvoice = paymentMatches[0]
+
+      preppedTransaction = prepNewlyMatchedTransactionForDB(transaction, matchedInvoice)
+
+      transactionTuple = preppedTransaction.as_tuple()
+
+      addTransactionToDB(transactionTuple, con, cur)
+
+      paidInvoiceMemo.append(matchedInvoice.invoice_num)
+
+      matched.append([preppedTransaction, matchedInvoice])
+
+      existingCustomerTransactions.pop(0)
+      continue
+
+    if len(paymentMatches) > 1:
+
+      chosenInvoiceID = tk.IntVar(value=0)
+
+      openSelectBetweenInvoices(root, transaction, paymentMatches, chosenInvoiceID)
+
+      invoiceID = chosenInvoiceID.get()
+
+      if invoiceID == 0:
+        noMatches.append(transaction)
+        existingCustomerTransactions.pop(0)
+        continue
+      else:
+        selectedInvoice = [possInvoice for possInvoice in paymentMatches if possInvoice.invoice_num == invoiceID][0]
+
+        paidInvoiceMemo.append(selectedInvoice.invoice_num)
+
+        preppedTransaction = prepNewlyMatchedTransactionForDB(transaction, selectedInvoice)
+
+        transactionTuple = preppedTransaction.as_tuple()
+
+        addTransactionToDB(transactionTuple, con, cur)
+
+        matched.append([preppedTransaction, selectedInvoice])
+
+        existingCustomerTransactions.pop(0)
+
+        continue
+
+    if len(paymentMatches) == 0:
+
+      closeEnoughMatched = [closeEnoughInvoice for closeEnoughInvoice in formattedInvoices if verifyTransactionAmount(transaction, closeEnoughInvoice, 10) == True and closeEnoughInvoice.invoice_num not in paidInvoiceMemo]
+
+      if len(closeEnoughMatched) == 1:
+
+        matchVerifiedBool = tk.BooleanVar()
+
+        openVerifyCloseEnoughtMatch(root, transaction, closeEnoughMatched[0], matchVerifiedBool)
+
+        if matchVerifiedBool.get() == True:
+
+          paidInvoiceMemo.append(closeEnoughMatched[0].invoice_num)
+
+          preppedTransaction = prepNewlyMatchedTransactionForDB(transaction, closeEnoughMatched[0])
+
+          transactionTuple = preppedTransaction.as_tuple()
+
+          addTransactionToDB(transactionTuple, con, cur)
+
+          matched.append([preppedTransaction, closeEnoughMatched[0]])
+
+          existingCustomerTransactions.pop(0)
+
+          continue
+      
+      if len(closeEnoughMatched) > 1:
+
+        # Error here where for some reason I had a loop. Need to write popup to verify between close enoughs
+
+        invoiceIDVar = tk.IntVar()
+
+        print(closeEnoughMatched)
+
+        openSelectBetweenCloseEnoughInvoices(root, transaction, closeEnoughMatched, invoiceIDVar)
+
+        invoiceID = chosenInvoiceID.get()
+
+        if invoiceID == 0:
+          noMatches.append(transaction)
+          existingCustomerTransactions.pop(0)
+          continue
+        else:
+          selectedInvoice = [possInvoice for possInvoice in paymentMatches if possInvoice.invoice_num == invoiceID][0]
+
+          paidInvoiceMemo.append(selectedInvoice.invoice_num)
+
+          preppedTransaction = prepNewlyMatchedTransactionForDB(transaction, selectedInvoice)
+
+          transactionTuple = preppedTransaction.as_tuple()
+
+          addTransactionToDB(transactionTuple, con, cur)
+
+          matched.append([preppedTransaction, selectedInvoice])
+
+          existingCustomerTransactions.pop(0)
+
+          continue
+      
+      if len(closeEnoughMatched) == 0:
+        noMatches.append(transaction)
+        existingCustomerTransactions.pop(0)
+        break
+
+  [print(i) for i in matched]
+  [print(i) for i in noMatches] 
+  print(len(matched))
+  print(len(noMatches)) 
+  print(transactionCount)
+
 
   return matched, noMatches, newCustomersTransactions

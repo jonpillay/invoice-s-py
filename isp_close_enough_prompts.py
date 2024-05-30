@@ -192,7 +192,8 @@ def openSelectBetweenCloseEnoughInvoices(root, transaction, closeEnoughMatched, 
      selectedInvoice = invoiceTable.focus()
 
      if selectedInvoice:
-        invoiceAmount = invoiceTable(selectedInvoice)["values"][0]
+        invoiceDetails = invoiceTable.item(selectedInvoice)
+        invoiceAmount = float(invoiceDetails.get("values")[2])
         errorDif = round(invoiceAmount - transaction.amount, 2)
         difference_label.config(text=f"Difference is {errorDif}")
 

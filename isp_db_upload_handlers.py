@@ -232,8 +232,8 @@ def handleTransactionUpload(root, filename):
 
   incompRec.sort(key=lambda Transaction: Transaction.paid_by)
 
-  for i in incompRec:
-    print(i)
+  # for i in incompRec:
+  #   print(i)
 
   matched, noMatches, newCustomersTransactions = resolveNoMatchTransactions(root, incompRec, cur, con)
 
@@ -241,9 +241,9 @@ def handleTransactionUpload(root, filename):
 
   transactionUploadList = []
 
-  for e in upLoadedPairs:
-    print(e)
-    print("")
+  # for e in upLoadedPairs:
+  #   print(e)
+  #   print("")
 
   # print("No Matches")
   # print("")
