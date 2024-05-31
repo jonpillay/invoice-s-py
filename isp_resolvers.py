@@ -32,9 +32,6 @@ def resolveNameMismatches(root, cur, conn, matchNameErrors):
 
       if transaction.paid_by in aliasesDict[invoice.issued_to]:
 
-        print(transaction.paid_by)
-        print(aliasesDict[invoice.issued_to])
-
         prepMatchedTransforDB(error[0], error[1])
 
         nameResolved.append(error)
@@ -89,7 +86,7 @@ def resolveNamesIntoDB(root, cur, con, namesList):
 
   resolvedCount = 0
 
-  while nameCount > resolvedCount:
+  while nameCount + 1 > resolvedCount:
 
     for name in namesList:
 
@@ -304,7 +301,7 @@ def resolveMultiInvoiceTransactions(root, cur, con, multiRecs):
           break
         elif verifyBool.get() == False:
           
-          errorList =[checkTrans, checkInvoices]
+          errorList = [checkTrans, checkInvoices]
 
           multiErrorFlagged.append(errorList)
           multiInvoiceMatches.pop(0)
@@ -315,6 +312,7 @@ def resolveMultiInvoiceTransactions(root, cur, con, multiRecs):
 
 
 def resolveNoMatchTransactions(root, incompTransactions, cur, con):
+
 
   existingCustomerTransactions, newCustomersTransactions = getCustomerIDForTrans(root, incompTransactions, cur, con)
 
@@ -340,8 +338,6 @@ def resolveNoMatchTransactions(root, incompTransactions, cur, con):
       formattedInvoices = [genInvoiceDCobj(curInvoice) for curInvoice in candInvoices]
 
       paymentMatches = [customerInvoice for customerInvoice in formattedInvoices if verifyTransactionAmount(transaction, customerInvoice, 0.01) == True and customerInvoice.invoice_num not in paidInvoiceMemo]
-
-      print(paymentMatches)
 
       if len(paymentMatches) == 1:
 
@@ -454,8 +450,8 @@ def resolveNoMatchTransactions(root, incompTransactions, cur, con):
           break
 
 
-  [print(i) for i in matched]
-  [print(i) for i in noMatches]  
+  # [print(i) for i in matched]
+  # [print(i) for i in noMatches]
 
   return matched, noMatches, newCustomersTransactions
 

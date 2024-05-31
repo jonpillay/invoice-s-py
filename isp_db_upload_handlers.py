@@ -188,6 +188,8 @@ def handleTransactionUpload(root, filename):
 
   transactionUploadList = []
 
+  print(len(matchPaymentError)+len(nameResolved)+len(upLoadedPairs)+len(noMatchFromNum)+len(incompRec)+len(multiRec))
+
 
   # Start of multi-invoice transaction verification.
  
@@ -219,6 +221,8 @@ def handleTransactionUpload(root, filename):
   correctedTransactions = [(errorPair[0][0], errorPair[1]) for errorPair in correctedErrors]
 
   addCorrectedTransactionPairsDB(correctedTransactions, con, cur)
+
+  upLoadedPairs.extend(correctedTransactions)
 
   con.commit()
 
