@@ -601,11 +601,11 @@ def resolveNoMatchTransactions2(root, incompTransactions, cur, con):
         existingCustomerTransactions.pop(0)
         break
 
-  [print(i) for i in matched]
-  [print(i) for i in noMatches] 
-  print(len(matched))
-  print(len(noMatches)) 
-  print(transactionCount)
+  # [print(i) for i in matched]
+  # [print(i) for i in noMatches] 
+  # print(len(matched))
+  # print(len(noMatches)) 
+  # print(transactionCount)
 
 
   return matched, noMatches, newCustomersTransactions

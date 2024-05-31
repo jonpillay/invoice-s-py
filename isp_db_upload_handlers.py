@@ -239,6 +239,13 @@ def handleTransactionUpload(root, filename):
 
   upLoadedPairs.extend(matched)
 
+  print(len(upLoadedPairs))
+  print(len(noMatches))
+  print(len(newCustomersTransactions))
+  print(len(namesUnresolved))
+  print(len(uploadedMultiTransactionPairs))
+  print(len(multiInvoiceErrors))
+
   transactionUploadList = []
 
   # for e in upLoadedPairs:
