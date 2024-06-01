@@ -82,81 +82,58 @@ def resolveNameMismatches(root, cur, conn, matchNameErrors):
 
 def resolveNamesIntoDB(root, cur, con, namesList):
 
-  nameCount = len(namesList)
+  for name in namesList:
 
-  resolvedCount = 0
+    dbCustomers = getCustomerNamesIDs(cur)
+    alisesDict = constructCustomerAliasesDict(cur, dbCustomers)
 
-  while nameCount + 1 > resolvedCount:
+    nameCheck = compareCustomerToAliasesDict(name, alisesDict)
 
-    for name in namesList:
+    if nameCheck == True:
 
-      dbCustomers = getCustomerNamesIDs(cur)
-      alisesDict = constructCustomerAliasesDict(cur, dbCustomers)
+      continue
 
-      nameCheck = compareCustomerToAliasesDict(name, alisesDict)
+    else:
+      
+      newCustomerReturn = tk.StringVar()
 
-      if nameCheck == True:
+      newAliasReturn = tk.StringVar()
 
-        resolvedCount += 1
+      openNewCustomerPrompt(root, name, dbCustomers, newCustomerReturn, newAliasReturn)
 
-        continue
+      customerName = newCustomerReturn.get()
 
-      else:
-        newCustomerReturn = tk.StringVar()
+      aliasName = newAliasReturn.get()
 
-        newAliasReturn = tk.StringVar()
+      if customerName != "" and customerName.strip().upper() == name.strip().upper():
 
-        openNewCustomerPrompt(root, name, dbCustomers, newCustomerReturn, newAliasReturn)
+        addNewCustomerToDB(name, cur)
 
-        customerName = newCustomerReturn.get()
+        con.commit()
 
-        aliasName = newAliasReturn.get()
 
-        if customerName != "" and customerName.strip().upper() == name.strip().upper():
+      elif aliasName != "":
 
-          addNewCustomerToDB(name, cur)
+        customerID = findCustomerIDInTup(aliasName, dbCustomers)
 
-          con.commit()
+        addAliasToDB(name, customerID, cur)
 
-          namesList.pop(0)
+        con.commit()
 
-          resolvedCount += 1
 
-          break
+      elif customerName != "" and customerName != name:
+        
+        addNewCustomerToDB(customerName, cur)
 
-        elif aliasName != "":
+        con.commit()
 
-          customerID = findCustomerIDInTup(aliasName, dbCustomers)
+        customerID = cur.lastrowid
 
-          addAliasToDB(name, customerID, cur)
+        addAliasToDB(name, customerID, cur)
 
-          con.commit()
+        con.commit()
 
-          namesList.pop(0)
-
-          resolvedCount += 1
-
-          break
-
-        elif customerName != "" and customerName != name:
-          
-          addNewCustomerToDB(customerName, cur)
-
-          con.commit()
-
-          customerID = cur.lastrowid
-
-          addAliasToDB(name, customerID, cur)
-
-          con.commit()
-
-          namesList.pop(0)
-
-          resolvedCount += 1
-
-          break
-
-          # This also needs to add the original invoice name as a customer alias for the newly created customer entry.
+        # This also needs to add the original invoice name as a customer alias for the newly created customer entry.
 
 
 def resolvePaymentErrors(root, paymentErrors):
