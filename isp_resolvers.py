@@ -299,6 +299,12 @@ def resolveNoMatchTransactions(root, incompTransactions, cur, con):
 
   existingCustomerTransactions, newCustomersTransactions = getCustomerIDForTrans(root, incompTransactions, cur, con)
 
+  print("start of existingCustomerList")
+
+  for exist in existingCustomerTransactions:
+    print(exist)
+    print("")
+
   matched = []
   noMatches = []
 
@@ -441,7 +447,7 @@ def resolveNoMatchTransactions(root, incompTransactions, cur, con):
   # [print(i) for i in matched]
   # [print(i) for i in noMatches]
 
-  print("Start of the noMatch transactions as they are recieved by resolveNoMatchTransactions2")
+  print("Start of the noMatch transactions as they are recieved by resolveNoMatchTransactions")
   print("")
 
   for noMatch in noMatches:

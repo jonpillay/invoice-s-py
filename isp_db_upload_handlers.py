@@ -188,7 +188,7 @@ def handleTransactionUpload(root, filename):
 
   transactionUploadList = []
 
-  print(len(matchPaymentError)+len(nameResolved)+len(upLoadedPairs)+len(noMatchFromNum)+len(incompRec)+len(multiRec))
+  # print(len(matchPaymentError)+len(nameResolved)+len(upLoadedPairs)+len(noMatchFromNum)+len(incompRec)+len(multiRec))
 
 
   # Start of multi-invoice transaction verification.
@@ -212,7 +212,7 @@ def handleTransactionUpload(root, filename):
 
   incompRec.extend(noMatch)
 
-  print(len(reMatched))
+  # print(len(reMatched))
 
   correctedErrors, incorrectInvoiceNums = resolvePaymentErrors(root, reMatched)
 
@@ -255,9 +255,9 @@ def handleTransactionUpload(root, filename):
 
   # List of transactions that have not found a match. (36)
   print(len(noMatches))
-  for i in noMatches:
-    print(i)
-    print(" ")
+  # for i in noMatches:
+  #   print(i)
+  #   print(" ")
 
   # List of new customer transactions that have no matching invoices or records on the DB - to be sent for printing (3)
   print(len(newCustomersTransactions))

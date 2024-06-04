@@ -238,15 +238,23 @@ def getCustomerIDForTrans(root, transList, cur, con):
         transList.pop(0)
         break
 
-      for id in customerIDMemo:
-        if transaction.paid_by in customerIDMemo[id]:
+      idListMemo = [id for id, names in customerIDMemo.items() if transaction.paid_by in names]
 
-          transaction.customer_id = id
-          matched.append(transaction)
-          transList.pop(0)
-          break
+      if len(idListMemo) > 0:
+        transaction.customer_id = idListMemo[0]
+        matched.append(transaction)
+        transList.pop(0)
+        break
 
-      
+      # for id in customerIDMemo:
+      #   if transaction.paid_by in customerIDMemo[id]:
+
+      #     transaction.customer_id = id
+      #     matched.append(transaction)
+      #     transList.pop(0)
+      #     break
+
+
       if transaction.customer_id is None:
         
         DBCustomers = getCustomerNamesIDs(cur)
@@ -257,13 +265,21 @@ def getCustomerIDForTrans(root, transList, cur, con):
 
         customerIDMemo = dict(customerIDict)
 
-        for id in customerIDict:
-          if transaction.paid_by in customerIDict[id]:
+        idListDict = [id for id, names in customerIDict.items() if transaction.paid_by in names]
 
-            transaction.customer_id = id
-            matched.append(transaction)
-            transList.pop(0)
-            break
+        if len(idListDict) > 0:
+          transaction.customer_id = idListDict[0]
+          matched.append(transaction)
+          transList.pop(0)
+          break
+
+        # for id in customerIDict:
+        #   if transaction.paid_by in customerIDict[id]:
+
+        #     transaction.customer_id = id
+        #     matched.append(transaction)
+        #     transList.pop(0)
+        #     break
 
 
       if transaction.customer_id is None:
@@ -282,14 +298,16 @@ def getCustomerIDForTrans(root, transList, cur, con):
 
           newCustomerNamesMemo.append(transaction.paid_by)
           newCustomerTransactions.append(transaction)
+
+          transList.pop(0)
+          break
         
         else:
           transaction.customer_id = customerID
           matched.append(transaction)
 
-        transList.pop(0)
-
-        break
+          transList.pop(0)
+          break
 
   return matched, newCustomerTransactions
 
