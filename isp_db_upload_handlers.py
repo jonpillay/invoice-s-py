@@ -250,24 +250,27 @@ def handleTransactionUpload(root, filename):
 
   """
 
-  #List of all the uploaded Transaction/Single Invoice pairs that have been uploaded - To be sent to printer
+  #List of all the uploaded Transaction/Single Invoice pairs that have been uploaded - To be sent to printer (274)
   print(len(upLoadedPairs))
 
-  # List of transactions that have not found a match.
+  # List of transactions that have not found a match. (36)
   print(len(noMatches))
+  for i in noMatches:
+    print(i)
+    print(" ")
 
-  # List of new customer transactions that have no matching invoices or records on the DB - to be sent for printing
+  # List of new customer transactions that have no matching invoices or records on the DB - to be sent for printing (3)
   print(len(newCustomersTransactions))
 
-  # Transactions that have the wrong name on them
+  # Transactions that have the wrong name on them (0)
   print(len(namesUnresolved))
 
   # List of pairs of lists containing transaction/invoices. The first Transaction in the list is the original multi transaction,
-  # the following ones are dummy transaction (a split of the main one) to pay each invoice.
+  # the following ones are dummy transaction (a split of the main one) to pay each invoice. (7)
   print(len(uploadedMultiTransactionPairs))
 
-  # Any multi invoice errors where the listed invoices do not total to the transaction amount
-  print(len(multiInvoiceErrors))
+  # Any multi invoice errors where the listed invoices do not total to the transaction amount. Should be possibly tried to match earlier. (0)
+  print(len(multiInvoiceErrors)) 
 
   # Multi-invoice errors that even though they do add up to the correct amount, were flaggeed as errors by the user
   # I expect this to be none, as if the invoices already add up, then I would assume it errorless.

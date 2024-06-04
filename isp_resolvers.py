@@ -290,6 +290,12 @@ def resolveMultiInvoiceTransactions(root, cur, con, multiRecs):
 
 def resolveNoMatchTransactions(root, incompTransactions, cur, con):
 
+  print("Start of the incomp transactions as they are recieved by resolveNoMatchTransactions")
+  print("")
+
+  for incomp in incompTransactions:
+    print(incomp)
+    print("")
 
   existingCustomerTransactions, newCustomersTransactions = getCustomerIDForTrans(root, incompTransactions, cur, con)
 
@@ -344,7 +350,9 @@ def resolveNoMatchTransactions(root, incompTransactions, cur, con):
         if invoiceID == 0:
           noMatches.append(transaction)
           existingCustomerTransactions.pop(0)
+          print("Here INNIT STILL!")
           break
+
         else:
           selectedInvoice = [possInvoice for possInvoice in paymentMatches if possInvoice.invoice_num == invoiceID][0]
 
@@ -365,6 +373,12 @@ def resolveNoMatchTransactions(root, incompTransactions, cur, con):
       if len(paymentMatches) == 0:
 
         closeEnoughMatched = [closeEnoughInvoice for closeEnoughInvoice in formattedInvoices if verifyTransactionAmount(transaction, closeEnoughInvoice, 1) == True and closeEnoughInvoice.invoice_num not in paidInvoiceMemo]
+
+        if len(closeEnoughMatched) == 0:
+          noMatches.append(transaction)
+          existingCustomerTransactions.pop(0)
+          print("Here INNIT!")
+          break
 
         if len(closeEnoughMatched) == 1:
 
@@ -403,7 +417,9 @@ def resolveNoMatchTransactions(root, incompTransactions, cur, con):
           if invoiceID == 0:
             noMatches.append(transaction)
             existingCustomerTransactions.pop(0)
+            print("Here INNIT THOUGH!")
             break
+
           else:
             selectedInvoice = [possInvoice for possInvoice in paymentMatches if possInvoice.invoice_num == invoiceID][0]
 
@@ -420,22 +436,32 @@ def resolveNoMatchTransactions(root, incompTransactions, cur, con):
             existingCustomerTransactions.pop(0)
 
             break
-        
-        if len(closeEnoughMatched) == 0:
-          noMatches.append(transaction)
-          existingCustomerTransactions.pop(0)
-          break
 
 
   # [print(i) for i in matched]
   # [print(i) for i in noMatches]
+
+  print("Start of the noMatch transactions as they are recieved by resolveNoMatchTransactions2")
+  print("")
+
+  for noMatch in noMatches:
+    print(noMatch)
+    print("")
+
+  quit()
 
   return matched, noMatches, newCustomersTransactions
 
 
 
 
+
+
+
+
 def resolveNoMatchTransactions2(root, incompTransactions, cur, con):
+
+
 
   existingCustomerTransactions, newCustomersTransactions = getCustomerIDForTrans(root, incompTransactions, cur, con)
 
@@ -573,6 +599,8 @@ def resolveNoMatchTransactions2(root, incompTransactions, cur, con):
         noMatches.append(transaction)
         existingCustomerTransactions.pop(0)
         break
+
+
 
   # [print(i) for i in matched]
   # [print(i) for i in noMatches] 
