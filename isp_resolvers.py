@@ -290,20 +290,20 @@ def resolveMultiInvoiceTransactions(root, cur, con, multiRecs):
 
 def resolveNoMatchTransactions(root, incompTransactions, cur, con):
 
-  print("Start of the incomp transactions as they are recieved by resolveNoMatchTransactions")
-  print("")
+  # print("Start of the incomp transactions as they are recieved by resolveNoMatchTransactions")
+  # print("")
 
-  for incomp in incompTransactions:
-    print(incomp)
-    print("")
+  # for incomp in incompTransactions:
+  #   print(incomp)
+  #   print("")
 
   existingCustomerTransactions, newCustomersTransactions = getCustomerIDForTrans(root, incompTransactions, cur, con)
 
-  print("start of existingCustomerList")
+  # print("start of existingCustomerList")
 
-  for exist in existingCustomerTransactions:
-    print(exist)
-    print("")
+  # for exist in existingCustomerTransactions:
+  #   print(exist)
+  #   print("")
 
   matched = []
   noMatches = []
@@ -447,14 +447,14 @@ def resolveNoMatchTransactions(root, incompTransactions, cur, con):
   # [print(i) for i in matched]
   # [print(i) for i in noMatches]
 
-  print("Start of the noMatch transactions as they are recieved by resolveNoMatchTransactions")
-  print("")
+  # print("Start of the noMatch transactions as they are recieved by resolveNoMatchTransactions")
+  # print("")
 
-  for noMatch in noMatches:
-    print(noMatch)
-    print("")
+  # for noMatch in noMatches:
+  #   print(noMatch)
+  #   print("")
 
-  quit()
+  # quit()
 
   return matched, noMatches, newCustomersTransactions
 
