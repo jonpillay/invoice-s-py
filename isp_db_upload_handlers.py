@@ -226,9 +226,9 @@ def handleTransactionUpload(root, filename):
 
   con.commit()
 
-  uploadedRec = [(uploadedPair[0][0], uploadedPair[0][1]) for uploadedPair in correctedErrors]
+  uploadRecs = [(uploadedPair[0][0], uploadedPair[0][1]) for uploadedPair in correctedErrors]
 
-  upLoadedPairs.extend(uploadedRec)
+  upLoadedPairs.extend(uploadRecs)
 
 
 

@@ -136,78 +136,6 @@ def resolveNamesIntoDB(root, cur, con, namesList):
         # This also needs to add the original invoice name as a customer alias for the newly created customer entry.
 
 
-def resolvePaymentErrors(root, paymentErrors):
-
-  print("Start of resolvePaymentErrors")
-
-  errorCount = len(paymentErrors)
-
-  dummyTransactionUploadTups = []
-
-  errors = []
-
-  while len(dummyTransactionUploadTups) + len(errors) < errorCount:
-
-    for error in paymentErrors:
-
-      transaction = error[0]
-      invoice = error[1]
-
-      checkedBool = tk.BooleanVar()
-      resolveBool = tk.BooleanVar()
-
-      resolveString = tk.StringVar()
-      noteString = tk.StringVar()
-
-      openTransactionPaymentErrorPrompt(root, invoice, transaction, checkedBool, resolveBool, resolveString, noteString)
-
-      if checkedBool.get() == False:
-        break
-
-      elif checkedBool.get() == True and resolveBool.get() == True:
-
-        prepMatchedTransforDB(error[0], error[1])
-
-        if resolveString.get() == "CASH":
-          methodStr = "CORDUM (CASH)"
-        elif resolveString.get() == "BACS":
-          methodStr = "CORDUM (BACS)"
-        
-        correctionAmount = 0 - (invoice.amount - transaction.amount)
-
-        dummyTransaction = Transaction(
-          invoice_num=transaction.invoice_num,
-          amount=correctionAmount,
-          paid_on=datetime.today().strftime('%Y-%m-%d'),
-          paid_by=transaction.paid_by,
-          payment_method=methodStr,
-          og_string=transaction.og_string,
-          error_notes=noteString.get(),
-          invoice_id=transaction.invoice_id,
-          customer_id=transaction.customer_id
-        )
-        
-        uploadTuple = (error, dummyTransaction)
-
-        dummyTransactionUploadTups.append(uploadTuple)
-
-        paymentErrors.pop(0)
-
-        break
-      
-      elif checkedBool.get() == True and resolveBool.get() == False:
-
-        transaction.error_flagged = 1
-
-        transaction.error_notes = f"Transaction Invoice # Error - {noteString.get()}"
-
-        errors.append(transaction)
-
-        paymentErrors.pop(0)
-
-        break
-
-  return dummyTransactionUploadTups, errors
 
 
 
@@ -285,6 +213,84 @@ def resolveMultiInvoiceTransactions(root, cur, con, multiRecs):
           break
   
   return multiVerified, multiErrorFlagged, multiInvoiceErrors
+
+
+def resolvePaymentErrors(root, paymentErrors):
+
+  print("Start of resolvePaymentErrors")
+
+  errorCount = len(paymentErrors)
+
+  dummyTransactionUploadTups = []
+
+  errors = []
+
+  while len(dummyTransactionUploadTups) + len(errors) < errorCount:
+
+    for error in paymentErrors:
+
+      transaction = error[0]
+      invoice = error[1]
+
+      checkedBool = tk.BooleanVar()
+      resolveBool = tk.BooleanVar()
+
+      resolveString = tk.StringVar()
+      noteString = tk.StringVar()
+
+      openTransactionPaymentErrorPrompt(root, invoice, transaction, checkedBool, resolveBool, resolveString, noteString)
+
+      if checkedBool.get() == False:
+        break
+
+      elif checkedBool.get() == True and resolveBool.get() == True:
+
+        prepMatchedTransforDB(error[0], error[1])
+
+        if resolveString.get() == "CASH":
+          methodStr = "CORDUM (CASH)"
+        elif resolveString.get() == "BACS":
+          methodStr = "CORDUM (BACS)"
+        
+        correctionAmount = 0 - (invoice.amount - transaction.amount)
+
+        dummyTransaction = Transaction(
+          invoice_num=transaction.invoice_num,
+          amount=correctionAmount,
+          paid_on=datetime.today().strftime('%Y-%m-%d'),
+          paid_by=transaction.paid_by,
+          payment_method=methodStr,
+          og_string=transaction.og_string,
+          error_notes=noteString.get(),
+          invoice_id=transaction.invoice_id,
+          customer_id=transaction.customer_id
+        )
+        
+        uploadTuple = (error, dummyTransaction)
+
+        dummyTransactionUploadTups.append(uploadTuple)
+
+        paymentErrors.pop(0)
+
+        break
+      
+      elif checkedBool.get() == True and resolveBool.get() == False:
+
+        transaction.error_flagged = 1
+
+        transaction.error_notes = f"Transaction Invoice # Error - {noteString.get()}"
+
+        errors.append(transaction)
+
+        paymentErrors.pop(0)
+
+        break
+
+  return dummyTransactionUploadTups, errors
+
+
+
+
 
 
 
