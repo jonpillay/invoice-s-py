@@ -188,8 +188,9 @@ def handleTransactionUpload(root, filename):
 
   transactionUploadList = []
 
-  # print(len(matchPaymentError)+len(nameResolved)+len(upLoadedPairs)+len(noMatchFromNum)+len(incompRec)+len(multiRec))
 
+  print("Transaction count @line 192")
+  print(len(matchPaymentError)+len(noMatchFromNum)+len(incompRec)+len(multiRec)+len(upLoadedPairs))
 
   # Start of multi-invoice transaction verification.
  
@@ -203,6 +204,12 @@ def handleTransactionUpload(root, filename):
 
   con.commit()
 
+  print("Transaction count @line 207")
+  print(len(matchPaymentError)+len(noMatchFromNum)+len(incompRec)+len(multiVerified)+len(multiErrorFlagged)+len(multiInvoiceErrors)+len(upLoadedPairs))
+
+
+  # print(len(matchPaymentError)+len(nameResolved)+len(upLoadedPairs)+len(noMatchFromNum)+len(incompRec)+len(multiVerified)+len(multiErrorFlagged)+len(multiInvoiceErrors))
+
 
   # Resolve Payment Errors
 
@@ -210,19 +217,24 @@ def handleTransactionUpload(root, filename):
   # rematch payment errors against updated DB
   reMatched, noMatch = reMatchPaymentErrors(matchPaymentError, cur)
 
+  print("Transaction count @line 220")
+  print(len(reMatched)+len(noMatch)+len(noMatchFromNum)+len(incompRec)+len(multiVerified)+len(multiErrorFlagged)+len(multiInvoiceErrors)+len(upLoadedPairs))
+
   incompRec.extend(noMatch)
+  incompRec.extend(noMatchFromNum)
 
   # print(len(reMatched))
 
   correctedErrors, incorrectInvoiceNums = resolvePaymentErrors(root, reMatched)
+
+  print("Transaction count @line 229")
+  print(len(correctedErrors)+len(incorrectInvoiceNums)+len(incompRec)+len(multiVerified)+len(multiErrorFlagged)+len(multiInvoiceErrors)+len(upLoadedPairs))
 
   incompRec.extend(incorrectInvoiceNums)
 
   correctedTransactions = [(errorPair[0][0], errorPair[1]) for errorPair in correctedErrors]
 
   addCorrectedTransactionPairsDB(correctedTransactions, con, cur)
-
-  upLoadedPairs.extend(correctedTransactions)
 
   con.commit()
 
@@ -242,6 +254,25 @@ def handleTransactionUpload(root, filename):
   matched, noMatches, newCustomersTransactions = resolveNoMatchTransactions(root, incompRec, cur, con)
 
   upLoadedPairs.extend(matched)
+
+  print("Transaction count @line 257")
+  print(len(noMatches)+len(newCustomersTransactions)+len(multiVerified)+len(multiErrorFlagged)+len(multiInvoiceErrors)+len(upLoadedPairs))
+
+
+
+
+  # print("Start of matched")
+  # print("")
+
+  # for match in matched:
+  #   print(match)
+
+  #   print("Start of noMatches")
+  #   print("")
+
+  # for noMatch in noMatches:
+  #   print(match)
+  #   print("")
 
 
   """

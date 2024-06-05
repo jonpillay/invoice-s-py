@@ -215,6 +215,8 @@ def resolveMultiInvoiceTransactions(root, cur, con, multiRecs):
   return multiVerified, multiErrorFlagged, multiInvoiceErrors
 
 
+
+
 def resolvePaymentErrors(root, paymentErrors):
 
   print("Start of resolvePaymentErrors")
@@ -303,7 +305,14 @@ def resolveNoMatchTransactions(root, incompTransactions, cur, con):
   #   print(incomp)
   #   print("")
 
+  print("Length of incomp transactions")
+  print(len(incompTransactions))
+
   existingCustomerTransactions, newCustomersTransactions = getCustomerIDForTrans(root, incompTransactions, cur, con)
+
+  print("Length of existingcustomer and newCustomer")
+  print(len(existingCustomerTransactions) + len(newCustomersTransactions))
+
 
   # print("start of existingCustomerList")
 
