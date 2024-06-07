@@ -139,6 +139,8 @@ def openTransactionAliasPrompt(root, invoice, transaction, aliasBool, rejectedBo
 
   promptWindow.wait_window(main_frame)
 
+  
+
 def openTransactionPaymentErrorPrompt(root, invoice, transaction, checkedBool, resolveBool, resolveString, noteString):
    
   # Should return a list of verified Transactions ready to be uploaded onto the DB.

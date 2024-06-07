@@ -167,7 +167,7 @@ def addDummyTransactionsToDB(transactionUploadList, cur, con):
 
 def addDummyNoteTransactionsToDB(transactionUploadList, con, cur):
 
-  sql = "INSERT INTO TRANSACTIONS (amount, paid_on, company_name, payment_method, og_string, error_notes, invoice_num, customer_id, invoice_id, parent_trans) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
+  sql = "INSERT INTO TRANSACTIONS (amount, paid_on, company_name, payment_method, og_string, invoice_num, error_notes, customer_id, invoice_id, parent_trans) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
 
   cur.executemany(sql, transactionUploadList)
 
@@ -322,6 +322,8 @@ def resolveNewCustomersDB(root, invoiceCustomers, aliasesDict, cur, conn):
         conn.commit()
       else:
         print("Nothing happened")
+
+
 
 def addCorrectedTransactionPairsDB(correctedErrors, con, cur):
 

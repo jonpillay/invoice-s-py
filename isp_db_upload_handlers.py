@@ -167,13 +167,13 @@ def handleTransactionUpload(root, filename):
     else:
       print("cannot match")
 
-  print(len(matchPaymentError)+len(matchNameError)+len(transactionUploadList)+len(noMatchFromNum)+len(incompRec)+len(multiRec))
+  # print(len(matchPaymentError)+len(matchNameError)+len(transactionUploadList)+len(noMatchFromNum)+len(incompRec)+len(multiRec))
   # records are complete at this point
 
   # resolve name mismatches
   nameResolved, namesUnresolved = resolveNameMismatches(root, cur, con, matchNameError)
   
-  print(len(matchPaymentError)+len(nameResolved)+len(transactionUploadList)+len(noMatchFromNum)+len(incompRec)+len(multiRec))
+  # print(len(matchPaymentError)+len(nameResolved)+len(transactionUploadList)+len(noMatchFromNum)+len(incompRec)+len(multiRec))
   # records are complete at this point
 
   transactionUploadList.extend(nameResolved)
@@ -204,8 +204,8 @@ def handleTransactionUpload(root, filename):
 
   con.commit()
 
-  print("Transaction count @line 207")
-  print(len(matchPaymentError)+len(noMatchFromNum)+len(incompRec)+len(multiVerified)+len(multiErrorFlagged)+len(multiInvoiceErrors)+len(upLoadedPairs))
+  # print("Transaction count @line 207")
+  # print(len(matchPaymentError)+len(noMatchFromNum)+len(incompRec)+len(multiVerified)+len(multiErrorFlagged)+len(multiInvoiceErrors)+len(upLoadedPairs))
 
 
   # print(len(matchPaymentError)+len(nameResolved)+len(upLoadedPairs)+len(noMatchFromNum)+len(incompRec)+len(multiVerified)+len(multiErrorFlagged)+len(multiInvoiceErrors))
@@ -217,8 +217,8 @@ def handleTransactionUpload(root, filename):
   # rematch payment errors against updated DB
   reMatched, noMatch = reMatchPaymentErrors(matchPaymentError, cur)
 
-  print("Transaction count @line 220")
-  print(len(reMatched)+len(noMatch)+len(noMatchFromNum)+len(incompRec)+len(multiVerified)+len(multiErrorFlagged)+len(multiInvoiceErrors)+len(upLoadedPairs))
+  # print("Transaction count @line 220")
+  # print(len(reMatched)+len(noMatch)+len(noMatchFromNum)+len(incompRec)+len(multiVerified)+len(multiErrorFlagged)+len(multiInvoiceErrors)+len(upLoadedPairs))
 
   incompRec.extend(noMatch)
   incompRec.extend(noMatchFromNum)
@@ -227,8 +227,8 @@ def handleTransactionUpload(root, filename):
 
   correctedErrors, incorrectInvoiceNums = resolvePaymentErrors(root, reMatched)
 
-  print("Transaction count @line 229")
-  print(len(correctedErrors)+len(incorrectInvoiceNums)+len(incompRec)+len(multiVerified)+len(multiErrorFlagged)+len(multiInvoiceErrors)+len(upLoadedPairs))
+  # print("Transaction count @line 229")
+  # print(len(correctedErrors)+len(incorrectInvoiceNums)+len(incompRec)+len(multiVerified)+len(multiErrorFlagged)+len(multiInvoiceErrors)+len(upLoadedPairs))
 
   incompRec.extend(incorrectInvoiceNums)
 
@@ -253,10 +253,19 @@ def handleTransactionUpload(root, filename):
 
   matched, noMatches, newCustomersTransactions = resolveNoMatchTransactions(root, incompRec, cur, con)
 
+  matchedUploadTuples = [matchedTrans[0].as_tuple() for matchedTrans in  matched]
+
+  addTransactionsToDB(matchedUploadTuples, cur)
+
+  con.commit()
+
   upLoadedPairs.extend(matched)
 
-  print("Transaction count @line 257")
-  print(len(noMatches)+len(newCustomersTransactions)+len(multiVerified)+len(multiErrorFlagged)+len(multiInvoiceErrors)+len(upLoadedPairs))
+  for thisTrans in matched:
+    print(thisTrans[0].as_tuple())
+
+  # print("Transaction count @line 260")
+  # print(len(noMatches)+len(namesUnresolved)+len(newCustomersTransactions)+len(multiVerified)+len(multiErrorFlagged)+len(multiInvoiceErrors)+len(upLoadedPairs))
 
 
 

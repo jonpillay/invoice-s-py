@@ -254,15 +254,15 @@ def resolvePaymentErrors(root, paymentErrors):
         elif resolveString.get() == "BACS":
           methodStr = "CORDUM (BACS)"
         
-        correctionAmount = 0 - (invoice.amount - transaction.amount)
+        correctionAmount = round(0 - (invoice.amount - transaction.amount), 2)
 
         dummyTransaction = Transaction(
-          invoice_num=transaction.invoice_num,
           amount=correctionAmount,
           paid_on=datetime.today().strftime('%Y-%m-%d'),
           paid_by=transaction.paid_by,
           payment_method=methodStr,
           og_string=transaction.og_string,
+          invoice_num=transaction.invoice_num,
           error_notes=noteString.get(),
           invoice_id=transaction.invoice_id,
           customer_id=transaction.customer_id
@@ -305,13 +305,13 @@ def resolveNoMatchTransactions(root, incompTransactions, cur, con):
   #   print(incomp)
   #   print("")
 
-  print("Length of incomp transactions")
-  print(len(incompTransactions))
+  # print("Length of incomp transactions")
+  # print(len(incompTransactions))
 
   existingCustomerTransactions, newCustomersTransactions = getCustomerIDForTrans(root, incompTransactions, cur, con)
 
-  print("Length of existingcustomer and newCustomer")
-  print(len(existingCustomerTransactions) + len(newCustomersTransactions))
+  # print("Length of existingcustomer and newCustomer")
+  # print(len(existingCustomerTransactions) + len(newCustomersTransactions))
 
 
   # print("start of existingCustomerList")
@@ -336,7 +336,6 @@ def resolveNoMatchTransactions(root, incompTransactions, cur, con):
       if len(candInvoices) == 0:
         noMatches.append(transaction)
         existingCustomerTransactions.pop(0)
-        print("here innit")
         break
 
       formattedInvoices = [genInvoiceDCobj(curInvoice) for curInvoice in candInvoices]
@@ -371,7 +370,6 @@ def resolveNoMatchTransactions(root, incompTransactions, cur, con):
         if invoiceID == 0:
           noMatches.append(transaction)
           existingCustomerTransactions.pop(0)
-          print("Here INNIT STILL!")
           break
 
         else:
@@ -398,7 +396,6 @@ def resolveNoMatchTransactions(root, incompTransactions, cur, con):
         if len(closeEnoughMatched) == 0:
           noMatches.append(transaction)
           existingCustomerTransactions.pop(0)
-          print("Here INNIT!")
           break
 
         if len(closeEnoughMatched) == 1:
@@ -438,7 +435,6 @@ def resolveNoMatchTransactions(root, incompTransactions, cur, con):
           if invoiceID == 0:
             noMatches.append(transaction)
             existingCustomerTransactions.pop(0)
-            print("Here INNIT THOUGH!")
             break
 
           else:
