@@ -2,6 +2,7 @@ import tkinter as tk
 import re
 from datetime import datetime
 import copy
+from collections import defaultdict
 
 from isp_dataframes import Transaction, Invoice
 from isp_db_helpers import getCustomerAliases, getCustomerID, addParentTransactionToDB, fetchUnpaidInvoiceByNum, getCustomerNamesIDs, resolveNewCustomersDB, resolveNameIntoDB
@@ -322,3 +323,14 @@ def prepNewlyMatchedTransactionForDB(transaction, invoice):
   transaction.error_notes = None
 
   return transaction
+
+
+
+def groupDataClassObjsByAttribute(DCList, attribute):
+
+  attrGroup = defaultdict(list)
+
+  for DC in DCList:
+    attrGroup[DC.attribute].append(DC)
+
+  return attrGroup.values()
