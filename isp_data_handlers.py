@@ -104,12 +104,31 @@ def genTransactionDCobj(transaction):
   date_paid = datetime.strptime(transaction[2], "%Y-%m-%d")
   
   transactionDC = Transaction(
-    invoice_num=int(transaction[0][0]),
+    invoice_num=int(transaction[0]),
     amount=transaction[1],
     paid_on=date_paid,
     paid_by=transaction[3],
     payment_method=transaction[4],
     og_string=transaction[5]
+  )
+
+  return transactionDC
+
+def genDBTransactionDCobj(transaction):
+  
+  transactionDC = Transaction(
+    transaction_id=transaction[0],
+    invoice_num=int(transaction[1]),
+    amount=transaction[2],
+    paid_on=transaction[3],
+    paid_by=transaction[4],
+    payment_method=transaction[5],
+    og_string=transaction[6],
+    error_flagged=transaction[7],
+    error_notes=transaction[8],
+    invoice_id=transaction[9],
+    customer_id=transaction[10],
+    parent_trans=transaction[11]
   )
 
   return transactionDC

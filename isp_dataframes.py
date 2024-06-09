@@ -12,6 +12,7 @@ class Transaction:
   paid_by: str
   payment_method: str
   og_string: str
+  transaction_id: int = None
   invoice_num: int = None
   error_flagged: int = None
   error_notes: str = None

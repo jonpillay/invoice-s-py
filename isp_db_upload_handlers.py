@@ -92,6 +92,8 @@ def handleTransactionUpload(root, filename):
         transDC = genNoNumTransactionDCobj(cleanedEntry)
         unsortedIncompRec.append(transDC)
       elif len(cleanedEntry[0]) == 1:
+        num = cleanedEntry[0][0]
+        cleanedEntry[0] = num
         transDC = genTransactionDCobj(cleanedEntry)
         unsortedCompRec.append(transDC)
       else:
