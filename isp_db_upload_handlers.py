@@ -260,15 +260,9 @@ def handleTransactionUpload(root, filename):
   print(len(matched)+len(noMatches)+len(newCustomersTransactions))
   print("")
 
-  matchedUploadTuples = [matchedTrans[0].as_tuple() for matchedTrans in  matched]
-
-  addTransactionsToDB(matchedUploadTuples, cur)
-
   con.commit()
 
   upLoadedPairs.extend(matched)
-
-  print(noMatches)
 
   # print("Transaction count @line 260")
   # print(len(noMatches)+len(namesUnresolved)+len(newCustomersTransactions)+len(multiVerified)+len(multiErrorFlagged)+len(multiInvoiceErrors)+len(upLoadedPairs))
