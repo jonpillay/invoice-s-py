@@ -267,6 +267,9 @@ def resolvePaymentErrors(root, paymentErrors):
           invoice_id=transaction.invoice_id,
           customer_id=transaction.customer_id
         )
+
+        error.error_flagged = 1
+        error.error_notes = f"CORRECTED by AMOUNT={correctionAmount}"
         
         uploadTuple = (error, dummyTransaction)
 
