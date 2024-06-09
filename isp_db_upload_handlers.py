@@ -152,6 +152,8 @@ def handleTransactionUpload(root, filename):
   #   print(invoice.invoice_num)
   #   print("")
 
+  incompRec.extend(noMatchFromNum)
+
   for transaction, invoice in matches:
 
     detailMatch = verifyTransactionDetails(transaction, invoice, cur)
@@ -190,7 +192,7 @@ def handleTransactionUpload(root, filename):
 
 
   print("Transaction count @line 192")
-  print(len(matchPaymentError)+len(noMatchFromNum)+len(incompRec)+len(multiRec)+len(upLoadedPairs))
+  print(len(matchPaymentError)+len(incompRec)+len(multiRec)+len(upLoadedPairs))
 
   # Start of multi-invoice transaction verification.
  
@@ -221,7 +223,6 @@ def handleTransactionUpload(root, filename):
   # print(len(reMatched)+len(noMatch)+len(noMatchFromNum)+len(incompRec)+len(multiVerified)+len(multiErrorFlagged)+len(multiInvoiceErrors)+len(upLoadedPairs))
 
   incompRec.extend(noMatch)
-  incompRec.extend(noMatchFromNum)
 
   # print(len(reMatched))
 
@@ -248,10 +249,16 @@ def handleTransactionUpload(root, filename):
 
   incompRec.sort(key=lambda Transaction: Transaction.paid_by)
 
-  # for i in incompRec:
-  #   print(i)
+
+  print("InComp rec len check")
+  print(len(incompRec))
+  print("")
 
   matched, noMatches, newCustomersTransactions = resolveNoMatchTransactions(root, incompRec, cur, con)
+
+  print("Ouput len check")
+  print(len(matched)+len(noMatches)+len(newCustomersTransactions))
+  print("")
 
   matchedUploadTuples = [matchedTrans[0].as_tuple() for matchedTrans in  matched]
 

@@ -74,6 +74,17 @@ def fetchUnpaidInvoicesByCustomerBeforeDate(beforeDate, customerID, cur):
   return invoices
 
 
+def fetchInvoicesByCustomerDateRange(lowDate, highDate, customerID, cur):
+
+  sql = "SELECT id, invoice_num, amount, date_issued, issued_to, error_flagged, error_notes, customer_id FROM INVOICES WHERE INVOICES.date_issued BETWEEN ? and ? and INVOICES.customer_id=? ORDER BY invoice_num"
+
+  cur.execute(sql, (lowDate, highDate, customerID))
+
+  invoices = cur.fetchall()
+
+  return invoices
+
+
 
 # Needs to fetch invoices by customer and also only before the transaction was paid
 
@@ -86,6 +97,18 @@ def fetchUnpaidInvoicesByCustomerDateRange(lowDate, highDate, customerID, cur):
   invoices = cur.fetchall()
 
   return invoices
+
+
+def fetchTransactionsByInvoiceID(invoiceID, cur):
+  
+  sql = "SELECT * FROM TRANSACTIONS WHERE invoice_id=?"
+
+  cur.execute(sql, (invoiceID,))
+
+  transactions = cur.fetchall()
+
+  return transactions
+
 
 
 

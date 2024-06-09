@@ -114,6 +114,8 @@ def genTransactionDCobj(transaction):
 
   return transactionDC
 
+
+
 def genNoNumTransactionDCobj(transaction):
 
   date_paid = datetime.strptime(transaction[2], "%Y-%m-%d")
@@ -331,6 +333,9 @@ def groupDataClassObjsByAttribute(DCList, attribute):
   attrGroup = defaultdict(list)
 
   for DC in DCList:
-    attrGroup[DC.attribute].append(DC)
+
+    customer_id = getattr(DC, attribute)
+
+    attrGroup[customer_id].append(DC)
 
   return attrGroup.values()
