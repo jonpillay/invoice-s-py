@@ -268,8 +268,8 @@ def resolvePaymentErrors(root, paymentErrors):
           customer_id=transaction.customer_id
         )
 
-        error.error_flagged = 1
-        error.error_notes = f"CORRECTED by AMOUNT={correctionAmount}"
+        error[0].error_flagged = 1
+        error[0].error_notes = f"CORRECTED BY AMOUNT={correctionAmount}"
         
         uploadTuple = (error, dummyTransaction)
 

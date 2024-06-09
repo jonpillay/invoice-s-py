@@ -157,6 +157,20 @@ def addTransactionToDB(transactionTuple, con, cur):
 
 
 
+def addErrorTransactionToDB(transactionTuple, con, cur):
+  
+  sql = "INSERT INTO TRANSACTIONS (amount, paid_on, company_name, payment_method, og_string, error_flagged, error_notes, invoice_num, customer_id, invoice_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
+
+  cur.execute(sql, transactionTuple)
+
+  con.commit()
+
+  transID = cur.lastrowid
+
+  return transID
+
+
+
 def addTransactionsToDB(transactionsTuples, cur):
 
   sql = "INSERT INTO TRANSACTIONS (amount, paid_on, company_name, payment_method, og_string, invoice_num, customer_id, invoice_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?)"
@@ -352,10 +366,13 @@ def addCorrectedTransactionPairsDB(correctedErrors, con, cur):
 
   for transactionPair in correctedErrors:
   
-    parentTransaction = transactionPair[0]
+    parentTransactionTup = transactionPair[0].as_tuple()
     correctionTransation = transactionPair[1]
 
-    parentID = addTransactionToDB(parentTransaction.as_tuple(), con, cur)
+    if len(parentTransactionTup) == 8:
+      parentID = addTransactionToDB(parentTransactionTup, con, cur)
+    else:
+      parentID = addErrorTransactionToDB(parentTransactionTup, con, cur)
 
     correctionTransation.parent_trans = parentID
 
