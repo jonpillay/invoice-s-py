@@ -1,6 +1,6 @@
 from isp_noMatch_list import noMatchList
 from isp_data_handlers import groupDataClassObjsByAttribute, genInvoiceDCobj, genDBTransactionDCobj
-from isp_db_helpers import fetchInvoicesByCustomerDateRange, fetchTransactionsByInvoiceID
+from isp_db_helpers import fetchInvoicesByCustomerBeforeDate, fetchTransactionsByInvoiceID
 
 import sqlite3
 import os
@@ -19,7 +19,7 @@ def final_resolver(matchlessList, cur, con):
 
     for transaction in customerTransactionGroup:
 
-      candInvoices = fetchInvoicesByCustomerDateRange(transaction.paid_on, datetime.today(), transaction.customer_id, cur)
+      candInvoices = fetchInvoicesByCustomerBeforeDate(transaction.paid_on, transaction.customer_id, cur)
 
       candInvoiceDCs = [genInvoiceDCobj(candInvoice) for candInvoice in candInvoices]
 
@@ -28,6 +28,7 @@ def final_resolver(matchlessList, cur, con):
 
         if len(candTransactions) > 0:
           for candTransaction in candTransactions:
+            print(candTransaction)
             candTransaction = genDBTransactionDCobj(candTransaction)
             
             if candTransaction.error_flagged == 1:

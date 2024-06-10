@@ -63,6 +63,17 @@ def fetchRangeInvoicesByCustomer(low, high, customerID, cur):
   return invoices
 
 
+def fetchInvoicesByCustomerBeforeDate(beforeDate, customerID, cur):
+
+  sql = "SELECT id, invoice_num, amount, date_issued, issued_to, error_flagged, error_notes, customer_id FROM INVOICES WHERE date_issued < ? and INVOICES.customer_id=? ORDER BY invoice_num"
+
+  cur.execute(sql, (beforeDate, customerID))
+
+  invoices = cur.fetchall()
+
+  return invoices
+
+
 def fetchUnpaidInvoicesByCustomerBeforeDate(beforeDate, customerID, cur):
 
   sql = "SELECT INVOICES.id, INVOICES.invoice_num, INVOICES.amount, INVOICES.date_issued, INVOICES.issued_to, INVOICES.customer_id FROM INVOICES LEFT JOIN TRANSACTIONS ON INVOICES.id = TRANSACTIONS.invoice_id WHERE date_issued < ? and INVOICES.customer_id=? ORDER BY INVOICES.invoice_num"
@@ -159,7 +170,7 @@ def addTransactionToDB(transactionTuple, con, cur):
 
 def addErrorTransactionToDB(transactionTuple, con, cur):
   
-  sql = "INSERT INTO TRANSACTIONS (amount, paid_on, company_name, payment_method, og_string, error_flagged, error_notes, invoice_num, customer_id, invoice_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
+  sql = "INSERT INTO TRANSACTIONS (amount, paid_on, company_name, payment_method, og_string, invoice_num, error_flagged, error_notes, customer_id, invoice_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
 
   cur.execute(sql, transactionTuple)
 
@@ -209,6 +220,10 @@ def addDummyNoteTransactionsToDB(transactionUploadList, con, cur):
   cur.executemany(sql, transactionUploadList)
 
   con.commit()
+
+  transID = cur.lastrowid
+
+  return transID
 
 
 
@@ -369,10 +384,15 @@ def addCorrectedTransactionPairsDB(correctedErrors, con, cur):
     parentTransactionTup = transactionPair[0].as_tuple()
     correctionTransation = transactionPair[1]
 
-    if len(parentTransactionTup) == 8:
-      parentID = addTransactionToDB(parentTransactionTup, con, cur)
-    else:
-      parentID = addErrorTransactionToDB(parentTransactionTup, con, cur)
+    print(parentTransactionTup)
+    parentID = addErrorTransactionToDB(parentTransactionTup, con, cur)
+
+    # if len(parentTransactionTup) == 8:
+    #   print(parentTransactionTup)
+    #   parentID = addTransactionToDB(parentTransactionTup, con, cur)
+    # else:
+    #   print(parentTransactionTup)
+    #   parentID = addDummyNoteTransactionsToDB([parentTransactionTup], con, cur)
 
     correctionTransation.parent_trans = parentID
 
