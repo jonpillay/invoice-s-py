@@ -1,6 +1,7 @@
 from isp_noMatch_list import noMatchList
 from isp_data_handlers import groupDataClassObjsByAttribute, genDBInvoiceDCobj, genDBTransactionDCobj
 from isp_db_helpers import fetchInvoicesByCustomerBeforeDate, fetchTransactionsByInvoiceID
+from isp_trans_verify import checkIfTransactionErrorIsCorrection
 
 import sqlite3
 import os
@@ -34,9 +35,6 @@ def final_resolver(matchlessList, cur, con):
 
           candTransactions = fetchTransactionsByInvoiceID(invoiceDC.invoice_id, cur)
 
-          print(transaction)
-          print(candTransactions)
-
           if len(candTransactions) > 0:
 
             errorTransaction = None
@@ -47,11 +45,21 @@ def final_resolver(matchlessList, cur, con):
                 errorTransaction = genDBTransactionDCobj(candTransaction)
               elif "CORDUM" in candTransaction[5]:
                 dummyTransaction = genDBTransactionDCobj(candTransaction)
-              else:
-                break
 
-            print(errorTransaction)
-            print(dummyTransaction)
+            # print(transaction)
+            # print(errorTransaction)
+            # print(dummyTransaction)
+
+            checkIfTransactionErrorIsCorrection(errorTransaction, dummyTransaction, 1, cur)
+
+          """
+            Need a verfifyCorrectionPayment function to check if the under/over payment is correct with current transaction.
+            Performed by taking the amount on the dummy transaction and minusing it from the transaction amount and then doing
+            an amount check against outstanding invoices. If a match is found, dummy transaction is removed and each transaction/invoice
+            pair in matched together.
+
+          """
+
 
             # for candTransaction in candTransactions:
 

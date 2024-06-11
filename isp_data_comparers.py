@@ -17,7 +17,3 @@ def getCustomerDBName(aliasDict, name):
       return customer
     elif name in aliasDict[customer]:
       return customer
-    
-
-def checkIfTransactionErrorIsCorrection():
-  pass
