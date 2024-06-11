@@ -14,6 +14,8 @@ def final_resolver(matchlessList, cur, con):
 
   for customerTransactionGroup in noMatchGroups:
 
+    print(customerTransactionGroup[0].paid_by)
+
     # Sort grouped customer Transactions by date
     customerTransactionGroup.sort(key=attrgetter('paid_on'))
 
@@ -22,29 +24,26 @@ def final_resolver(matchlessList, cur, con):
       # print("This is the transaction")
       # print(transaction)
 
-      candInvoices = fetchInvoicesByCustomerBeforeDate(transaction.paid_on, transaction.customer_id, cur)
+      candInvoices = fetchInvoicesByCustomerBeforeDate(datetime.today(), transaction.customer_id, cur)
 
       candInvoiceDCs = [genInvoiceDCobj(candInvoice) for candInvoice in candInvoices]
 
       for invoiceDC in candInvoiceDCs:
 
-        print(invoiceDC)
-        candTransactions = fetchTransactionsByInvoiceID(invoiceDC.invoice_id, cur)
+        if invoiceDC.error_flagged == 1:
 
-        if len(candTransactions) > 0:
+          candTransactions = fetchTransactionsByInvoiceID(invoiceDC.invoice_id, cur)
 
-          for candTransaction in candTransactions:
+          if len(candTransactions) > 0:
 
+            for candTransaction in candTransactions:
 
-            candTransaction = genDBTransactionDCobj(candTransaction)
+              candTransaction = genDBTransactionDCobj(candTransaction)
 
-
-
-            
-            if candTransaction.error_flagged == 1:
-              pass
-            else:
-              print("NOTHING")
+              if candTransaction.error_flagged == 1:
+                print(candTransaction)
+              else:
+                print("NOTHING")
 
 
 
