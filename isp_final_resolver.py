@@ -1,5 +1,5 @@
 from isp_noMatch_list import noMatchList
-from isp_data_handlers import groupDataClassObjsByAttribute, genInvoiceDCobj, genDBTransactionDCobj
+from isp_data_handlers import groupDataClassObjsByAttribute, genDBInvoiceDCobj, genDBTransactionDCobj
 from isp_db_helpers import fetchInvoicesByCustomerBeforeDate, fetchTransactionsByInvoiceID
 
 import sqlite3
@@ -24,9 +24,9 @@ def final_resolver(matchlessList, cur, con):
       # print("This is the transaction")
       # print(transaction)
 
-      candInvoices = fetchInvoicesByCustomerBeforeDate(datetime.today(), transaction.customer_id, cur)
+      candInvoices = fetchInvoicesByCustomerBeforeDate(transaction.paid_on, transaction.customer_id, cur)
 
-      candInvoiceDCs = [genInvoiceDCobj(candInvoice) for candInvoice in candInvoices]
+      candInvoiceDCs = [genDBInvoiceDCobj(candInvoice) for candInvoice in candInvoices]
 
       for invoiceDC in candInvoiceDCs:
 
@@ -34,16 +34,33 @@ def final_resolver(matchlessList, cur, con):
 
           candTransactions = fetchTransactionsByInvoiceID(invoiceDC.invoice_id, cur)
 
+          print(transaction)
+          print(candTransactions)
+
           if len(candTransactions) > 0:
 
+            errorTransaction = None
+            dummyTransaction = None
+
             for candTransaction in candTransactions:
-
-              candTransaction = genDBTransactionDCobj(candTransaction)
-
-              if candTransaction.error_flagged == 1:
-                print(candTransaction)
+              if "CORRECTED BY" in candTransaction[8]:
+                errorTransaction = genDBTransactionDCobj(candTransaction)
+              elif "CORDUM" in candTransaction[5]:
+                dummyTransaction = genDBTransactionDCobj(candTransaction)
               else:
-                print("NOTHING")
+                break
+
+            print(errorTransaction)
+            print(dummyTransaction)
+
+            # for candTransaction in candTransactions:
+
+            #   candTransaction = genDBTransactionDCobj(candTransaction)
+
+            #   if candTransaction.error_flagged == 1:
+            #     pass
+            #   else:
+            #     print("NOTHING")
 
 
 

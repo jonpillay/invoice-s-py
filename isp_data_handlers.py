@@ -99,6 +99,24 @@ def genInvoiceDCobj(invoice):
 
   return invoiceDC
 
+
+def genDBInvoiceDCobj(invoice):
+
+  date_issued = datetime.strptime(invoice[3], "%Y-%m-%d")
+
+  invoiceDC = Invoice(
+    invoice_id=invoice[0],
+    invoice_num=invoice[1],
+    amount=invoice[2],
+    date_issued=date_issued,
+    issued_to=invoice[4],
+    error_flagged=invoice[5],
+    error_notes=invoice[6],
+    customer_id=invoice[7]
+  )
+
+  return invoiceDC
+
 def genTransactionDCobj(transaction):
 
   date_paid = datetime.strptime(transaction[2], "%Y-%m-%d")
