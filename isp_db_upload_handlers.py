@@ -266,6 +266,8 @@ def handleTransactionUpload(root, filename):
 
   upLoadedPairs.extend(matched)
 
+  print(noMatches)
+
   # print("Transaction count @line 260")
   # print(len(noMatches)+len(namesUnresolved)+len(newCustomersTransactions)+len(multiVerified)+len(multiErrorFlagged)+len(multiInvoiceErrors)+len(upLoadedPairs))
 

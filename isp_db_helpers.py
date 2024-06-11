@@ -112,7 +112,7 @@ def fetchUnpaidInvoicesByCustomerDateRange(lowDate, highDate, customerID, cur):
 
 def fetchTransactionsByInvoiceID(invoiceID, cur):
   
-  sql = "SELECT * FROM TRANSACTIONS WHERE invoice_id=?"
+  sql = "SELECT id, invoice_num, amount, paid_on, company_name, payment_method, og_string, error_flagged, error_notes, invoice_id, customer_id, parent_trans FROM TRANSACTIONS WHERE invoice_id=?"
 
   cur.execute(sql, (invoiceID,))
 
@@ -396,6 +396,7 @@ def addCorrectedTransactionPairsDB(correctedErrors, con, cur):
 
     correctionTransation.parent_trans = parentID
 
+    print(correctionTransation.as_tuple())
     addDummyNoteTransactionsToDB([correctionTransation.as_tuple()], con, cur)
 
 

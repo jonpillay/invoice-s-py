@@ -254,11 +254,11 @@ def resolvePaymentErrors(root, paymentErrors):
         elif resolveString.get() == "BACS":
           methodStr = "CORDUM (BACS)"
         
-        correctionAmount = round(0 - (invoice.amount - transaction.amount), 2)
+        correctionAmount = round((invoice.amount - transaction.amount), 2)
 
         dummyTransaction = Transaction(
           amount=correctionAmount,
-          paid_on=datetime.today().strftime('%Y-%m-%d'),
+          paid_on=transaction.paid_on,
           paid_by=transaction.paid_by,
           payment_method=methodStr,
           og_string=transaction.og_string,
@@ -269,7 +269,7 @@ def resolvePaymentErrors(root, paymentErrors):
         )
 
         error[0].error_flagged = 1
-        error[0].error_notes = f"CORRECTED BY AMOUNT={correctionAmount}"
+        error[0].error_notes = f"CORRECTED BY = {correctionAmount}"
         
         uploadTuple = (error, dummyTransaction)
 

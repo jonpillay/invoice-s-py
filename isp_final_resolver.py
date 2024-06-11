@@ -5,7 +5,7 @@ from isp_db_helpers import fetchInvoicesByCustomerBeforeDate, fetchTransactionsB
 import sqlite3
 import os
 from operator import attrgetter
-from datetime import datetime
+from datetime import datetime, timedelta
 
 def final_resolver(matchlessList, cur, con):
 
@@ -19,22 +19,32 @@ def final_resolver(matchlessList, cur, con):
 
     for transaction in customerTransactionGroup:
 
+      # print("This is the transaction")
+      # print(transaction)
+
       candInvoices = fetchInvoicesByCustomerBeforeDate(transaction.paid_on, transaction.customer_id, cur)
 
       candInvoiceDCs = [genInvoiceDCobj(candInvoice) for candInvoice in candInvoices]
 
       for invoiceDC in candInvoiceDCs:
+
+        print(invoiceDC)
         candTransactions = fetchTransactionsByInvoiceID(invoiceDC.invoice_id, cur)
 
         if len(candTransactions) > 0:
+
           for candTransaction in candTransactions:
-            print(candTransaction)
+
+
             candTransaction = genDBTransactionDCobj(candTransaction)
+
+
+
             
             if candTransaction.error_flagged == 1:
-              print(candTransaction)
-
-
+              pass
+            else:
+              print("NOTHING")
 
 
 
