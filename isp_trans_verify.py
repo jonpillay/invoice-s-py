@@ -60,7 +60,10 @@ def checkIfTransactionErrorIsCorrection(root, transaction, dummyCorrectionTransa
   candInvoiceDCs = [genInvoiceDCobj(invoice) for invoice in candInvoices]
 
   # needs completion with each if statement if evaluating to True tieing the current transaction to the matched invoice
-  # and deleting the old dummy transaction and noting on all 4 of the invoices/transactions the cross payment 
+  # and deleting the old dummy transaction and noting on all 4 of the invoices/transactions the cross payment
+
+  # should possibly be rewrittent to allow user to choose between matched invoices, also means that backend upload functions
+  # for perfectly matched paris should be performed here
 
   for candInvoice in candInvoiceDCs:
 
