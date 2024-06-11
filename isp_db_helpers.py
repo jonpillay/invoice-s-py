@@ -448,3 +448,12 @@ def resolveNameIntoDB(root, name, dbCustomers, newCustomerBool, cur, con):
     con.commit()
 
     return customerID
+  
+
+def updateInvoiceRec(invoice_id, field, updateValue, cur, con):
+
+  sql = f"UPDATE INVOICES SET {field} = ? WHERE id = ?"
+
+  cur.execute(sql, (updateValue, invoice_id))
+
+  con.commit()

@@ -1,5 +1,5 @@
 from isp_dataframes import Transaction, Invoice
-from isp_db_helpers import getCustomerID, fetchRangeInvoicesByCustomer, getCustomerNamesIDs, addAliasToDB, addNewCustomerToDB, addTransactionToDB, findCustomerIDInTup, fetchUnpaidInvoicesByCustomerDateRange, fetchUnpaidInvoicesByCustomerBeforeDate
+from isp_db_helpers import getCustomerID, fetchRangeInvoicesByCustomer, getCustomerNamesIDs, addAliasToDB, addNewCustomerToDB, addTransactionToDB, findCustomerIDInTup, fetchUnpaidInvoicesByCustomerDateRange, fetchUnpaidInvoicesByCustomerBeforeDate, updateInvoiceRec
 from isp_popup_window import openTransactionAliasPrompt, openTransactionPaymentErrorPrompt, openNewCustomerPrompt
 from isp_data_handlers import constructCustomerAliasesDict, genInvoiceDCobj, genNoNumTransactionDCobj, prepMatchedTransforDB, constructCustomerIDict, getCustomerIDForTrans, prepNewlyMatchedTransactionForDB
 from isp_data_comparers import compareCustomerToAliasesDict, getCustomerDBName
@@ -217,7 +217,7 @@ def resolveMultiInvoiceTransactions(root, cur, con, multiRecs):
 
 
 
-def resolvePaymentErrors(root, paymentErrors):
+def resolvePaymentErrors(root, paymentErrors, cur, con):
 
   print("Start of resolvePaymentErrors")
 
@@ -270,6 +270,11 @@ def resolvePaymentErrors(root, paymentErrors):
 
         error[0].error_flagged = 1
         error[0].error_notes = f"CORRECTED BY = {correctionAmount}"
+
+        invoiceErrorStr = f"CORRECTED BY = {correctionAmount}"
+
+        updateInvoiceRec(invoice.invoice_id, "error_flagged", "1", cur, con)
+        updateInvoiceRec(invoice.invoice_id, "error_notes", invoiceErrorStr, cur, con)
         
         uploadTuple = (error, dummyTransaction)
 

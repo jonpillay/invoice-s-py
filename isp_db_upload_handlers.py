@@ -228,7 +228,7 @@ def handleTransactionUpload(root, filename):
 
   # print(len(reMatched))
 
-  correctedErrors, incorrectInvoiceNums = resolvePaymentErrors(root, reMatched)
+  correctedErrors, incorrectInvoiceNums = resolvePaymentErrors(root, reMatched, cur, con)
 
   # print("Transaction count @line 229")
   # print(len(correctedErrors)+len(incorrectInvoiceNums)+len(incompRec)+len(multiVerified)+len(multiErrorFlagged)+len(multiInvoiceErrors)+len(upLoadedPairs))
