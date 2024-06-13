@@ -221,6 +221,7 @@ def genMultiTransactionsInvoices(transactionsList, cur, con):
 def prepMatchedTransforDB(transaction, invoice):
   transaction.invoice_id = invoice.invoice_id
   transaction.customer_id = invoice.customer_id
+  transaction.invoice_num = invoice.invoice_num
 
 
 def reMatchPaymentErrors(matchPaymentErrors, cur):

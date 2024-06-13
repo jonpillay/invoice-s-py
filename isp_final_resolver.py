@@ -50,7 +50,7 @@ def final_resolver(matchlessList, cur, con):
             # print(errorTransaction)
             # print(dummyTransaction)
 
-            checkIfTransactionErrorIsCorrection(errorTransaction, dummyTransaction, 1, cur)
+            checkIfTransactionErrorIsCorrection(transaction, errorTransaction, dummyTransaction, cur, con)
 
           """
             Need a verfifyCorrectionPayment function to check if the under/over payment is correct with current transaction.

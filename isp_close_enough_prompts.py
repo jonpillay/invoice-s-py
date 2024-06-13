@@ -8,7 +8,6 @@ import os
 from isp_treeviews import renderPromptInvoices, renderPromptTransactions, renderPromptMulitTransactions
 from isp_db_helpers import fetchUnpaidInvoicesByCustomerBeforeDate
 from isp_data_handlers import genInvoiceDCobj
-from isp_trans_verify import verifyTransactionAmount
 
 
 

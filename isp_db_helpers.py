@@ -457,3 +457,22 @@ def updateInvoiceRec(invoice_id, field, updateValue, cur, con):
   cur.execute(sql, (updateValue, invoice_id))
 
   con.commit()
+
+
+def updateTransactionRec(transaction_id, field, updateValue, cur, con):
+
+  sql = f"UPDATE TRANSACTIONS SET {field} = ? WHERE id = ?"
+
+  cur.execute(sql, (updateValue, transaction_id))
+
+  con.commit()
+
+
+
+def deleteTransactionRec(id, cur, con):
+
+  sql = "DELETE FROM TRANSACTIONS WHERE id = ?"
+
+  cur.execute(sql, (id,))
+
+  con.commit()
