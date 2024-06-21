@@ -21,6 +21,8 @@ def resolveNameMismatches(root, cur, conn, matchNameErrors):
 
   while len(nameResolved) + len(unMatchable) < errorCount:
 
+    print("Here Innit")
+
     dbCustomers = getCustomerNamesIDs(cur)
 
     aliasesDict = constructCustomerAliasesDict(cur, dbCustomers)
@@ -30,15 +32,32 @@ def resolveNameMismatches(root, cur, conn, matchNameErrors):
       transaction = error[0]
       invoice = error[1]
 
-      if transaction.paid_by in aliasesDict[invoice.issued_to]:
+      print(invoice)
+      print(aliasesDict)
 
-        prepMatchedTransforDB(error[0], error[1])
+      if invoice.issued_to in aliasesDict:
 
-        nameResolved.append(error)
-        matchNameErrors.pop(0)
+        if transaction.paid_by in aliasesDict[invoice.issued_to]:
 
-        # Whilst I don't think technically needed, I added the break here to reset the loop after popping an element.
-        break
+          prepMatchedTransforDB(error[0], error[1])
+
+          nameResolved.append(error)
+          matchNameErrors.pop(0)
+
+          break
+      
+      elif: 
+      
+        for name in aliasesDict:
+
+          if transaction.paid_by in aliasesDict[name]:
+
+            prepMatchedTransforDB(error[0], error[1])
+
+            nameResolved.append(error)
+            matchNameErrors.pop(0)
+
+            break
 
       else:
 
