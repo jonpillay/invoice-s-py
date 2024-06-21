@@ -34,10 +34,10 @@ def resolveNameMismatches(root, cur, conn, matchNameErrors):
 
       print(invoice)
       print(aliasesDict)
+      
+      for name in aliasesDict:
 
-      if invoice.issued_to in aliasesDict:
-
-        if transaction.paid_by in aliasesDict[invoice.issued_to]:
+        if transaction.paid_by in aliasesDict[name]:
 
           prepMatchedTransforDB(error[0], error[1])
 
@@ -45,19 +45,6 @@ def resolveNameMismatches(root, cur, conn, matchNameErrors):
           matchNameErrors.pop(0)
 
           break
-      
-      elif: 
-      
-        for name in aliasesDict:
-
-          if transaction.paid_by in aliasesDict[name]:
-
-            prepMatchedTransforDB(error[0], error[1])
-
-            nameResolved.append(error)
-            matchNameErrors.pop(0)
-
-            break
 
       else:
 
