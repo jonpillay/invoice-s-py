@@ -68,6 +68,8 @@ def openNewCustomerPrompt(root, customer, dbCustomers, newCustomerReturn, newAli
 
   promptWindow.wait_window(main_frame)
 
+  
+
 def openTransactionAliasPrompt(root, invoice, transaction, aliasBool, rejectedBool):
     
   promptWindow = tk.Toplevel(root)

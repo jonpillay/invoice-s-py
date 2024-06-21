@@ -146,7 +146,8 @@ def handleTransactionUpload(root, filename):
     if len(invoice) == 0:
       noMatchFromNum.append(transaction)
     else:
-      invoice = genInvoiceDCobj(invoice[0])
+      invoiceClean = [el for el in invoice[0] if el != None]
+      invoice = genInvoiceDCobj(invoiceClean)
       matches.append([transaction, invoice])
 
   # for transaction, invoice in matches:
