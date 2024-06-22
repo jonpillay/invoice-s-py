@@ -50,6 +50,16 @@ def verifyAlias(transaction, invoice):
     
   """
     
+  """
+
+  Need a new transaction that only takes in the invoice and transaction, which match by number and name. 
+  This is to be used in the first resolve payment errors to see if the transaction error can be matched with
+  any past invoices' amount or error correction. This needs to be run before (and feed) resolvePaymentErrors.
+  Taking in the
+
+  checkIfTransactionErrorIsCorrection needs to be rewritten to take in only the error amount and 
+
+  """
 
 def checkIfTransactionErrorIsCorrection(transaction, errorTransaction, dummyCorrectionTransaction, cur, con):
 
@@ -78,6 +88,8 @@ def checkIfTransactionErrorIsCorrection(transaction, errorTransaction, dummyCorr
       
       # amounts match exactly (within flaoting point error). Assume that the under/overpayment was a correction on the previous invoice
 
+      # Still needs to be rewritten if the amount is > 0
+
       if dummyCorrectionTransaction.amount < 0:
 
         errorStr = f"Transaction also pays £{0-dummyCorrectionTransaction.amount} towards invoiceID {candInvoice.invoice_id}"
@@ -98,46 +110,50 @@ def checkIfTransactionErrorIsCorrection(transaction, errorTransaction, dummyCorr
 
         print(transactionTup)
 
-        # deleteTransactionRec(dummyCorrectionTransaction.id, con, cur)
+        deleteTransactionRec(dummyCorrectionTransaction.id, con, cur)
 
         print("exact match")
 
         matchedIDsMemo.append(candInvoice.invoice_id)
 
-        break
+        return (transaction, candInvoice)
+      
+      else:
+        
+        errorStr = f"Transaction has £{0-dummyCorrectionTransaction.amount} from invoiceID {candInvoice.invoice_id}"
+
+        updateTransactionRec(errorTransaction.id, "error_notes", errorStr)
+
+        updateInvoiceRec(errorTransaction.invoice_id, "error_notes", "")
+
+        updateInvoiceRec(errorTransaction.invoice_id, "error_flagged", "0")
+
+        prepMatchedTransforDB(transaction, candInvoice)
+
+        transaction.error_flagged = 0
+
+        transaction.error_notes = f"Transaction pays {0-dummyCorrectionTransaction.amount} towards transID {errorTransaction.transaction_id} for invoiceID {candInvoice.invoice_id}"
+
+        transactionTup = transaction.as_tuple()
+
+        print(transactionTup)
+
+        deleteTransactionRec(dummyCorrectionTransaction.id, con, cur)
+
+        print("exact match")
+
+        matchedIDsMemo.append(candInvoice.invoice_id)
+
+        return (transaction, candInvoice)
 
 
     if verifyTransactionAmount(transaction, candInvoice, 15, dummyCorrectionTransaction.amount):
 
-
-      errorStr = f"Transaction also pays £{0-dummyCorrectionTransaction.amount} towards invoiceID {candInvoice.invoice_id}"
-
-      updateTransactionRec(errorTransaction.transaction_id, "error_notes", errorStr, cur, con)
-
-      updateInvoiceRec(errorTransaction.invoice_id, "error_notes", "", cur, con)
-
-      updateInvoiceRec(errorTransaction.invoice_id, "error_flagged", "0", cur, con)
-
-      prepMatchedTransforDB(transaction, candInvoice)
-
-      transaction.error_flagged = 0
-
-      transaction.error_notes = f"Transaction uses {0-dummyCorrectionTransaction.amount} from transID {errorTransaction.transaction_id} for invoiceID {candInvoice.invoice_id}"
-
-      transactionTup = transaction.as_tuple()
-
-      errorID = addErrorTransactionToDB(transactionTup, con, cur)
-
-      deleteTransactionRec(dummyCorrectionTransaction.transaction_id, cur, con)
-      
-      print(dummyCorrectionTransaction.transaction_id)
-      print(errorID)
-
-      con.commit()
+      possMatches.append(candInvoice)
 
       matchedIDsMemo.append(candInvoice.invoice_id)
 
-      break
+ 
       # matchVerifiedBool = tk.BooleanVar()
 
       # openVerifyCloseEnoughtMatch(root, transaction, candInvoice, matchVerifiedBool)
@@ -145,3 +161,5 @@ def checkIfTransactionErrorIsCorrection(transaction, errorTransaction, dummyCorr
       # if matchVerifiedBool.get() == True:
 
       #   return candInvoice.invoice_id
+  
+  return possMatches

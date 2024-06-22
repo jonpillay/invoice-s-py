@@ -274,8 +274,8 @@ def resolvePaymentErrors(root, paymentErrors, cur, con):
           customer_id=transaction.customer_id
         )
 
-        error[0].error_flagged = 1
-        error[0].error_notes = f"CORRECTED BY = {correctionAmount}"
+        transaction.error_flagged = 1
+        transaction.error_notes = f"CORRECTED BY = {correctionAmount}"
 
         invoiceErrorStr = f"CORRECTED BY = {correctionAmount}"
 

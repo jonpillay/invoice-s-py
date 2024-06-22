@@ -10,6 +10,9 @@ from datetime import datetime, timedelta
 
 def final_resolver(matchlessList, cur, con):
 
+  matched = []
+  nonMatchable = []
+
   # Sort noMatch list of Transactions into sublists orderd by customer_id
   noMatchGroups = groupDataClassObjsByAttribute(matchlessList, 'customer_id')
 
@@ -19,6 +22,8 @@ def final_resolver(matchlessList, cur, con):
 
     # Sort grouped customer Transactions by date
     customerTransactionGroup.sort(key=attrgetter('paid_on'))
+
+
 
     for transaction in customerTransactionGroup:
 
@@ -50,7 +55,14 @@ def final_resolver(matchlessList, cur, con):
             # print(errorTransaction)
             # print(dummyTransaction)
 
-            checkIfTransactionErrorIsCorrection(transaction, errorTransaction, dummyTransaction, cur, con)
+            matchCheck = checkIfTransactionErrorIsCorrection(transaction, errorTransaction, dummyTransaction, cur, con)
+
+            if type(matchCheck) == list:
+              print("We here though")
+              print(matchCheck)
+            else:
+              print("This is the tup")
+              print(matchCheck)
 
           """
             Need a verfifyCorrectionPayment function to check if the under/over payment is correct with current transaction.
