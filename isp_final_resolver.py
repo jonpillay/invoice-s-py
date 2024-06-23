@@ -27,17 +27,22 @@ def final_resolver(matchlessList, cur, con):
 
     for transaction in customerTransactionGroup:
 
-      # print("This is the transaction")
-      # print(transaction)
+      # each Transaction here has been unable to match to an invoice, either it doesn't have an invoice number,
+      # or invoice number was an error.
 
+      possibleMatches = []
+
+      # fetch all invoices before the transaction date
       candInvoices = fetchInvoicesByCustomerBeforeDate(transaction.paid_on, transaction.customer_id, cur)
 
       candInvoiceDCs = [genDBInvoiceDCobj(candInvoice) for candInvoice in candInvoices]
 
       for invoiceDC in candInvoiceDCs:
 
+        # from those invoices check if any were errors
         if invoiceDC.error_flagged == 1:
 
+          # if they are errors fetch the both the Original Transaction and the correction dummy
           candTransactions = fetchTransactionsByInvoiceID(invoiceDC.invoice_id, cur)
 
           if len(candTransactions) > 0:
@@ -45,19 +50,21 @@ def final_resolver(matchlessList, cur, con):
             errorTransaction = None
             dummyTransaction = None
 
+            # convert to DCs and assign to descriptive variables
             for candTransaction in candTransactions:
               if "CORRECTED BY" in candTransaction[8]:
                 errorTransaction = genDBTransactionDCobj(candTransaction)
               elif "CORDUM" in candTransaction[5]:
                 dummyTransaction = genDBTransactionDCobj(candTransaction)
 
-            # print(transaction)
-            # print(errorTransaction)
-            # print(dummyTransaction)
-
+            # pass all three into funct to see if the error correction and any other unpaid invoice match the transaction amount
             matchCheck = checkIfTransactionErrorIsCorrection(transaction, errorTransaction, dummyTransaction, cur, con)
 
             if type(matchCheck) == list:
+              # if a list is returned it will be a list of possible matches.
+              # These are a group of unpaid invoices that are close enough matches to the transaction payment
+              # when corrected by the previous error.
+              # Each list needs to be ordered by the error invoice it relates to, probably a dictionary
               print("We here though")
               print(matchCheck)
             else:

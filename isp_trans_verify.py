@@ -63,6 +63,7 @@ def verifyAlias(transaction, invoice):
 
 def checkIfTransactionErrorIsCorrection(transaction, errorTransaction, dummyCorrectionTransaction, cur, con):
 
+  # needs to return only the matched invoice, the rest of the information is already present in the calling function
 
   candInvoices = fetchUnpaidInvoicesByCustomerBeforeDate(transaction.paid_on, transaction.customer_id, cur)
 
