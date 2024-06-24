@@ -61,6 +61,17 @@ def verifyAlias(transaction, invoice):
 
   """
 
+def getTransactionCorrectionNexusDif(transaction, invoice, tol, correctionAmount = 0):
+
+  dif  = abs(invoice.amount - (transaction.amount - correctionAmount))
+  
+  if dif <= tol:
+    return dif
+  else:
+    return False
+  
+
+
 def checkIfTransactionErrorIsCorrection(transaction, errorTransaction, dummyCorrectionTransaction, cur, con):
 
   # needs to return only the matched invoice, the rest of the information is already present in the calling function
@@ -79,6 +90,8 @@ def checkIfTransactionErrorIsCorrection(transaction, errorTransaction, dummyCorr
   matchedIDsMemo = []
 
   matched = []
+
+  bestMatch = None
 
   for candInvoice in candInvoiceDCs:
 
@@ -145,16 +158,16 @@ def checkIfTransactionErrorIsCorrection(transaction, errorTransaction, dummyCorr
 
         matchedIDsMemo.append(candInvoice.invoice_id)
 
-        return (transaction, candInvoice)
+        return [True, candInvoice]
+      
+    dif = getTransactionCorrectionNexusDif(transaction, candInvoice, 15, dummyCorrectionTransaction.amount)
 
+    if dif != False:
 
-    if verifyTransactionAmount(transaction, candInvoice, 15, dummyCorrectionTransaction.amount):
+      if bestMatch == None or dif < bestMatch[0]:
 
-      possMatches.append(candInvoice)
+        bestMatch = [dif, candInvoice]
 
-      matchedIDsMemo.append(candInvoice.invoice_id)
-
- 
       # matchVerifiedBool = tk.BooleanVar()
 
       # openVerifyCloseEnoughtMatch(root, transaction, candInvoice, matchVerifiedBool)

@@ -39,10 +39,10 @@ def final_resolver(matchlessList, cur, con):
 
       for invoiceDC in candInvoiceDCs:
 
-        # from those invoices check if any were errors
+        # from those invoices check if any had errors
         if invoiceDC.error_flagged == 1:
 
-          # if they are errors fetch the both the Original Transaction and the correction dummy
+          # if there were errors fetch the both the Original Transaction and the correction dummy
           candTransactions = fetchTransactionsByInvoiceID(invoiceDC.invoice_id, cur)
 
           if len(candTransactions) > 0:
@@ -60,7 +60,7 @@ def final_resolver(matchlessList, cur, con):
             # pass all three into funct to see if the error correction and any other unpaid invoice match the transaction amount
             matchCheck = checkIfTransactionErrorIsCorrection(transaction, errorTransaction, dummyTransaction, cur, con)
 
-            if type(matchCheck) == list:
+            if matchCheck[0] == True:
               # if a list is returned it will be a list of possible matches.
               # These are a group of unpaid invoices that are close enough matches to the transaction payment
               # when corrected by the previous error.
