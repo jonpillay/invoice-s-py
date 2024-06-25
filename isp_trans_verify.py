@@ -86,10 +86,7 @@ def checkIfTransactionErrorIsCorrection(transaction, errorTransaction, dummyCorr
   # should possibly be rewrittent to allow user to choose between matched invoices, also means that backend upload functions
   # for perfectly matched paris should be performed here
 
-  possMatches = []
   matchedIDsMemo = []
-
-  matched = []
 
   bestMatch = None
 
@@ -130,7 +127,7 @@ def checkIfTransactionErrorIsCorrection(transaction, errorTransaction, dummyCorr
 
         matchedIDsMemo.append(candInvoice.invoice_id)
 
-        return (transaction, candInvoice)
+        return [True, candInvoice]
       
       else:
         
@@ -176,4 +173,4 @@ def checkIfTransactionErrorIsCorrection(transaction, errorTransaction, dummyCorr
 
       #   return candInvoice.invoice_id
   
-  return possMatches
+  return bestMatch

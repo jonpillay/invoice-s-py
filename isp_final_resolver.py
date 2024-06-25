@@ -32,6 +32,8 @@ def final_resolver(matchlessList, cur, con):
 
       possibleMatches = []
 
+      bestMatch = None
+
       # fetch all invoices before the transaction date
       candInvoices = fetchInvoicesByCustomerBeforeDate(transaction.paid_on, transaction.customer_id, cur)
 
@@ -61,15 +63,22 @@ def final_resolver(matchlessList, cur, con):
             matchCheck = checkIfTransactionErrorIsCorrection(transaction, errorTransaction, dummyTransaction, cur, con)
 
             if matchCheck[0] == True:
-              # if a list is returned it will be a list of possible matches.
-              # These are a group of unpaid invoices that are close enough matches to the transaction payment
-              # when corrected by the previous error.
-              # Each list needs to be ordered by the error invoice it relates to, probably a dictionary
-              print("We here though")
-              print(matchCheck)
+
+              # If true is returned in the list here then the match is exact and no user query needed. The returned invoice
+              # and related Transactions should be appended to the matched list for reporting and then break the loop.
+
+              # Form the a list for reporting. In order, OG No Num Transaction, The invoice it was matched to, with the error Transaction that ballances the numbers.
+              matchReport = [transaction, matchCheck[1], errorTransaction]
+
+              matched.append(matchReport)
+
             else:
-              print("This is the tup")
-              print(matchCheck)
+              # if the list returned does not have True as its first element then it is a close enough match. This should be compared
+              # against the current best match to see if it is closer.
+
+              if bestMatch == None or matchCheck[0] < bestMatch[0]:
+
+                bestMatch = matchCheck
 
           """
             Need a verfifyCorrectionPayment function to check if the under/over payment is correct with current transaction.
@@ -88,8 +97,16 @@ def final_resolver(matchlessList, cur, con):
             #     pass
             #   else:
             #     print("NOTHING")
+      
+      if bestMatch != None:   
+        # open user close enough prompt
+        pass
+      else:
+        nonMatchable.append(transaction)
 
+  return matched, nonMatchable
 
+  
 
 
 dummyConn = sqlite3.connect(os.getenv("DB_NAME"))
