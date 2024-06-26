@@ -1,14 +1,17 @@
+import tkinter as tk
+
 from isp_noMatch_list import noMatchList
 from isp_data_handlers import groupDataClassObjsByAttribute, genDBInvoiceDCobj, genDBTransactionDCobj
 from isp_db_helpers import fetchInvoicesByCustomerBeforeDate, fetchTransactionsByInvoiceID
 from isp_trans_verify import checkIfTransactionErrorIsCorrection
+from isp_close_enough_prompts import openVerifyErrorCorrectionCloseEnoughMatch
 
 import sqlite3
 import os
 from operator import attrgetter
 from datetime import datetime, timedelta
 
-def final_resolver(matchlessList, cur, con):
+def final_resolver(root, matchlessList, cur, con):
 
   matched = []
   nonMatchable = []
@@ -60,7 +63,7 @@ def final_resolver(matchlessList, cur, con):
                 dummyTransaction = genDBTransactionDCobj(candTransaction)
 
             # pass all three into funct to see if the error correction and any other unpaid invoice match the transaction amount
-            matchCheck = checkIfTransactionErrorIsCorrection(transaction, errorTransaction, dummyTransaction, cur, con)
+            matchCheck = checkIfTransactionErrorIsCorrection(transaction, invoiceDC, dummyTransaction, cur, con)
 
             if matchCheck[0] == True:
 
@@ -98,9 +101,19 @@ def final_resolver(matchlessList, cur, con):
             #   else:
             #     print("NOTHING")
       
-      if bestMatch != None:   
-        # open user close enough prompt
-        pass
+      if bestMatch != None:
+
+        matchVerifiedBool = tk.BooleanVar()
+        
+        openVerifyErrorCorrectionCloseEnoughMatch(root, transaction, bestMatch[1], errorTransaction, dummyTransaction, matchVerifiedBool)
+
+        verified = matchVerifiedBool.get()
+
+        if verified == True:
+          print("Worked")
+        else:
+          print("Also Worked")
+
       else:
         nonMatchable.append(transaction)
 
@@ -109,10 +122,10 @@ def final_resolver(matchlessList, cur, con):
   
 
 
-dummyConn = sqlite3.connect(os.getenv("DB_NAME"))
+# dummyConn = sqlite3.connect(os.getenv("DB_NAME"))
 
-dummyConn.execute('PRAGMA foreign_keys = ON')
+# dummyConn.execute('PRAGMA foreign_keys = ON')
 
-dummyCur = dummyConn.cursor()
+# dummyCur = dummyConn.cursor()
 
-final_resolver(noMatchList, dummyCur, dummyConn)
+# final_resolver(noMatchList, dummyCur, dummyConn)

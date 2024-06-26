@@ -12,6 +12,8 @@ from isp_data_handlers import constructCustomerAliasesDict, constructCustomerIDi
 from isp_resolvers import resolveNameMismatches, resolvePaymentErrors, resolveMultiInvoiceTransactions, resolveNoMatchTransactions
 from isp_multi_invoice_prompt import openSelectBetweenInvoices
 
+from isp_final_resolver import final_resolver
+
 from isp_dataframes import Transaction
 
 
@@ -267,7 +269,7 @@ def handleTransactionUpload(root, filename):
 
   upLoadedPairs.extend(matched)
 
-  print(noMatches)
+  final_resolver(root, noMatches, cur, con)
 
   # print("Transaction count @line 260")
   # print(len(noMatches)+len(namesUnresolved)+len(newCustomersTransactions)+len(multiVerified)+len(multiErrorFlagged)+len(multiInvoiceErrors)+len(upLoadedPairs))

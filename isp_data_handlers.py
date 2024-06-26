@@ -135,12 +135,17 @@ def genTransactionDCobj(transaction):
   return transactionDC
 
 def genDBTransactionDCobj(transaction):
+
+  try:
+    date_paid = datetime.strptime(transaction[3], "%Y-%m-%d %H:%M:%S")
+  except ValueError:
+      date_paid = datetime.strptime(transaction[3], "%Y-%m-%d")
   
   transactionDC = Transaction(
     transaction_id=transaction[0],
     invoice_num=int(transaction[1]),
     amount=transaction[2],
-    paid_on=transaction[3],
+    paid_on=date_paid,
     paid_by=transaction[4],
     payment_method=transaction[5],
     og_string=transaction[6],
