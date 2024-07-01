@@ -196,6 +196,9 @@ def checkIfTransactionListContainsErrorCorrections(root, correctedErrors, con, c
           
           # unpaid invoice has been found for the payment error
 
+          # Need to delete the old dummy transaction from the DB and create 2 new dummy transactions to represent the split
+          # and pay for both of the matched invoices
+
           pass
         
 
