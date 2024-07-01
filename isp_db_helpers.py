@@ -384,8 +384,9 @@ def addCorrectedTransactionPairsDB(correctedErrors, con, cur):
     parentTransactionTup = transactionPair[0].as_tuple()
     correctionTransation = transactionPair[1]
 
-    print(parentTransactionTup)
     parentID = addErrorTransactionToDB(parentTransactionTup, con, cur)
+
+    transactionPair[0].transaction_id = parentID
 
     # if len(parentTransactionTup) == 8:
     #   print(parentTransactionTup)
@@ -396,8 +397,9 @@ def addCorrectedTransactionPairsDB(correctedErrors, con, cur):
 
     correctionTransation.parent_trans = parentID
 
-    print(correctionTransation.as_tuple())
     addDummyNoteTransactionsToDB([correctionTransation.as_tuple()], con, cur)
+
+    return correctedErrors
 
 
 

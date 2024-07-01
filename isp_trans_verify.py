@@ -72,7 +72,7 @@ def getTransactionCorrectionNexusDif(transaction, invoice, tol, correctionAmount
   
 
 
-def checkIfTransactionErrorIsCorrection(transaction, errorTransaction, dummyCorrectionTransaction, cur, con):
+def checkIfNoNumTransactionErrorIsCorrection(transaction, errorTransaction, dummyCorrectionTransaction, cur, con):
 
   # needs to return only the matched invoice, the rest of the information is already present in the calling function
 
@@ -174,3 +174,42 @@ def checkIfTransactionErrorIsCorrection(transaction, errorTransaction, dummyCorr
       #   return candInvoice.invoice_id
   
   return bestMatch
+
+
+def checkIfTransactionListContainsErrorCorrections(root, correctedErrors, con, cur):
+
+  for tupTransactionGroup in correctedErrors:
+
+    transaction = tupTransactionGroup[0][0]
+    invoice = tupTransactionGroup[0][1]
+    dummyTransaction = tupTransactionGroup[1]
+
+    # check if transaction over - payment is payment on unpaid invoices
+
+    if dummyTransaction.amount < 0:
+
+      candInvoices = fetchUnpaidInvoicesByCustomerBeforeDate(transaction.paid_on, transaction.customer_id, cur)
+
+      for candInvoice in candInvoices:
+
+        if candInvoice.amount + dummyTransaction.amount == 0:
+          
+          # unpaid invoice has been found for the payment error
+
+          pass
+        
+
+
+
+
+  # will be passed the output from resolvePaymentErrors for transactions that have been corrected.
+  # A list of Tuples, the first element being a list of the original Transaction and the invoice
+  # it now matches to. The second element in the tuple is the dummy correction Transaction created by
+  # resolvePaymentErrors.
+
+  # The function not only has to check database for invoice/transaction pair errors, but also first
+  # itself.
+
+  # It should perform corrections in loop to avoid candidate transactions being pulled twice
+
+  pass

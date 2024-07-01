@@ -3,7 +3,7 @@ import tkinter as tk
 from isp_noMatch_list import noMatchList
 from isp_data_handlers import groupDataClassObjsByAttribute, genDBInvoiceDCobj, genDBTransactionDCobj
 from isp_db_helpers import fetchInvoicesByCustomerBeforeDate, fetchTransactionsByInvoiceID
-from isp_trans_verify import checkIfTransactionErrorIsCorrection
+from isp_trans_verify import checkIfNoNumTransactionErrorIsCorrection
 from isp_close_enough_prompts import openVerifyErrorCorrectionCloseEnoughMatch
 
 import sqlite3
@@ -63,7 +63,7 @@ def final_resolver(root, matchlessList, cur, con):
                 dummyTransaction = genDBTransactionDCobj(candTransaction)
 
             # pass all three into funct to see if the error correction and any other unpaid invoice match the transaction amount
-            matchCheck = checkIfTransactionErrorIsCorrection(transaction, invoiceDC, dummyTransaction, cur, con)
+            matchCheck = checkIfNoNumTransactionErrorIsCorrection(transaction, invoiceDC, dummyTransaction, cur, con)
 
             if matchCheck[0] == True:
 

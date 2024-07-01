@@ -6,7 +6,7 @@ import re
 from datetime import datetime
 
 from isp_csv_helpers import cleanTransactionRaw, cleanInvoiceListRawGenCustomerList
-from isp_trans_verify import verifyTransactionDetails, verifyAlias, verifyTransactionAmount
+from isp_trans_verify import verifyTransactionDetails, verifyAlias, verifyTransactionAmount, checkIfTransactionListContainsErrorCorrections
 from isp_db_helpers import getInvoiceNumsIDs, fetchInvoiceByNum, fetchUnpaidInvoiceByNum, addTransactionsToDB, addNewCustomersToDB, getDBInvoiceNums, getCustomerNamesIDs, resolveNewCustomersDB, addCashInvoicesAndTransactions, addInvoicesToDB, addDummyTransactionsToDB, addCorrectedTransactionPairsDB
 from isp_data_handlers import constructCustomerAliasesDict, constructCustomerIDict, prepInvoiceUploadList, genInvoiceDCobj, genTransactionDCobj, genMultiTransactionDCobj, prepMatchedTransforDB, genMultiTransactionsInvoices, reMatchPaymentErrors, genNoNumTransactionDCobj
 from isp_resolvers import resolveNameMismatches, resolvePaymentErrors, resolveMultiInvoiceTransactions, resolveNoMatchTransactions
@@ -224,6 +224,7 @@ def handleTransactionUpload(root, filename):
   # rematch payment errors against updated DB
   reMatched, noMatch = reMatchPaymentErrors(matchPaymentError, cur)
 
+
   # print("Transaction count @line 220")
   # print(len(reMatched)+len(noMatch)+len(noMatchFromNum)+len(incompRec)+len(multiVerified)+len(multiErrorFlagged)+len(multiInvoiceErrors)+len(upLoadedPairs))
 
@@ -233,16 +234,29 @@ def handleTransactionUpload(root, filename):
 
   correctedErrors, incorrectInvoiceNums = resolvePaymentErrors(root, reMatched, cur, con)
 
+
+  # need a function here to check if any of the payment errors are corrections of previous payments.
+  # starting with those in the current list and then going backwards through the DB invoices.
+
   # print("Transaction count @line 229")
   # print(len(correctedErrors)+len(incorrectInvoiceNums)+len(incompRec)+len(multiVerified)+len(multiErrorFlagged)+len(multiInvoiceErrors)+len(upLoadedPairs))
 
   incompRec.extend(incorrectInvoiceNums)
 
-  correctedTransactions = [(errorPair[0][0], errorPair[1]) for errorPair in correctedErrors]
+  # print("This is corrected errors")
+
+  # print(correctedErrors)
+
+  correctedTransactions = [(correctedPair[0][0], correctedPair[1]) for correctedPair in correctedErrors]
 
   addCorrectedTransactionPairsDB(correctedTransactions, con, cur)
 
   con.commit()
+
+  print("This is the correctedErrors")
+  print(correctedErrors)
+
+  checkIfTransactionListContainsErrorCorrections(root, correctedErrors, con, cur)
 
   uploadRecs = [(uploadedPair[0][0], uploadedPair[0][1]) for uploadedPair in correctedErrors]
 
