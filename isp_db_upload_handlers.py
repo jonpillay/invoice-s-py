@@ -249,14 +249,14 @@ def handleTransactionUpload(root, filename):
 
   correctedTransactions = [(correctedPair[0][0], correctedPair[1]) for correctedPair in correctedErrors]
 
-  addCorrectedTransactionPairsDB(correctedTransactions, con, cur)
+  updatedCorrectedErrors = addCorrectedTransactionPairsDB(correctedErrors, con, cur)
 
   con.commit()
 
   print("This is the correctedErrors")
   print(correctedErrors)
 
-  checkIfTransactionListContainsErrorCorrections(root, correctedErrors, con, cur)
+  checkIfTransactionListContainsErrorCorrections(root, updatedCorrectedErrors, con, cur)
 
   uploadRecs = [(uploadedPair[0][0], uploadedPair[0][1]) for uploadedPair in correctedErrors]
 

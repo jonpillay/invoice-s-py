@@ -379,14 +379,14 @@ def resolveNewCustomersDB(root, invoiceCustomers, aliasesDict, cur, conn):
 
 def addCorrectedTransactionPairsDB(correctedErrors, con, cur):
 
-  for transactionPair in correctedErrors:
+  for errorTup in correctedErrors:
   
-    parentTransactionTup = transactionPair[0].as_tuple()
-    correctionTransation = transactionPair[1]
+    parentTransaction = errorTup[0][0]
+    correctionTransation = errorTup[0][1]
 
-    parentID = addErrorTransactionToDB(parentTransactionTup, con, cur)
+    parentID = addErrorTransactionToDB(parentTransaction.as_tuple(), con, cur)
 
-    transactionPair[0].transaction_id = parentID
+    parentTransaction.transaction_id = parentID
 
     # if len(parentTransactionTup) == 8:
     #   print(parentTransactionTup)
@@ -399,7 +399,7 @@ def addCorrectedTransactionPairsDB(correctedErrors, con, cur):
 
     addDummyNoteTransactionsToDB([correctionTransation.as_tuple()], con, cur)
 
-    return correctedErrors
+  return correctedErrors
 
 
 
