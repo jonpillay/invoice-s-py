@@ -217,7 +217,6 @@ def checkIfTransactionListContainsErrorCorrections(root, correctedErrors, con, c
             matchedInvoiceNumTransDummy.invoice_num = invoice.invoice_num
             matchedInvoiceNumTransDummy.amount = invoice.amount
             matchedInvoiceNumTransDummy.payment_method = f"*SPLITDUM* with {candInvoice.invoice_num}"
-            matchedInvoiceNumTransDummy.og_string = transaction.og_string
             matchedInvoiceNumTransDummy.invoice_id = invoice.invoice_id
             matchedInvoiceNumTransDummy.parent_trans = transaction.transaction_id
 
@@ -227,21 +226,75 @@ def checkIfTransactionListContainsErrorCorrections(root, correctedErrors, con, c
             matchedInvoiceCorrectionTransDummy.invoice_num = candInvoice.invoice_num
             matchedInvoiceCorrectionTransDummy.amount = candInvoice.amount
             matchedInvoiceCorrectionTransDummy.payment_method = f"*SPLITDUM* with {candInvoice.invoice_num}"
-            matchedInvoiceCorrectionTransDummy.og_string = transaction.og_string
             matchedInvoiceCorrectionTransDummy.invoice_id = candInvoice.invoice_id
             matchedInvoiceCorrectionTransDummy.parent_trans = transaction.transaction_id
 
-            # add the split dummy transactions to the DB which now pay for the two invoices
+            # add the split dummy transactions to the DB which now pays for the two invoices
 
             addDummyNoteTransactionsToDB([matchedInvoiceNumTransDummy, matchedInvoiceCorrectionTransDummy], cur, con)
 
-            reMatched.append([transaction, matchedInvoiceNumTransDummy, matchedInvoiceCorrectionTransDummy])
+            # modify invoices' error_notes to note new split payment
+
+            updateInvoiceRec(invoice.invoice_id, 'error_notes', f'Paid for with SPLIT transaction shares with invoice # {candInvoice.invoice_num}', cur, con)
+            updateInvoiceRec(candInvoice.invoice_id, 'error_notes', f'Paid for with SPLIT transaction shares with invoice # {invoice.invoice_num}', cur, con)
+
+            reMatched.append([transaction, [matchedInvoiceNumTransDummy, matchedInvoiceCorrectionTransDummy]])
 
             correctedErrors.pop(0)
 
             break
-        
 
+        # start of check to see if transaction over payment is a correction for a group of invoices
+
+        runningInvoiceTotal = 0
+        invoiceGroup = []
+
+        for currentInvoice in candInvoices:
+
+          if runningInvoiceTotal > dummyTransaction.amount:
+            break
+
+          elif runningInvoiceTotal == dummyTransaction.amount:
+
+            # transaction overpayment matches with total of group of unpaid invoices
+
+            # delete the existing dummy transaction
+            deleteDummyTransactionsByParentID(transaction.transaction_id, con, cur)
+
+            # create dummy transactions for the invoices to be paid and update error_note on invoice
+
+            dummyTransactionGroup = []
+
+            for paidInvoice in invoiceGroup:
+
+              dummyTransaction = copy.deepcopy(transaction)
+
+              dummyTransaction.transaction_id = None
+              dummyTransaction.invoice_num = paidInvoice.invoice_num
+              dummyTransaction.amount = paidInvoice.amount
+              dummyTransaction.payment_method = f"*SPLITDUM* from {transaction.transaction_id}"
+              dummyTransaction.invoice_id = paidInvoice.invoice_id
+              dummyTransaction.parent_trans = transaction.transaction_id
+
+              # update invoice DB record
+              updateInvoiceRec(paidInvoice.invoice_id, 'error_notes', f'Paid for with SPLITGROUP transaction', cur, con)
+
+              dummyTransactionGroup.append(dummyTransaction)
+
+            # upload the dummy transactions to the DB
+            addDummyNoteTransactionsToDB(dummyTransactionGroup, cur, con)
+
+            reMatched.append([transaction, dummyTransactionGroup])
+
+            correctedErrors.pop(0)
+
+            break
+
+          else:
+            # if the total of the candInvoices that have been looped over is under and does not equal the overpayment
+            # then add the current invoice amount to the running total and append the invoice into the invoice group
+            runningInvoiceTotal += currentInvoice.amount
+            invoiceGroup.append(currentInvoice)
 
 
 
