@@ -179,54 +179,67 @@ def checkIfNoNumTransactionErrorIsCorrection(transaction, errorTransaction, dumm
 
 def checkIfTransactionListContainsErrorCorrections(root, correctedErrors, con, cur):
 
-  for tupTransactionGroup in correctedErrors:
+  errorCount = len(correctedErrors)
 
-    transaction = tupTransactionGroup[0][0]
-    invoice = tupTransactionGroup[0][1]
-    dummyTransaction = tupTransactionGroup[1]
+  reMatched = []
+  stillErrors = []
 
-    # check if transaction overpayment is payment on unpaid invoices
+  while len(reMatched) + len(stillErrors) < errorCount:
 
-    if dummyTransaction.amount < 0:
+    for tupTransactionGroup in correctedErrors:
 
-      candInvoices = fetchUnpaidInvoicesByCustomerBeforeDate(transaction.paid_on, transaction.customer_id, cur)
+      transaction = tupTransactionGroup[0][0]
+      invoice = tupTransactionGroup[0][1]
+      dummyTransaction = tupTransactionGroup[1]
 
-      for candInvoice in candInvoices:
+      # check if transaction overpayment is payment on unpaid invoices
 
-        if candInvoice.amount + dummyTransaction.amount == 0:
-          
-          # unpaid invoice has been found for the payment error
+      if dummyTransaction.amount < 0:
 
-          # Need to delete the old dummy transaction from the DB
+        candInvoices = fetchUnpaidInvoicesByCustomerBeforeDate(transaction.paid_on, transaction.customer_id, cur)
 
-          deleteDummyTransactionsByParentID(transaction.transaction_id, con, cur)
+        for candInvoice in candInvoices:
 
-          # create 2 new dummy transactions to represent the split
-          # and pay for both of the matched invoices
+          if candInvoice.amount + dummyTransaction.amount == 0:
+            
+            # unpaid invoice has been found for the payment error
 
-          matchedInvoiceNumTransDummy = copy.deepcopy(transaction)
+            # Need to delete the old dummy transaction from the DB
 
-          matchedInvoiceNumTransDummy.transaction_id = None
-          matchedInvoiceNumTransDummy.invoice_num = invoice.invoice_num
-          matchedInvoiceNumTransDummy.amount = invoice.amount
-          matchedInvoiceNumTransDummy.payment_method = f"*SPLITDUM* with {candInvoice.invoice_num}"
-          matchedInvoiceNumTransDummy.og_string = transaction.og_string
-          matchedInvoiceNumTransDummy.invoice_id = invoice.invoice_id
-          matchedInvoiceNumTransDummy.parent_trans = transaction.transaction_id
+            deleteDummyTransactionsByParentID(transaction.transaction_id, con, cur)
 
-          matchedInvoiceCorrectionTransDummy = copy.deepcopy(transaction)
+            # create 2 new dummy transactions to represent the split
+            # and pay for both of the matched invoices
 
-          matchedInvoiceCorrectionTransDummy.transaction_id = None
-          matchedInvoiceCorrectionTransDummy.invoice_num = candInvoice.invoice_num
-          matchedInvoiceCorrectionTransDummy.amount = candInvoice.amount
-          matchedInvoiceCorrectionTransDummy.payment_method = f"*SPLITDUM* with {candInvoice.invoice_num}"
-          matchedInvoiceCorrectionTransDummy.og_string = transaction.og_string
-          matchedInvoiceCorrectionTransDummy.invoice_id = candInvoice.invoice_id
-          matchedInvoiceCorrectionTransDummy.parent_trans = transaction.transaction_id
+            matchedInvoiceNumTransDummy = copy.deepcopy(transaction)
 
-          addDummyNoteTransactionsToDB([matchedInvoiceNumTransDummy, matchedInvoiceCorrectionTransDummy], cur, con)
+            matchedInvoiceNumTransDummy.transaction_id = None
+            matchedInvoiceNumTransDummy.invoice_num = invoice.invoice_num
+            matchedInvoiceNumTransDummy.amount = invoice.amount
+            matchedInvoiceNumTransDummy.payment_method = f"*SPLITDUM* with {candInvoice.invoice_num}"
+            matchedInvoiceNumTransDummy.og_string = transaction.og_string
+            matchedInvoiceNumTransDummy.invoice_id = invoice.invoice_id
+            matchedInvoiceNumTransDummy.parent_trans = transaction.transaction_id
 
-          pass
+            matchedInvoiceCorrectionTransDummy = copy.deepcopy(transaction)
+
+            matchedInvoiceCorrectionTransDummy.transaction_id = None
+            matchedInvoiceCorrectionTransDummy.invoice_num = candInvoice.invoice_num
+            matchedInvoiceCorrectionTransDummy.amount = candInvoice.amount
+            matchedInvoiceCorrectionTransDummy.payment_method = f"*SPLITDUM* with {candInvoice.invoice_num}"
+            matchedInvoiceCorrectionTransDummy.og_string = transaction.og_string
+            matchedInvoiceCorrectionTransDummy.invoice_id = candInvoice.invoice_id
+            matchedInvoiceCorrectionTransDummy.parent_trans = transaction.transaction_id
+
+            # add the split dummy transactions to the DB which now pay for the two invoices
+
+            addDummyNoteTransactionsToDB([matchedInvoiceNumTransDummy, matchedInvoiceCorrectionTransDummy], cur, con)
+
+            reMatched.append([transaction, matchedInvoiceNumTransDummy, matchedInvoiceCorrectionTransDummy])
+
+            correctedErrors.pop(0)
+
+            break
         
 
 
