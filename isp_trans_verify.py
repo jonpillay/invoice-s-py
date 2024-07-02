@@ -1,9 +1,10 @@
 from isp_dataframes import Transaction, Invoice
-from isp_db_helpers import getCustomerAliases, fetchUnpaidInvoicesByCustomerBeforeDate, deleteTransactionRec, updateTransactionRec, updateInvoiceRec, addErrorTransactionToDB
+from isp_db_helpers import getCustomerAliases, fetchUnpaidInvoicesByCustomerBeforeDate, deleteTransactionRec, updateTransactionRec, updateInvoiceRec, addErrorTransactionToDB, deleteDummyTransactionsByParentID, addDummyNoteTransactionsToDB
 from isp_data_handlers import genInvoiceDCobj, prepMatchedTransforDB
 from isp_close_enough_prompts import openVerifyCloseEnoughtMatch
 
 import tkinter as tk
+import copy
 
   
 def verifyTransactionAmount(transaction, invoice, tol, correctionAmount = 0):
@@ -184,7 +185,7 @@ def checkIfTransactionListContainsErrorCorrections(root, correctedErrors, con, c
     invoice = tupTransactionGroup[0][1]
     dummyTransaction = tupTransactionGroup[1]
 
-    # check if transaction over - payment is payment on unpaid invoices
+    # check if transaction overpayment is payment on unpaid invoices
 
     if dummyTransaction.amount < 0:
 
@@ -196,8 +197,34 @@ def checkIfTransactionListContainsErrorCorrections(root, correctedErrors, con, c
           
           # unpaid invoice has been found for the payment error
 
-          # Need to delete the old dummy transaction from the DB and create 2 new dummy transactions to represent the split
+          # Need to delete the old dummy transaction from the DB
+
+          deleteDummyTransactionsByParentID(transaction.transaction_id, con, cur)
+
+          # create 2 new dummy transactions to represent the split
           # and pay for both of the matched invoices
+
+          matchedInvoiceNumTransDummy = copy.deepcopy(transaction)
+
+          matchedInvoiceNumTransDummy.transaction_id = None
+          matchedInvoiceNumTransDummy.invoice_num = invoice.invoice_num
+          matchedInvoiceNumTransDummy.amount = invoice.amount
+          matchedInvoiceNumTransDummy.payment_method = f"*SPLITDUM* with {candInvoice.invoice_num}"
+          matchedInvoiceNumTransDummy.og_string = transaction.og_string
+          matchedInvoiceNumTransDummy.invoice_id = invoice.invoice_id
+          matchedInvoiceNumTransDummy.parent_trans = transaction.transaction_id
+
+          matchedInvoiceCorrectionTransDummy = copy.deepcopy(transaction)
+
+          matchedInvoiceCorrectionTransDummy.transaction_id = None
+          matchedInvoiceCorrectionTransDummy.invoice_num = candInvoice.invoice_num
+          matchedInvoiceCorrectionTransDummy.amount = candInvoice.amount
+          matchedInvoiceCorrectionTransDummy.payment_method = f"*SPLITDUM* with {candInvoice.invoice_num}"
+          matchedInvoiceCorrectionTransDummy.og_string = transaction.og_string
+          matchedInvoiceCorrectionTransDummy.invoice_id = candInvoice.invoice_id
+          matchedInvoiceCorrectionTransDummy.parent_trans = transaction.transaction_id
+
+          addDummyNoteTransactionsToDB([matchedInvoiceNumTransDummy, matchedInvoiceCorrectionTransDummy], cur, con)
 
           pass
         

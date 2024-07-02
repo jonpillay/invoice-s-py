@@ -121,6 +121,13 @@ def fetchTransactionsByInvoiceID(invoiceID, cur):
   return transactions
 
 
+def deleteDummyTransactionsByParentID(paarentTransID, cur, con):
+
+  sql = "DELETE FROM TRANSACTIONS WHERE parent_id = ?"
+
+  cur.execute(sql, (paarentTransID,))
+
+  con.commit()
 
 
 def addInvoicesToDB(invoicesTuples, cur):
