@@ -256,7 +256,7 @@ def handleTransactionUpload(root, filename):
   print("This is the correctedErrors")
   print(correctedErrors)
 
-  checkIfTransactionListContainsErrorCorrections(root, updatedCorrectedErrors, con, cur)
+  # checkIfTransactionListContainsErrorCorrections(root, updatedCorrectedErrors, con, cur)
 
   uploadRecs = [(uploadedPair[0][0], uploadedPair[0][1]) for uploadedPair in correctedErrors]
 

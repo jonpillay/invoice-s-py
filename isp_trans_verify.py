@@ -296,6 +296,9 @@ def checkIfTransactionListContainsErrorCorrections(root, correctedErrors, con, c
             runningInvoiceTotal += currentInvoice.amount
             invoiceGroup.append(currentInvoice)
 
+      # fetch previous dummy transactions to see if the error on the current transaction is a correction on the last
+      
+       
 
 
   # will be passed the output from resolvePaymentErrors for transactions that have been corrected.
