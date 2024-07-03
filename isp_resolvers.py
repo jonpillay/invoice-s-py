@@ -21,7 +21,6 @@ def resolveNameMismatches(root, cur, conn, matchNameErrors):
 
   while len(nameResolved) + len(unMatchable) < errorCount:
 
-    print("Here Innit")
 
     dbCustomers = getCustomerNamesIDs(cur)
 
@@ -31,9 +30,6 @@ def resolveNameMismatches(root, cur, conn, matchNameErrors):
       
       transaction = error[0]
       invoice = error[1]
-
-      print(invoice)
-      print(aliasesDict)
       
       for name in aliasesDict:
 
@@ -224,8 +220,6 @@ def resolveMultiInvoiceTransactions(root, cur, con, multiRecs):
 
 
 def resolvePaymentErrors(root, paymentErrors, cur, con):
-
-  print("Start of resolvePaymentErrors")
 
   errorCount = len(paymentErrors)
 

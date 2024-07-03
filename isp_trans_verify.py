@@ -1,6 +1,6 @@
 from isp_dataframes import Transaction, Invoice
-from isp_db_helpers import getCustomerAliases, fetchUnpaidInvoicesByCustomerBeforeDate, deleteTransactionRec, updateTransactionRec, updateInvoiceRec, addErrorTransactionToDB, deleteDummyTransactionsByParentID, addDummyNoteTransactionsToDB
-from isp_data_handlers import genInvoiceDCobj, prepMatchedTransforDB
+from isp_db_helpers import getCustomerAliases, fetchUnpaidInvoicesByCustomerBeforeDate, deleteTransactionRec, updateTransactionRec, updateInvoiceRec, addErrorTransactionToDB, deleteDummyTransactionsByParentID, addDummyNoteTransactionsToDB, fetchTransactionsByCustomerPaymentMethod
+from isp_data_handlers import genInvoiceDCobj, prepMatchedTransforDB, genDBInvoiceDCobj
 from isp_close_enough_prompts import openVerifyCloseEnoughtMatch
 
 import tkinter as tk
@@ -188,9 +188,15 @@ def checkIfTransactionListContainsErrorCorrections(root, correctedErrors, con, c
 
     for tupTransactionGroup in correctedErrors:
 
+      print("This is the tup group")
+      print(tupTransactionGroup)
+
       transaction = tupTransactionGroup[0][0]
       invoice = tupTransactionGroup[0][1]
       dummyTransaction = tupTransactionGroup[1]
+      
+      print("This is the invoice")
+      print(invoice)
 
       # check if transaction overpayment is payment on unpaid invoices
 
@@ -198,7 +204,9 @@ def checkIfTransactionListContainsErrorCorrections(root, correctedErrors, con, c
 
         candInvoices = fetchUnpaidInvoicesByCustomerBeforeDate(transaction.paid_on, transaction.customer_id, cur)
 
-        for candInvoice in candInvoices:
+        candInvoiceDCs = [genInvoiceDCobj(DBinvoice) for DBinvoice in candInvoices]
+
+        for candInvoice in candInvoiceDCs:
 
           if candInvoice.amount + dummyTransaction.amount == 0:
             
@@ -297,9 +305,12 @@ def checkIfTransactionListContainsErrorCorrections(root, correctedErrors, con, c
             invoiceGroup.append(currentInvoice)
 
       # fetch previous dummy transactions to see if the error on the current transaction is a correction on the last
-      
-       
 
+      candDummyTransactions = fetchTransactionsByCustomerPaymentMethod("CORDUM", transaction.customer_id, cur)
+
+      print("This is dummy transactions")
+      print(candDummyTransactions)
+      exit()
 
   # will be passed the output from resolvePaymentErrors for transactions that have been corrected.
   # A list of Tuples, the first element being a list of the original Transaction and the invoice
@@ -310,5 +321,3 @@ def checkIfTransactionListContainsErrorCorrections(root, correctedErrors, con, c
   # itself.
 
   # It should perform corrections in loop to avoid candidate transactions being pulled twice
-
-  pass

@@ -121,6 +121,17 @@ def fetchTransactionsByInvoiceID(invoiceID, cur):
   return transactions
 
 
+def fetchTransactionsByCustomerPaymentMethod(paymentMethod, customerID, cur):
+
+  sql ="SELECT * FROM TRANSACTIONS WHERE payment_method LIKE ? AND customer_id = ?"
+
+  cur.execute(sql, (paymentMethod, customerID))
+
+  transactions = cur.fetchall()
+
+  return transactions
+
+
 def deleteDummyTransactionsByParentID(paarentTransID, cur, con):
 
   sql = "DELETE FROM TRANSACTIONS WHERE parent_id = ?"
