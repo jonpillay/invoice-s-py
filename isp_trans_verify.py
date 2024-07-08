@@ -193,15 +193,6 @@ def checkIfTransactionListContainsErrorCorrections(root, correctedErrors, con, c
       transaction = tupTransactionGroup[0][0]
       invoice = tupTransactionGroup[0][1]
       dummyTransaction = tupTransactionGroup[1]
-      
-      print("This is the invoice")
-      print(invoice)
-
-      print("This is the transaction")
-      print(transaction)
-
-      print("This is the dummy")
-      print(dummyTransaction)
 
       # check if transaction overpayment is payment on unpaid invoices
 
@@ -315,6 +306,30 @@ def checkIfTransactionListContainsErrorCorrections(root, correctedErrors, con, c
 
       print("This is dummy transactions")
       print(candDummyTransactions)
+
+      for prevDummyTransaction in candDummyTransactions:
+
+        if prevDummyTransaction.amount + dummyTransaction.amount == 0:
+
+          """
+          
+          - What happens now?
+
+          - preDummyTransaction is no longer valid, needs to be deleted
+
+          - preDummyTransaction needs to be deleted or modified as no longer a correction dummy, but split dummy
+
+          - create new dummy transactions that is split and signifies the two payments from the parent transaction
+
+          - or should I just modify the two that are already present so that they are represent their new roles?
+
+          """
+
+          # delete the old dummy transaction (prevDummyTransaction) from database#
+
+          deleteDummyTransactionsByParentID(prevDummyTransaction.parent_trans, con, cur)
+
+
     exit()
 
   # will be passed the output from resolvePaymentErrors for transactions that have been corrected.

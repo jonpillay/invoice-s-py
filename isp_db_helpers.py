@@ -29,6 +29,17 @@ def fetchInvoiceByNum(invoiceNumber, cur):
   return invoice
 
 
+def fetchInvoiceByID(invoiceID, cur):
+
+  sql = "SELECT * FROM INVOICES WHERE invoice_id=?"
+
+  cur.execute(sql, (invoiceID,))
+
+  invoice = cur.fetchall()
+
+  return invoice
+
+
 def fetchUnpaidInvoiceByNum(invoiceNumber, cur):
 
   sql = "SELECT INVOICES.id, INVOICES.invoice_num, INVOICES.amount, INVOICES.date_issued, INVOICES.issued_to, INVOICES.customer_id FROM INVOICES LEFT JOIN TRANSACTIONS ON INVOICES.id = TRANSACTIONS.invoice_id WHERE INVOICES.invoice_num=? AND TRANSACTIONS.invoice_id IS NULL"
