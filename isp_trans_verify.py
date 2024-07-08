@@ -23,10 +23,6 @@ def verifyTransactionDetails(transaction, invoice, cur):
 
   amountVerified = verifyTransactionAmount(transaction, invoice, 0.01)
 
-  # print(transaction.invoice_num)
-  # print(invoice.invoice_num)
-  # print("")
-
   if amountVerified == True and invoice.issued_to != transaction.paid_by or amountVerified == True and invoice.issued_to not in customerAliases:
     return f"Name Mismatch {transaction.paid_by} to {invoice.issued_to}"
   elif amountVerified == False:
@@ -312,20 +308,22 @@ def checkIfTransactionListContainsErrorCorrections(root, correctedErrors, con, c
         if prevDummyTransaction.amount + dummyTransaction.amount == 0:
 
           """
+          - The dummyTransaction from incoming corrected errors now needs to be a *SPLITTRANS* from the parent transaction (transaction) that is was
+          - originally created to correct. The candDummy transaction also needs to be modified to make it a *SPLITTRANS*
           
           - What happens now?
 
-          - preDummyTransaction is no longer valid, needs to be deleted
+          - Both need to be made SPLITDUM as this signals they have a counterpart (or several).
 
-          - preDummyTransaction needs to be deleted or modified as no longer a correction dummy, but split dummy
+          - They can keep their original amounts. The prevDummyTransaction amount still relates to the error amount between the previous error transaction
+          - and the Invoice. It is the same amount (but opposite in its positive/negative value) that corrects the incoming transaction/invoice pair.
 
-          - create new dummy transactions that is split and signifies the two payments from the parent transaction
+          - both the previousDummyTransaction and dummyTransaction should keep their original parent_trans id as they still relate to that transaction
 
-          - or should I just modify the two that are already present so that they are represent their new roles?
+          - But added to the OGstring of the prevDummyTransaction and it is corrected by the dummyTransaction, and the OGstring of the dummyTransaction
+          - should be noted that it corrects the prevDummyTransaction. 
 
           """
-
-          # delete the old dummy transaction (prevDummyTransaction) from database#
 
           deleteDummyTransactionsByParentID(prevDummyTransaction.parent_trans, con, cur)
 
