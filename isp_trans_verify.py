@@ -177,6 +177,8 @@ def checkIfNoNumTransactionErrorIsCorrection(transaction, errorTransaction, dumm
   return bestMatch
 
 
+
+
 def checkIfTransactionListContainsErrorCorrections(root, correctedErrors, con, cur):
 
   errorCount = len(correctedErrors)
@@ -188,15 +190,18 @@ def checkIfTransactionListContainsErrorCorrections(root, correctedErrors, con, c
 
     for tupTransactionGroup in correctedErrors:
 
-      print("This is the tup group")
-      print(tupTransactionGroup)
-
       transaction = tupTransactionGroup[0][0]
       invoice = tupTransactionGroup[0][1]
       dummyTransaction = tupTransactionGroup[1]
       
       print("This is the invoice")
       print(invoice)
+
+      print("This is the transaction")
+      print(transaction)
+
+      print("This is the dummy")
+      print(dummyTransaction)
 
       # check if transaction overpayment is payment on unpaid invoices
 
@@ -306,11 +311,11 @@ def checkIfTransactionListContainsErrorCorrections(root, correctedErrors, con, c
 
       # fetch previous dummy transactions to see if the error on the current transaction is a correction on the last
 
-      candDummyTransactions = fetchTransactionsByCustomerPaymentMethod("CORDUM", transaction.customer_id, cur)
+      candDummyTransactions = fetchTransactionsByCustomerPaymentMethod("%CORDUM%", transaction.customer_id, cur)
 
       print("This is dummy transactions")
       print(candDummyTransactions)
-      exit()
+    exit()
 
   # will be passed the output from resolvePaymentErrors for transactions that have been corrected.
   # A list of Tuples, the first element being a list of the original Transaction and the invoice
