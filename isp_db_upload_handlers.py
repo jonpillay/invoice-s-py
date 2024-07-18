@@ -370,3 +370,33 @@ def handleTransactionUpload(root, filename):
   
   cur.close()
   con.close()
+
+  print("This is the uploaded pairs")
+
+  for uploaded in upLoadedPairs:
+
+    print(uploaded[0])
+    print(uploaded[1])
+    print("")
+    print("")
+
+  print("upLoadedPairs len is ")
+  print(len(upLoadedPairs))
+
+  for multipair in uploadedMultiTransactionPairs:
+
+    print(multipair[0])
+    print("")
+    print(multipair[1])
+    print("")
+
+  print("multipair len is ")
+  print(len(multipair))
+
+  for matchless in noMatches:
+
+    print(matchless)
+    print("")
+
+  print("matchless len is ")
+  print(len(matchless))
