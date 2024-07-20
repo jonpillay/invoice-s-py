@@ -177,6 +177,11 @@ def checkIfNoNumTransactionErrorIsCorrection(transaction, errorTransaction, dumm
 
 def checkIfTransactionListContainsErrorCorrections(root, correctedErrors, con, cur):
 
+  """
+  Takes in a list of the corrected errors from the incoming Transactions and checks against both past unpaid invoices
+  and also past corrections. This checks if the current error from corrected errors is a correction on a past error.
+  """
+
   errorCount = len(correctedErrors)
 
   reMatched = []
@@ -296,9 +301,8 @@ def checkIfTransactionListContainsErrorCorrections(root, correctedErrors, con, c
             runningInvoiceTotal += currentInvoice.amount
             invoiceGroup.append(currentInvoice)
 
-      # fetch previous dummy transactions to see if the error on the current transaction is a correction on the last
+      # fetch previous dummy transactions to see if the error on the current transaction is a correction on a previous transaction
 
-      # needs turning into a DC object
       candDummyTransactions = fetchTransactionsByCustomerPaymentMethod("%CORDUM%", transaction.customer_id, cur)
 
       candDummyTransactionDCs = [genDBTransactionDCobj(transDC) for transDC in candDummyTransactions]
@@ -310,12 +314,16 @@ def checkIfTransactionListContainsErrorCorrections(root, correctedErrors, con, c
           print("It lives!")
 
           """
-          - The dummyTransaction from incoming corrected errors now needs to be a *SPLITTRANS* from the parent transaction (transaction) that is was
-          - originally created to correct. The candDummy transaction also needs to be modified to make it a *SPLITTRANS*
           
           - What happens now?
+          
+          - The incoming transaction (transaction) needs an error note saying it corrects the previous transaction (take the parent_transaction_id from previousDummyTransaction).
+          
+          - That previousDummyTransaction needs to be made a *SPLITCOR* (split correction), keeping it's details, but the with an error note saying it is
+          - corrected by the incoming transaction (transaction).
 
-          - Both need to be made SPLITDUM as this signals they have a counterpart (or several).
+          - The incoming transaction's already created dummy transaction (dummyTransaction) also needs to be updated with *SPLITCOR* and error noted that it 
+          - corrects previousDummyTransaction and thus the previous transaction (previosuDummyTransaction's parent_transaction)
 
           - They can keep their original amounts. The prevDummyTransaction amount still relates to the error amount between the previous error transaction
           - and the Invoice. It is the same amount (but opposite in its positive/negative value) that corrects the incoming transaction/invoice pair.
@@ -327,9 +335,13 @@ def checkIfTransactionListContainsErrorCorrections(root, correctedErrors, con, c
 
           """
 
+          # turn the subject dummyTransaction into *SPLITDUM* payment methods
+          # updateTransactionRec(dummyTransaction.transaction_id, 'payment_method', "*SPLTTRANS*", cur, con)
+
           # deleteDummyTransactionsByParentID(prevDummyTransaction.parent_trans, con, cur)
 
 
+    con.close()
     exit()
 
   # will be passed the output from resolvePaymentErrors for transactions that have been corrected.
