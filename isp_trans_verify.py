@@ -318,7 +318,9 @@ def checkIfTransactionListContainsErrorCorrections(root, correctedErrors, con, c
           - What happens now?
           
           - The incoming transaction (transaction) needs an error note saying it corrects the previous transaction (take the parent_transaction_id from previousDummyTransaction).
-          
+
+          - The corrected transaction (grab ID from the prevDummyTransaction) needs an error note saying it is corrected by the incoming transaction
+
           - That previousDummyTransaction needs to be made a *SPLITCOR* (split correction), keeping it's details, but the with an error note saying it is
           - corrected by the incoming transaction (transaction).
 
@@ -328,17 +330,24 @@ def checkIfTransactionListContainsErrorCorrections(root, correctedErrors, con, c
           - They can keep their original amounts. The prevDummyTransaction amount still relates to the error amount between the previous error transaction
           - and the Invoice. It is the same amount (but opposite in its positive/negative value) that corrects the incoming transaction/invoice pair.
 
-          - both the previousDummyTransaction and dummyTransaction should keep their original parent_trans id as they still relate to that transaction
-
-          - But added to the OGstring of the prevDummyTransaction and it is corrected by the dummyTransaction, and the OGstring of the dummyTransaction
-          - should be noted that it corrects the prevDummyTransaction. 
-
           """
 
-          # turn the subject dummyTransaction into *SPLITDUM* payment methods
-          # updateTransactionRec(dummyTransaction.transaction_id, 'payment_method', "*SPLTTRANS*", cur, con)
+          # The incoming transaction (transaction) needs an error note saying it corrects the previous transaction (take the parent_transaction_id from previousDummyTransaction).
 
-          # deleteDummyTransactionsByParentID(prevDummyTransaction.parent_trans, con, cur)
+          updateTransactionRec(transaction.transaction_id, 'error_notes', f"error corrects *transID* {prevDummyTransaction.parent_trans}", cur, con)
+
+          # The corrected transaction (grab ID from the prevDummyTransaction) needs an error note saying it is corrected by the incoming transaction
+
+          updateTransactionRec(prevDummyTransaction.parent_trans, 'error_notes', f"error corrected by *transID* {transaction.transaction_id}", cur, con)
+
+          # That previousDummyTransaction needs to be made a *SPLITCORRECTED*, keeping it's details, but the with an error note saying it is
+          # corrected by the incoming transaction (transaction).
+
+          updateTransactionRec(prevDummyTransaction.transaction_id, 'payment_method', "*SPLITCORRECTED*", cur, con)
+
+          # The incoming transaction's already created dummy transaction (dummyTransaction) needs to be updated with *SPLITCORRECTION*
+
+          updateTransactionRec(dummyTransaction.transaction_id, 'payment_method', "*SPLITCORRECTION*", cur, con)
 
 
     con.close()
