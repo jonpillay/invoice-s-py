@@ -309,9 +309,9 @@ def checkIfTransactionListContainsErrorCorrections(root, correctedErrors, con, c
 
       for prevDummyTransaction in candDummyTransactionDCs:
 
-        if prevDummyTransaction.amount + dummyTransaction.amount in range(-1000, 1000):
+        if prevDummyTransaction.amount + dummyTransaction.amount == 0:
 
-          print("It lives!")
+          # if the incoming error amount added to the previous error equals 0, then it is assumed the incoming error is a correction on the previous error.
 
           """
           
