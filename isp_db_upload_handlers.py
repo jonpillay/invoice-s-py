@@ -8,7 +8,7 @@ from datetime import datetime
 from isp_csv_helpers import cleanTransactionRaw, cleanInvoiceListRawGenCustomerList
 from isp_trans_verify import verifyTransactionDetails, verifyAlias, verifyTransactionAmount, checkIfTransactionListContainsErrorCorrections
 from isp_db_helpers import getInvoiceNumsIDs, fetchInvoiceByNum, fetchUnpaidInvoiceByNum, addTransactionsToDB, addNewCustomersToDB, getDBInvoiceNums, getCustomerNamesIDs, resolveNewCustomersDB, addCashInvoicesAndTransactions, addInvoicesToDB, addDummyTransactionsToDB, addCorrectedTransactionPairsDB
-from isp_data_handlers import constructCustomerAliasesDict, constructCustomerIDict, prepInvoiceUploadList, genInvoiceDCobj, genTransactionDCobj, genMultiTransactionDCobj, prepMatchedTransforDB, genMultiTransactionsInvoices, reMatchPaymentErrors, genNoNumTransactionDCobj
+from isp_data_handlers import constructCustomerAliasesDict, constructCustomerIDict, prepInvoiceUploadList, genInvoiceDCobj, genTransactionDCobj, genMultiTransactionDCobj, prepMatchedTransforDB, genMultiTransactions, reMatchPaymentErrors, genNoNumTransactionDCobj
 from isp_resolvers import resolveNameMismatches, resolvePaymentErrors, resolveMultiInvoiceTransactions, resolveNoMatchTransactions
 from isp_multi_invoice_prompt import openSelectBetweenInvoices
 
@@ -203,7 +203,7 @@ def handleTransactionUpload(root, filename):
  
   multiVerified, multiErrorFlagged, multiInvoiceErrors = resolveMultiInvoiceTransactions(root, cur, con, multiRec)
 
-  dummyTransactions, uploadedMultiTransactionPairs = genMultiTransactionsInvoices(multiVerified, cur, con)
+  dummyTransactions, uploadedMultiTransactionPairs = genMultiTransactions(multiVerified, cur, con)
 
   dummyTransactionTuples = [dummyTrans.as_tuple() for dummyTrans in dummyTransactions]
 

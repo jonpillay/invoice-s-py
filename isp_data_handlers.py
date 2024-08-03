@@ -192,7 +192,7 @@ def genMultiTransactionDCobj(transaction):
 
 
 
-def genMultiTransactionsInvoices(transactionsList, cur, con):  
+def genMultiTransactions(transactionsList, cur, con):  
 
   transactionUploadList = []
 
