@@ -14,13 +14,13 @@ def resolveNameMismatches(root, cur, conn, matchNameErrors):
 
   errorCount = len(matchNameErrors)
 
-  print(errorCount)
-
   unMatchable = []
   nameResolved = []
+  
+  # need a list to be returned for resolved names, but with payment error
+  paymentErrors = []
 
   while len(nameResolved) + len(unMatchable) < errorCount:
-
 
     dbCustomers = getCustomerNamesIDs(cur)
 
@@ -35,12 +35,21 @@ def resolveNameMismatches(root, cur, conn, matchNameErrors):
 
         if transaction.paid_by in aliasesDict[name]:
 
-          prepMatchedTransforDB(error[0], error[1])
+          if transaction.amount == invoice.amount:
 
-          nameResolved.append(error)
-          matchNameErrors.pop(0)
+            prepMatchedTransforDB(error[0], error[1])
 
-          break
+            nameResolved.append(error)
+            matchNameErrors.pop(0)
+
+            break
+
+          else:
+
+            paymentErrors.append([transaction, invoice])
+            matchNameErrors.pop(0)
+
+            break
 
       else:
 
@@ -61,11 +70,20 @@ def resolveNameMismatches(root, cur, conn, matchNameErrors):
 
           conn.commit()
 
-          prepMatchedTransforDB(error[0], error[1])
+          if transaction.amount == invoice.amount:
 
-          nameResolved.append(error)
-          matchNameErrors.pop(0)
-          break
+            prepMatchedTransforDB(error[0], error[1])
+
+            nameResolved.append(error)
+            matchNameErrors.pop(0)
+            break
+
+          else:
+
+            paymentErrors.append([transaction, invoice])
+            matchNameErrors.pop(0)
+
+            break
 
         elif aliasBool.get() == False and rejectedBool.get() == True:
 
@@ -78,7 +96,7 @@ def resolveNameMismatches(root, cur, conn, matchNameErrors):
 
   # print(matchNameErrors)
 
-  return nameResolved, unMatchable
+  return nameResolved, unMatchable, paymentErrors
 
 
 

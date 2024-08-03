@@ -178,10 +178,12 @@ def handleTransactionUpload(root, filename):
   # records are complete at this point
 
   # resolve name mismatches
-  nameResolved, namesUnresolved = resolveNameMismatches(root, cur, con, matchNameError)
+  nameResolved, namesUnresolved, resolvedNamePaymentErrors = resolveNameMismatches(root, cur, con, matchNameError)
   
   # print(len(matchPaymentError)+len(nameResolved)+len(transactionUploadList)+len(noMatchFromNum)+len(incompRec)+len(multiRec))
   # records are complete at this point
+
+  matchPaymentError.extend(resolvedNamePaymentErrors)
 
   transactionUploadList.extend(nameResolved)
 
