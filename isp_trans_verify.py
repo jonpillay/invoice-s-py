@@ -159,7 +159,7 @@ def checkIfNoNumTransactionErrorIsCorrection(transaction, errorTransaction, dumm
     if dif != False:
 
       if bestMatch == None or dif < bestMatch[0]:
-        print(f"This is the {dif}")
+
         bestMatch = [dif, candInvoice]
 
       # matchVerifiedBool = tk.BooleanVar()

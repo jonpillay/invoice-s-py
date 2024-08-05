@@ -21,12 +21,8 @@ def final_resolver(root, matchlessList, cur, con):
 
   for customerTransactionGroup in noMatchGroups:
 
-    print(customerTransactionGroup[0].paid_by)
-
     # Sort grouped customer Transactions by date
     customerTransactionGroup.sort(key=attrgetter('paid_on'))
-
-
 
     for transaction in customerTransactionGroup:
 
