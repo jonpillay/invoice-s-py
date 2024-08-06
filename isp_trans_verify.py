@@ -71,6 +71,17 @@ def getTransactionCorrectionNexusDif(transaction, invoice, tol, correctionAmount
 
 def checkIfNoNumTransactionErrorIsCorrection(transaction, errorTransaction, dummyCorrectionTransaction, cur, con):
 
+  """
+  Checks if a none numbered incoming transaction (transaction) corrected by a past error (errorTransaction, dummyCorrectionTransaction)
+  Now pays for an unpaid invoice (what is eventually candInvoice), eith exactly, or within a tolerance.
+
+  Returns a list, if the match is exact, the list is composed of True bool and the matched invoice. If the match is not exact the list
+  is composed of the difference, and the matched invoice.
+
+  If no match is found, then bestMatch is returned as None, as it was initialised.
+
+  """
+
   # needs to return only the matched invoice, the rest of the information is already present in the calling function
 
   candInvoices = fetchUnpaidInvoicesByCustomerBeforeDate(transaction.paid_on, transaction.customer_id, cur)
@@ -96,13 +107,13 @@ def checkIfNoNumTransactionErrorIsCorrection(transaction, errorTransaction, dumm
       
       # amounts match exactly (within flaoting point error). Assume that the under/overpayment was a correction on the previous invoice
 
-      # Still needs to be rewritten if the amount is > 0
-
       if dummyCorrectionTransaction.amount < 0:
 
         errorStr = f"Transaction also pays £{0-dummyCorrectionTransaction.amount} towards invoiceID {candInvoice.invoice_id}"
 
         updateTransactionRec(errorTransaction.id, "error_notes", errorStr)
+
+        updateTransactionRec(errorTransaction.id, "payment_method", "*SPLITDUM*")
 
         updateInvoiceRec(errorTransaction.invoice_id, "error_notes", "")
 
@@ -131,6 +142,8 @@ def checkIfNoNumTransactionErrorIsCorrection(transaction, errorTransaction, dumm
         errorStr = f"Transaction has £{0-dummyCorrectionTransaction.amount} from invoiceID {candInvoice.invoice_id}"
 
         updateTransactionRec(errorTransaction.id, "error_notes", errorStr)
+
+        updateTransactionRec(errorTransaction.id, "payment_method", "*SPLITDUM*")
 
         updateInvoiceRec(errorTransaction.invoice_id, "error_notes", "")
 
