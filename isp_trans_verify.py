@@ -167,7 +167,7 @@ def checkIfNoNumTransactionErrorIsCorrection(transaction, errorTransaction, dumm
 
         return [True, candInvoice]
       
-    dif = getTransactionCorrectionNexusDif(transaction, candInvoice, 15, dummyCorrectionTransaction.amount)
+    dif = getTransactionCorrectionNexusDif(transaction, candInvoice, 1, dummyCorrectionTransaction.amount)
 
     if dif != False:
 

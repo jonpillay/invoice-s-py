@@ -118,32 +118,30 @@ def final_resolver(root, matchlessList, cur, con):
 
             # previous error transaction/invoice combo to be updated and noted that past transaction partially pays for the incoming one
 
-            errorStr = f"Transaction also pays £{0-dummyTransaction.amount} towards invoiceID {errorTransaction.invoice_id}"
+            errorStr = f"Transaction also pays £{0-dummyTransaction.amount} towards invoiceID {matchedInvoice.invoice_id}"
           
-            updateTransactionRec(errorTransaction.id, "error_notes", errorStr)
+            updateTransactionRec(errorTransaction.id, "error_notes", errorStr, cur, con)
 
-            updateTransactionRec(dummyTransaction.transaction_id, "payment_method", "*SPLITDUM*")
+            updateTransactionRec(dummyTransaction.transaction_id, "payment_method", "*SPLITDUM*", cur, con)
 
-            updateInvoiceRec(invoiceDC.invoice_id, "error_notes", "")
+            updateInvoiceRec(invoiceDC.invoice_id, "error_notes", "", cur, con)
 
-            updateInvoiceRec(invoiceDC.invoice_id, "error_flagged", 0)
-
-            updateTransactionRec(transaction.transaction_id, "error_flagged", 0)
-
-            errorNote = f"Transaction uses {0-dummyTransaction.amount} from transID {errorTransaction.transaction_id} for invoiceID {bestMatch[1].invoice_id}"
-
-            updateTransactionRec(transaction.transaction_id, "error_notes", errorNote)
+            updateInvoiceRec(invoiceDC.invoice_id, "error_flagged", 0, cur, con)
 
             # the incoming (no number) transaction (transaction) needs to be matched with the invoice it now pays for (bestMatch[1])
             # and a note made on the transaction that it is partially paid for by the previous transaction (error transaction)
 
             prepMatchedTransforDB(transaction, matchedInvoice)
 
-            transaction.error_note = f"Transaction paritally paid for with dummy transaction ID {dummyTransaction.transaction_id}"
+            transaction.error_note = f"Transaction uses {0-dummyTransaction.amount} from transID {errorTransaction.transaction_id} for invoiceID {bestMatch[1].invoice_id}"
 
             transTup = transaction.as_tuple()
 
-            addTransactionToDB(transTup, cur)
+            recordedTrans = addTransactionToDB(transTup, con, cur)
+
+            dummyTransactionErrorNote = f"Transaction is corrected by trans ID {recordedTrans}"
+
+            updateTransactionRec(dummyTransaction.transaction_id, "error_notes", dummyTransactionErrorNote, cur, con)
 
             # append to the matched list (for reporting), the no num transaction, the invoice it matches to and the corrention difference.
 
@@ -151,36 +149,34 @@ def final_resolver(root, matchlessList, cur, con):
 
           else:
 
-            # needs to be all done in reverse
-
             # previous error transaction/invoice combo to be updated and noted that past transaction partially pays for the incoming one
 
             errorStr = f"Transaction has £{0-dummyTransaction.amount} from previous payment invoiceID {errorTransaction.invoice_id}"
           
-            updateTransactionRec(errorTransaction.id, "error_notes", errorStr)
+            updateTransactionRec(errorTransaction.id, "error_notes", errorStr, cur, con)
 
-            updateTransactionRec(dummyTransaction.transaction_id, "payment_method", "*SPLITDUM*")
+            updateTransactionRec(dummyTransaction.transaction_id, "payment_method", "*SPLITDUM*", cur, con)
 
-            updateInvoiceRec(invoiceDC.invoice_id, "error_notes", "")
+            updateInvoiceRec(invoiceDC.invoice_id, "error_notes", "", cur, con)
 
-            updateInvoiceRec(invoiceDC.invoice_id, "error_flagged", 0)
+            updateInvoiceRec(invoiceDC.invoice_id, "error_flagged", 0, cur, con)
 
-            updateTransactionRec(transaction.transaction_id, "error_flagged", 0)
-
-            errorNote = f"Transaction pays {0-dummyTransaction.amount} from transID {errorTransaction.transaction_id} for invoiceID {bestMatch[0].invoice_id}"
-
-            updateTransactionRec(transaction.transaction_id, "error_notes", errorNote)
+            updateTransactionRec(transaction.transaction_id, "error_flagged", 0, cur, con)
 
             # the incoming (no number) transaction (transaction) needs to be matched with the invoice it now pays for (bestMatch[1])
             # and a note made on the transaction that it is partially paid for by the previous transaction (error transaction)
 
             prepMatchedTransforDB(transaction, matchedInvoice)
 
-            transaction.error_note = f"Transaction corrects under payment for transaction ID {dummyTransaction.transaction_id}"
+            transaction.error_note = f"Transaction pays {0-dummyTransaction.amount} from transID {errorTransaction.transaction_id} for invoiceID {bestMatch[0].invoice_id}"
 
             transTup = transaction.as_tuple()
 
-            addTransactionToDB(transTup, cur)
+            recordedTrans = addTransactionToDB(transTup, con, cur)
+
+            dummyTransactionErrorNote = f"Transaction is corrected by trans ID {recordedTrans}"
+
+            updateTransactionRec(dummyTransaction.transaction_id, "error_notes", dummyTransactionErrorNote, cur, con)
 
             # append to the matched list (for reporting), the no num transaction, the invoice it matches to and the corrention difference.
 
