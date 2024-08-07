@@ -178,7 +178,7 @@ def final_resolver(root, matchlessList, cur, con):
 
             updateTransactionRec(dummyTransaction.transaction_id, "error_notes", dummyTransactionErrorNote, cur, con)
 
-            # append to the matched list (for reporting), the no num transaction, the invoice it matches to and the corrention difference.
+            # append to the matched list (for reporting), the no num transaction, the invoice it matches to and the correction difference.
 
             matched.append([transaction, matchedInvoice, bestMatch[0]])
 

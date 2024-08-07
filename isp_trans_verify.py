@@ -111,13 +111,13 @@ def checkIfNoNumTransactionErrorIsCorrection(transaction, errorTransaction, dumm
 
         errorStr = f"Transaction also pays £{0-dummyCorrectionTransaction.amount} towards invoiceID {candInvoice.invoice_id}"
 
-        updateTransactionRec(errorTransaction.id, "error_notes", errorStr)
+        updateTransactionRec(errorTransaction.id, "error_notes", errorStr, cur, con)
 
-        updateTransactionRec(errorTransaction.id, "payment_method", "*SPLITDUM*")
+        updateTransactionRec(dummyCorrectionTransaction.id, "payment_method", "*SPLITDUM*", cur, con)
 
-        updateInvoiceRec(errorTransaction.invoice_id, "error_notes", "")
+        updateInvoiceRec(errorTransaction.invoice_id, "error_notes", "", cur, con)
 
-        updateInvoiceRec(errorTransaction.invoice_id, "error_flagged", "0")
+        updateInvoiceRec(errorTransaction.invoice_id, "error_flagged", "0", cur, con)
 
         prepMatchedTransforDB(transaction, candInvoice)
 
@@ -127,11 +127,11 @@ def checkIfNoNumTransactionErrorIsCorrection(transaction, errorTransaction, dumm
 
         transactionTup = transaction.as_tuple()
 
-        print(transactionTup)
+        recordedTrans = addDummyNoteTransactionsToDB([transactionTup, con, cur])
 
-        deleteTransactionRec(dummyCorrectionTransaction.id, con, cur)
+        dummyErrorStr = f"Transaction is corrected by trans ID {recordedTrans}"
 
-        print("exact match")
+        updateTransactionRec(dummyCorrectionTransaction, "error_notes", dummyErrorStr, cur, con)
 
         matchedIDsMemo.append(candInvoice.invoice_id)
 
@@ -141,13 +141,13 @@ def checkIfNoNumTransactionErrorIsCorrection(transaction, errorTransaction, dumm
         
         errorStr = f"Transaction has £{0-dummyCorrectionTransaction.amount} from invoiceID {candInvoice.invoice_id}"
 
-        updateTransactionRec(errorTransaction.id, "error_notes", errorStr)
+        updateTransactionRec(errorTransaction.id, "error_notes", errorStr, cur, con)
 
-        updateTransactionRec(errorTransaction.id, "payment_method", "*SPLITDUM*")
+        updateTransactionRec(errorTransaction.id, "payment_method", "*SPLITDUM*", cur, con)
 
-        updateInvoiceRec(errorTransaction.invoice_id, "error_notes", "")
+        updateInvoiceRec(errorTransaction.invoice_id, "error_notes", "", cur, con)
 
-        updateInvoiceRec(errorTransaction.invoice_id, "error_flagged", "0")
+        updateInvoiceRec(errorTransaction.invoice_id, "error_flagged", "0", cur, con)
 
         prepMatchedTransforDB(transaction, candInvoice)
 
@@ -157,11 +157,11 @@ def checkIfNoNumTransactionErrorIsCorrection(transaction, errorTransaction, dumm
 
         transactionTup = transaction.as_tuple()
 
-        print(transactionTup)
+        recordedTrans = addDummyNoteTransactionsToDB([transactionTup], con, cur)
 
-        deleteTransactionRec(dummyCorrectionTransaction.id, con, cur)
+        dummyErrorStr = f"Transaction is corrected by trans ID {recordedTrans}"
 
-        print("exact match")
+        updateTransactionRec(dummyCorrectionTransaction, "error_notes", dummyErrorStr, cur, con)
 
         matchedIDsMemo.append(candInvoice.invoice_id)
 
