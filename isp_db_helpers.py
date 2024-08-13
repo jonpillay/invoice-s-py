@@ -413,8 +413,6 @@ def addCorrectedTransactionPairsDB(correctedErrors, con, cur):
     parentTransaction = errorTup[0][0]
     correctionTransation = errorTup[1]
 
-    print(correctionTransation)
-
     parentID = addErrorTransactionToDB(parentTransaction.as_tuple(), con, cur)
 
     parentTransaction.transaction_id = parentID

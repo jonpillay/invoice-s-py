@@ -184,7 +184,7 @@ def resolveMultiInvoiceTransactions(root, cur, con, multiRecs):
 
     totalInvoiced = sum([invoice.amount for invoice in invoiceOBJs])
 
-    # Needs to be a close enough, with a tollerance of maybe 1 pound (tollerance should maybe be set relatively to the amount of invoices being paid for.)
+    # Needs to be a close enough, with a tollerance of maybe 1 pound (tolerance should maybe be set relatively to the amount of invoices being paid for.)
 
     if round(totalInvoiced, 2) == rec.amount:
 
@@ -451,8 +451,6 @@ def resolveNoMatchTransactions(root, incompTransactions, cur, con):
           # Error here where for some reason I had a loop. Need to write popup to verify between close enoughs
 
           invoiceIDVar = tk.IntVar()
-
-          print(closeEnoughMatched)
 
           openSelectBetweenCloseEnoughInvoices(root, transaction, closeEnoughMatched, invoiceIDVar)
 

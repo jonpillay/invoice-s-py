@@ -124,7 +124,6 @@ def handleTransactionUpload(root, filename):
   # working lists
 
   matches = []
-  noMatchFromNum = []
 
   matchPaymentError = []
   matchNameError = []
@@ -146,18 +145,11 @@ def handleTransactionUpload(root, filename):
     invoice = fetchInvoiceByNum(invoiceNum, cur)
 
     if len(invoice) == 0:
-      noMatchFromNum.append(transaction)
+      incompRec.append(transaction)
     else:
       invoiceClean = [el for el in invoice[0] if el != None]
       invoice = genInvoiceDCobj(invoiceClean)
       matches.append([transaction, invoice])
-
-  # for transaction, invoice in matches:
-  #   print(transaction.invoice_num)
-  #   print(invoice.invoice_num)
-  #   print("")
-
-  incompRec.extend(noMatchFromNum)
 
   for transaction, invoice in matches:
 
