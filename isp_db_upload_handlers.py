@@ -264,15 +264,15 @@ def handleTransactionUpload(root, filename):
   print(len(incompRec))
   print("")
 
-  matched, noMatches, newCustomersTransactions = resolveNoMatchTransactions(root, incompRec, cur, con)
+  inCompMatched, noMatches, newCustomersTransactions = resolveNoMatchTransactions(root, incompRec, cur, con)
 
   print("Ouput len check")
-  print(len(matched)+len(noMatches)+len(newCustomersTransactions))
+  print(len(inCompMatched)+len(noMatches)+len(newCustomersTransactions))
   print("")
 
   con.commit()
 
-  upLoadedPairs.extend(matched)
+  upLoadedPairs.extend(inCompMatched)
 
   finalMatches, finalNoMatch = final_resolver(root, noMatches, cur, con)
 

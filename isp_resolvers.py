@@ -1,9 +1,9 @@
 from isp_dataframes import Transaction, Invoice
-from isp_db_helpers import getCustomerID, fetchRangeInvoicesByCustomer, getCustomerNamesIDs, addAliasToDB, addNewCustomerToDB, addTransactionToDB, findCustomerIDInTup, fetchUnpaidInvoicesByCustomerDateRange, fetchUnpaidInvoicesByCustomerBeforeDate, updateInvoiceRec
+from isp_db_helpers import getCustomerID, fetchRangeInvoicesByCustomer, getCustomerNamesIDs, addAliasToDB, addNewCustomerToDB, addTransactionToDB, findCustomerIDInTup, fetchUnpaidInvoicesByCustomerDateRange, fetchUnpaidInvoicesByCustomerBeforeDate, updateInvoiceRec, addDummyTransactionsToDB
 from isp_popup_window import openTransactionAliasPrompt, openTransactionPaymentErrorPrompt, openNewCustomerPrompt
-from isp_data_handlers import constructCustomerAliasesDict, genInvoiceDCobj, genNoNumTransactionDCobj, prepMatchedTransforDB, constructCustomerIDict, getCustomerIDForTrans, prepNewlyMatchedTransactionForDB
+from isp_data_handlers import constructCustomerAliasesDict, genInvoiceDCobj, genNoNumTransactionDCobj, prepMatchedTransforDB, constructCustomerIDict, getCustomerIDForTrans, prepNewlyMatchedTransactionForDB, genMultiTransactions
 from isp_data_comparers import compareCustomerToAliasesDict, getCustomerDBName
-from isp_multi_invoice_prompt import openMultiInvoicePrompt, openSelectBetweenInvoices
+from isp_multi_invoice_prompt import openMultiInvoicePrompt, openMatchedMultiInvoicePrompt, openSelectBetweenInvoices
 from isp_trans_verify import verifyTransactionAmount
 from isp_close_enough_prompts import openVerifyCloseEnoughtMatch, openSelectBetweenCloseEnoughInvoices
 
@@ -205,9 +205,6 @@ def resolveMultiInvoiceTransactions(root, cur, con, multiRecs):
 
     for checkTrans, checkInvoices in multiInvoiceMatches:
 
-      # checkTrans = multiInvoice[0]
-      # checkInvoices = multiInvoice[1]
-
       checkedBool = tk.BooleanVar()
       verifyBool = tk.BooleanVar()
 
@@ -324,30 +321,23 @@ def resolvePaymentErrors(root, paymentErrors, cur, con):
 
 def resolveNoMatchTransactions(root, incompTransactions, cur, con):
 
-  # print("Start of the incomp transactions as they are recieved by resolveNoMatchTransactions")
-  # print("")
+  """
+  Takes transactions that have either no invoice number or an invoice number which has been flagged and incorrect.
 
-  # for incomp in incompTransactions:
-  #   print(incomp)
-  #   print("")
+  First attempts to match the transaction via amount against single unpaid invoices.
 
-  # print("Length of incomp transactions")
-  # print(len(incompTransactions))
+  Secondly attempting to match two or more unpaid invoices.
+
+  Finally an attempt is made to match the transaction to an invoice, but giving a tolerance to the match amount
+  
+  """
 
   existingCustomerTransactions, newCustomersTransactions = getCustomerIDForTrans(root, incompTransactions, cur, con)
 
-  # print("Length of existingcustomer and newCustomer")
-  # print(len(existingCustomerTransactions) + len(newCustomersTransactions))
-
-
-  # print("start of existingCustomerList")
-
-  # for exist in existingCustomerTransactions:
-  #   print(exist)
-  #   print("")
 
   matched = []
   noMatches = []
+  multiMatched = []
 
   transactionCount = len(existingCustomerTransactions)
 
@@ -356,6 +346,8 @@ def resolveNoMatchTransactions(root, incompTransactions, cur, con):
   while len(matched) + len(noMatches) < transactionCount:
 
     for transaction in existingCustomerTransactions:
+
+      # fetch all unpaid invoices, if there are zero unpaid then append the transaction to noMatches and move on
 
       candInvoices = fetchUnpaidInvoicesByCustomerBeforeDate(transaction.paid_on, transaction.customer_id, cur)
 
@@ -417,6 +409,42 @@ def resolveNoMatchTransactions(root, incompTransactions, cur, con):
 
       if len(paymentMatches) == 0:
 
+        runningInvoiceTotal = 0
+        candMultiInvoiceGroup = []
+
+        for candInvoice in formattedInvoices:
+
+          candMultiInvoiceGroup.append(candInvoice)
+
+          runningInvoiceTotal += candInvoice.amount
+
+          if runningInvoiceTotal > transaction.amount:
+            break
+
+          if runningInvoiceTotal == transaction.amount:
+
+            verifyBool = tk.BooleanVar()
+            
+            openMatchedMultiInvoicePrompt(root, transaction, candMultiInvoiceGroup, verifyBool)
+
+            if verifyBool.get() == True:
+
+              dummyTransactions, uploadedMultiTransactionPairs = genMultiTransactions([(transaction, candMultiInvoiceGroup)], cur, con)
+
+              dummyTransactionTuples = [dummyTrans.as_tuple() for dummyTrans in dummyTransactions]
+
+              addDummyTransactionsToDB(dummyTransactionTuples, cur, con)
+
+              con.commit()
+
+              multiMatched.append((transaction, candMultiInvoiceGroup))
+
+              existingCustomerTransactions.pop(0)
+              
+              break
+
+        # start of trying to match the transaction to a single invoice, but allowing for a tolerance in matching the amount
+
         closeEnoughMatched = [closeEnoughInvoice for closeEnoughInvoice in formattedInvoices if verifyTransactionAmount(transaction, closeEnoughInvoice, 1) == True and closeEnoughInvoice.invoice_num not in paidInvoiceMemo]
 
         if len(closeEnoughMatched) == 0:
@@ -447,8 +475,6 @@ def resolveNoMatchTransactions(root, incompTransactions, cur, con):
             break
         
         if len(closeEnoughMatched) > 1:
-
-          # Error here where for some reason I had a loop. Need to write popup to verify between close enoughs
 
           invoiceIDVar = tk.IntVar()
 

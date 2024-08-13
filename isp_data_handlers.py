@@ -192,13 +192,31 @@ def genMultiTransactionDCobj(transaction):
 
 
 
-def genMultiTransactions(transactionsList, cur, con):  
+def genMultiTransactions(multiTransInvPairs, cur, con):
+
+  """
+  
+  takes verified multi invoice transactions and the invoices they pay for and
+  creates dummy transactions to pay for each, uploading the parent transaction
+  and retrieving its databae id to be added to the dummy transactions.
+
+  returns
+
+  uploadedMultiTransactionPairs - list of two lists. The first containing the
+  parent transaction as its first element, followed by the created dummy transactions.
+  With the second list containing the invoices paid for. For reporting.
+
+  transactionUploadList - list of the newly created dummy transactions for upload.
+
+
+
+  """  
 
   transactionUploadList = []
 
   uploadedMultiTransactionPairs = []
   
-  for transaction, invoices in transactionsList:
+  for transaction, invoices in multiTransInvPairs:
 
     splitTransactions = [transaction]
     
