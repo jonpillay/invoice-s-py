@@ -184,7 +184,7 @@ def resolveMultiInvoiceTransactions(root, cur, con, multiRecs):
 
     totalInvoiced = sum([invoice.amount for invoice in invoiceOBJs])
 
-    # Needs to be a close enough, with a tollerance of maybe 1 pound (tolerance should maybe be set relatively to the amount of invoices being paid for.)
+    # Needs to be a close enough, with a tolerance of maybe 1 pound (tolerance should maybe be set relatively to the amount of invoices being paid for.)
 
     if round(totalInvoiced, 2) == rec.amount:
 
@@ -517,7 +517,7 @@ def resolveNoMatchTransactions(root, incompTransactions, cur, con):
 
   # quit()
 
-  return matched, noMatches, newCustomersTransactions
+  return matched, multiMatched, noMatches, newCustomersTransactions
 
 
 

@@ -247,11 +247,11 @@ def handleTransactionUpload(root, filename):
 
   con.commit()
 
-  checkIfTransactionListContainsErrorCorrections(root, updatedCorrectedErrors, con, cur)
+  # function now returns two lists. correctedErrorsReport is a list of incoming transactions that have had to be corrected
+  # and have not found a previous error they relate to.
+  # correctionTransactionErrorsReport is a list of the incoming transaction and the invoice/s or dummy transaction they pay for.
 
-  uploadRecs = [(uploadedPair[0][0], uploadedPair[0][1]) for uploadedPair in correctedErrors]
-
-  upLoadedPairs.extend(uploadRecs)
+  correctedErrorsReport, correctionTransactionErrorsReport = checkIfTransactionListContainsErrorCorrections(root, updatedCorrectedErrors, con, cur)
 
 
 

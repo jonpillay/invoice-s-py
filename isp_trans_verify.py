@@ -192,7 +192,7 @@ def checkIfTransactionListContainsErrorCorrections(root, correctedErrors, con, c
 
   """
   Takes in a list of the corrected errors from the incoming Transactions and checks against both past unpaid invoices
-  and also past corrections. This checks if the current error from corrected errors is a correction on a past error.
+  and also past corrections. This checks if the current error from corrected errors is a correction on a past error or unpaid invoice.
   """
 
   errorCount = len(correctedErrors)
@@ -256,7 +256,7 @@ def checkIfTransactionListContainsErrorCorrections(root, correctedErrors, con, c
             updateInvoiceRec(invoice.invoice_id, 'error_notes', f'Paid for with SPLIT transaction shares with invoice # {candInvoice.invoice_num}', cur, con)
             updateInvoiceRec(candInvoice.invoice_id, 'error_notes', f'Paid for with SPLIT transaction shares with invoice # {invoice.invoice_num}', cur, con)
 
-            reMatched.append([transaction, [matchedInvoiceNumTransDummy, matchedInvoiceCorrectionTransDummy]])
+            reMatched.append([transaction, [invoice, candInvoice]])
 
             correctedErrors.pop(0)
 
@@ -302,7 +302,7 @@ def checkIfTransactionListContainsErrorCorrections(root, correctedErrors, con, c
             # upload the dummy transactions to the DB
             addDummyNoteTransactionsToDB(dummyTransactionGroup, cur, con)
 
-            reMatched.append([transaction, dummyTransactionGroup])
+            reMatched.append([transaction, invoice, invoiceGroup])
 
             correctedErrors.pop(0)
 
@@ -362,9 +362,11 @@ def checkIfTransactionListContainsErrorCorrections(root, correctedErrors, con, c
 
           updateTransactionRec(dummyTransaction.transaction_id, 'payment_method', "*SPLITCORRECTION*", cur, con)
 
+      stillErrors.append(tupTransactionGroup)
+      correctedErrors.pop(0)
+      break
 
-    con.close()
-    exit()
+  return stillErrors, reMatched
 
   # will be passed the output from resolvePaymentErrors for transactions that have been corrected.
   # A list of Tuples, the first element being a list of the original Transaction and the invoice
