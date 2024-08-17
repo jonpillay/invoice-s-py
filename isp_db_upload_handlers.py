@@ -104,6 +104,9 @@ def handleTransactionUpload(root, filename):
 
   # Sort lists by date_paid
 
+  print("this is count at line 107")
+  print(count)
+
   # comprec is transactions with a single invoice number
   compRec = sorted(unsortedCompRec, key=lambda transaction:transaction.paid_on)
 
@@ -113,13 +116,11 @@ def handleTransactionUpload(root, filename):
   # multirec are transactions with 2 or more invoice numbers
   multiRec = sorted(unsortedMultiRec, key=lambda transaction:transaction.paid_on)
 
-  print(len(compRec)+len(incompRec)+len(multiRec))
-  #records are complete at this point
 
-  # final lists
+  print("This is the transaction count at line 117")
+  print(len(compRec)+len(incompRec)+len(multiRec))
 
   upLoadedPairs = []
-  noMatchFinal = []
 
   # working lists
 
@@ -186,9 +187,6 @@ def handleTransactionUpload(root, filename):
   con.commit()
 
   upLoadedPairs.extend(transactionUploadList)
-
-  transactionUploadList = []
-
 
   print("Transaction count @line 192")
   print(len(matchPaymentError)+len(incompRec)+len(multiRec)+len(upLoadedPairs))
@@ -264,9 +262,9 @@ def handleTransactionUpload(root, filename):
   print(len(incompRec))
   print("")
 
-  inCompMatched, noMatches, newCustomersTransactions = resolveNoMatchTransactions(root, incompRec, cur, con)
+  inCompMatched, inCompMultiMatch, noMatches, newCustomersTransactions = resolveNoMatchTransactions(root, incompRec, cur, con)
 
-  print("Ouput len check")
+  print("Ouput len check line 267")
   print(len(inCompMatched)+len(noMatches)+len(newCustomersTransactions))
   print("")
 
@@ -274,7 +272,33 @@ def handleTransactionUpload(root, filename):
 
   upLoadedPairs.extend(inCompMatched)
 
-  finalMatches, finalNoMatch = final_resolver(root, noMatches, cur, con)
+  inCompErrorCorrectionMatched, finalNoMatch = final_resolver(root, noMatches, cur, con)
+
+  print("This is the final count of all final transaction lists")
+  print(len(transactionUploadList) + len(correctedErrorsReport) + len(correctionTransactionErrorsReport) + len(inCompMatched) + len(inCompErrorCorrectionMatched) + len(uploadedMultiTransactionPairs) + len(inCompMultiMatch) + len(finalNoMatch) + len(multiErrorFlagged) + len(multiInvoiceErrors) + len(newCustomersTransactions))
+
+  print(len(transactionUploadList))
+  print(len(correctedErrorsReport))
+  print(len(correctionTransactionErrorsReport))
+  print(len(inCompMatched))
+  print(len(inCompErrorCorrectionMatched))
+  print(len(uploadedMultiTransactionPairs))
+  print(len(multiErrorFlagged))
+  print(len(multiInvoiceErrors))
+  print(len(inCompMultiMatch))
+  print(len(finalNoMatch))
+  print(len(newCustomersTransactions))
+  
+
+
+
+
+
+
+
+
+
+
 
   # print("Transaction count @line 260")
   # print(len(noMatches)+len(namesUnresolved)+len(newCustomersTransactions)+len(multiVerified)+len(multiErrorFlagged)+len(multiInvoiceErrors)+len(upLoadedPairs))
@@ -365,32 +389,24 @@ def handleTransactionUpload(root, filename):
   cur.close()
   con.close()
 
-  print("This is the uploaded pairs")
+  # print("This is the uploaded pairs")
 
-  for uploaded in upLoadedPairs:
+  # for uploaded in upLoadedPairs:
 
-    print(uploaded[0])
-    print(uploaded[1])
-    print("")
-    print("")
+  #   print(uploaded[0])
+  #   print(uploaded[1])
+  #   print("")
+  #   print("")
 
-  print("upLoadedPairs len is ")
-  print(len(upLoadedPairs))
+  # print("upLoadedPairs len is ")
+  # print(len(upLoadedPairs))
 
-  for multipair in uploadedMultiTransactionPairs:
+  # for multipair in uploadedMultiTransactionPairs:
 
-    print(multipair[0])
-    print("")
-    print(multipair[1])
-    print("")
+  #   print(multipair[0])
+  #   print("")
+  #   print(multipair[1])
+  #   print("")
 
-  print("multipair len is ")
-  print(len(multipair))
-
-  for matchless in noMatches:
-
-    print(matchless)
-    print("")
-
-  print("matchless len is ")
-  print(len(matchless))
+  # print("multipair len is ")
+  # print(len(multipair))

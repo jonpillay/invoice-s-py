@@ -389,6 +389,16 @@ def prepNewlyMatchedTransactionForDB(transaction, invoice):
 
   return transaction
 
+def prepNewlyMatchedErrorTransactionForDB(transaction, invoice):
+
+  prepMatchedTransforDB(transaction, invoice)
+
+  transaction.invoice_num = invoice.invoice_num
+  transaction.invoice_id = invoice.invoice_id
+  transaction.customer_id = invoice.customer_id
+
+  return transaction
+
 
 
 def groupDataClassObjsByAttribute(DCList, attribute):

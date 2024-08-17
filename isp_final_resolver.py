@@ -33,7 +33,7 @@ def final_resolver(root, matchlessList, cur, con):
 
       bestMatch = None
 
-      # fetch all invoices before the transaction date
+      # fetch all invoices before the transaction date. performed each iteration to avoid matching already matched transactions
       candInvoices = fetchInvoicesByCustomerBeforeDate(transaction.paid_on, transaction.customer_id, cur)
 
       candInvoiceDCs = [genDBInvoiceDCobj(candInvoice) for candInvoice in candInvoices]
@@ -61,15 +61,21 @@ def final_resolver(root, matchlessList, cur, con):
             # pass all three into funct to see if the error correction and any other unpaid invoice match the transaction amount
             matchCheck = checkIfNoNumTransactionErrorIsCorrection(transaction, invoiceDC, dummyTransaction, cur, con)
 
+            if matchCheck == None:
+              #needs to be added to unmatchable, where bug from yesterday was (I think)
+              continue
+
             if matchCheck[0] == True:
 
               # If true is returned in the list here then the match is exact and no user query needed. The returned invoice
               # and related Transactions should be appended to the matched list for reporting and then break the loop.
 
-              # Form the a list for reporting. In order, OG No Num Transaction, The invoice it was matched to, with the error Transaction that ballances the numbers.
+              # Form the list for reporting. In order, OG No Num Transaction, The invoice it was matched to, with the error Transaction that balances the numbers.
               matchReport = [transaction, matchCheck[1], errorTransaction]
 
               matched.append(matchReport)
+
+              continue
 
             else:
               # if the list returned does not have True as its first element then it is a close enough match. This should be compared
@@ -145,7 +151,7 @@ def final_resolver(root, matchlessList, cur, con):
 
             # append to the matched list (for reporting), the no num transaction, the invoice it matches to and the corrention difference.
 
-            matched.append([transaction, matchedInvoice, bestMatch[0]])
+            matched.append([transaction, matchedInvoice, errorTransaction, bestMatch[0]])
 
           else:
 
@@ -178,10 +184,9 @@ def final_resolver(root, matchlessList, cur, con):
 
             updateTransactionRec(dummyTransaction.transaction_id, "error_notes", dummyTransactionErrorNote, cur, con)
 
-            # append to the matched list (for reporting), the no num transaction, the invoice it matches to and the correction difference.
+            # append to the matched list (for reporting), the no num transaction, the invoice it matches correction difference.
 
-            matched.append([transaction, matchedInvoice, bestMatch[0]])
-
+            matched.append([transaction, matchedInvoice, errorTransaction, bestMatch[0]])
 
         else:
           

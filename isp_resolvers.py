@@ -1,7 +1,7 @@
 from isp_dataframes import Transaction, Invoice
-from isp_db_helpers import getCustomerID, fetchRangeInvoicesByCustomer, getCustomerNamesIDs, addAliasToDB, addNewCustomerToDB, addTransactionToDB, findCustomerIDInTup, fetchUnpaidInvoicesByCustomerDateRange, fetchUnpaidInvoicesByCustomerBeforeDate, updateInvoiceRec, addDummyTransactionsToDB, addDummyNoteTransactionsToDB
+from isp_db_helpers import getCustomerID, fetchRangeInvoicesByCustomer, getCustomerNamesIDs, addAliasToDB, addNewCustomerToDB, addTransactionToDB, findCustomerIDInTup, fetchUnpaidInvoicesByCustomerDateRange, fetchUnpaidInvoicesByCustomerBeforeDate, updateInvoiceRec, addDummyTransactionsToDB, addDummyNoteTransactionsToDB, addErrorTransactionToDB
 from isp_popup_window import openTransactionAliasPrompt, openTransactionPaymentErrorPrompt, openNewCustomerPrompt
-from isp_data_handlers import constructCustomerAliasesDict, genInvoiceDCobj, genNoNumTransactionDCobj, prepMatchedTransforDB, constructCustomerIDict, getCustomerIDForTrans, prepNewlyMatchedTransactionForDB, genMultiTransactions
+from isp_data_handlers import constructCustomerAliasesDict, genInvoiceDCobj, genNoNumTransactionDCobj, prepMatchedTransforDB, constructCustomerIDict, getCustomerIDForTrans, prepNewlyMatchedTransactionForDB, prepNewlyMatchedErrorTransactionForDB, genMultiTransactions
 from isp_data_comparers import compareCustomerToAliasesDict, getCustomerDBName
 from isp_multi_invoice_prompt import openMultiInvoicePrompt, openMatchedMultiInvoicePrompt, openSelectBetweenInvoices
 from isp_trans_verify import verifyTransactionAmount
@@ -283,8 +283,8 @@ def resolvePaymentErrors(root, paymentErrors, cur, con):
           customer_id=transaction.customer_id
         )
 
-        transaction.error_flagged = 1
-        transaction.error_notes = f"CORRECTED BY = {correctionAmount}"
+        error[0].error_flagged = 1
+        error[0].error_notes = f"CORRECTED BY = {correctionAmount}"
 
         invoiceErrorStr = f"CORRECTED BY = {correctionAmount}"
 
@@ -437,7 +437,7 @@ def resolveNoMatchTransactions(root, incompTransactions, cur, con):
 
               con.commit()
 
-              multiMatched.append((transaction, candMultiInvoiceGroup))
+              multiMatched.append([transaction, candMultiInvoiceGroup])
 
               existingCustomerTransactions.pop(0)
               
@@ -464,20 +464,23 @@ def resolveNoMatchTransactions(root, incompTransactions, cur, con):
 
             paidInvoiceMemo.append(invoice.invoice_num)
 
-            preppedTransaction = prepNewlyMatchedTransactionForDB(transaction, invoice)
+            correctionAmount = round((invoice.amount - transaction.amount), 2)
+
+            transaction.error_flagged = 1
+            transaction.error_notes = f"CORRECTED BY = {correctionAmount}"
+
+            preppedTransaction = prepNewlyMatchedErrorTransactionForDB(transaction, invoice)
 
             transactionTuple = preppedTransaction.as_tuple()
 
-            parentID = addTransactionToDB(transactionTuple, con, cur)
-
-            correctionAmount = round((invoice.amount - transaction.amount), 2)
+            parentID = addErrorTransactionToDB(transactionTuple, con, cur)
 
             dummyTransaction = Transaction(
               amount=correctionAmount,
               paid_on=transaction.paid_on,
               paid_by=transaction.paid_by,
               payment_method="CORDUM",
-              error_note=f"CORRECTION FOR {correctionAmount}",
+              error_notes=f"CORRECTION BY {correctionAmount}",
               og_string=transaction.og_string,
               invoice_num=transaction.invoice_num,
               invoice_id=transaction.invoice_id,
@@ -485,17 +488,14 @@ def resolveNoMatchTransactions(root, incompTransactions, cur, con):
               parent_trans=parentID
             )
 
-            addDummyNoteTransactionsToDB([dummyTransaction], con, cur)
-
-            transaction.error_flagged = 1
-            transaction.error_notes = f"CORRECTED BY = {correctionAmount}"
+            addDummyNoteTransactionsToDB([dummyTransaction.as_tuple()], con, cur)
 
             invoiceErrorStr = f"CORRECTED BY = {correctionAmount}"
 
             updateInvoiceRec(invoice.invoice_id, "error_flagged", "1", cur, con)
             updateInvoiceRec(invoice.invoice_id, "error_notes", invoiceErrorStr, cur, con)
 
-            matched.append([preppedTransaction, closeEnoughMatched[0]])
+            matched.append([preppedTransaction, closeEnoughMatched[0], correctionAmount])
 
             existingCustomerTransactions.pop(0)
 
@@ -519,11 +519,11 @@ def resolveNoMatchTransactions(root, incompTransactions, cur, con):
 
             paidInvoiceMemo.append(selectedInvoice.invoice_num)
 
-            preppedTransaction = prepNewlyMatchedTransactionForDB(transaction, selectedInvoice)
+            preppedTransaction = prepNewlyMatchedErrorTransactionForDB(transaction, selectedInvoice)
 
             transactionTuple = preppedTransaction.as_tuple()
 
-            parentID = addTransactionToDB(transactionTuple, con, cur)
+            parentID = addErrorTransactionToDB(transactionTuple, con, cur)
 
             correctionAmount = round((invoice.amount - transaction.amount), 2)
 
@@ -532,7 +532,7 @@ def resolveNoMatchTransactions(root, incompTransactions, cur, con):
               paid_on=transaction.paid_on,
               paid_by=transaction.paid_by,
               payment_method="CORDUM",
-              error_note=f"CORRECTION FOR {correctionAmount}",
+              error_notes=f"CORRECTION BY {correctionAmount}",
               og_string=transaction.og_string,
               invoice_num=transaction.invoice_num,
               invoice_id=transaction.invoice_id,
@@ -540,7 +540,7 @@ def resolveNoMatchTransactions(root, incompTransactions, cur, con):
               parent_trans=parentID
             )
 
-            addDummyNoteTransactionsToDB([dummyTransaction], con, cur)
+            addDummyNoteTransactionsToDB([dummyTransaction.as_tuple()], con, cur)
 
             transaction.error_flagged = 1
             transaction.error_notes = f"CORRECTED BY = {correctionAmount}"
@@ -550,7 +550,7 @@ def resolveNoMatchTransactions(root, incompTransactions, cur, con):
             updateInvoiceRec(invoice.invoice_id, "error_flagged", "1", cur, con)
             updateInvoiceRec(invoice.invoice_id, "error_notes", invoiceErrorStr, cur, con)
 
-            matched.append([preppedTransaction, selectedInvoice])
+            matched.append([preppedTransaction, selectedInvoice, correctionAmount])
 
             existingCustomerTransactions.pop(0)
 
