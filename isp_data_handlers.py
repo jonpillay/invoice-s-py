@@ -412,3 +412,15 @@ def groupDataClassObjsByAttribute(DCList, attribute):
     attrGroup[customer_id].append(DC)
 
   return attrGroup.values()
+
+def groupDataClassObjsByAttribute(DCList, attribute):
+
+  attrGroup = defaultdict(list)
+
+  for DC in DCList:
+
+    customer_id = getattr(DC, attribute)
+
+    attrGroup[customer_id].append(DC)
+
+  return attrGroup.values()
