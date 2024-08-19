@@ -45,8 +45,6 @@ def populateCustomerOutputDict(outputDict):
 
     catList = outputDict[category]
 
-    count = 0
-
     for entry in catList:
       
       customerID = None
@@ -62,5 +60,3 @@ def populateCustomerOutputDict(outputDict):
       customerOutputDict[customerID][category].append(entry)
 
   return customerOutputDict
-
-print(populateCustomerOutputDict(testOutputDict))
