@@ -329,6 +329,18 @@ def getCustomerNamesIDs(cur):
 
 
 
+def getCustomerIDs(cur):
+
+  fetctInvNumSQL = "SELECT id from CUSTOMERS"
+
+  cur.execute(fetctInvNumSQL)
+
+  customerIDs = cur.fetchall()
+
+  return [idTup[0] for idTup in customerIDs]
+
+
+
 
 def getCustomerAliases(cur, customerID):
 
