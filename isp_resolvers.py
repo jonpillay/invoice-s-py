@@ -12,6 +12,13 @@ from datetime import datetime
 
 def resolveNameMismatches(root, cur, conn, matchNameErrors):
 
+  """
+  
+  Getting double transaction records. With IDs jusmping 23, and then if shows again 22, think I have a problem with a loop,
+  I think it may be this loop. Will start with testing the length of matchNameErrors... in the morning.
+  
+  """
+
   errorCount = len(matchNameErrors)
 
   unMatchable = []
@@ -33,7 +40,7 @@ def resolveNameMismatches(root, cur, conn, matchNameErrors):
       
       for name in aliasesDict:
 
-        if transaction.paid_by in aliasesDict[name]:
+        if transaction.paid_by in aliasesDict[name] or transaction.paid_by == name:
 
           if transaction.amount == invoice.amount:
 

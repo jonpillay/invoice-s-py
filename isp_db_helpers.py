@@ -328,6 +328,16 @@ def getCustomerNamesIDs(cur):
   return [(customer[0], customer[1]) for customer in customerNames]
 
 
+def genCustomerNamesIDsDict(cur):
+
+  fetctInvNumSQL = "SELECT id, customer_name from CUSTOMERS"
+
+  cur.execute(fetctInvNumSQL)
+
+  customerNames = cur.fetchall()
+
+  return {customer[0]: customer[1] for customer in customerNames}
+
 
 def getCustomerIDs(cur):
 
