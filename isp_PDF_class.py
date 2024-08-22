@@ -18,9 +18,6 @@ class TransactionUploadPDF(FPDF):
     self.add_font("rajdhani", style='B', fname="./fonts/Rajdhani-Bold.ttf")
 
 
-
-
-
   def header(self):
 
     self.set_font('times', 'BU', 25)
@@ -49,27 +46,35 @@ class TransactionUploadPDF(FPDF):
   def printInlineDescription(self, str):
     font = ImageFont.truetype(genFontPath('Rajdhani-Regular.ttf'), 10)
     self.set_font('rajdhani', '', 10)
-    self.cell(getCellWidth(str, font, 2.5), 3, f"{str}", ln=0)
+    self.cell(getCellWidth(str, font, 2.5), 4, f"{str}", ln=0)
 
   def printInlineBold(self, str):
     font = ImageFont.truetype(genFontPath('Rajdhani-Bold.ttf'), 12)
     self.set_font('rajdhani', 'B', 12)
-    self.cell(getCellWidth(str, font, 2.6), 3, f"{str}", ln=0)
+    self.cell(getCellWidth(str, font, 2.6), 4, f"{str}", ln=0)
+
+  def printCorrectionNumber(self, str):
+    font = ImageFont.truetype(genFontPath('Rajdhani-Bold.ttf'), 15)
+    self.set_x(60)
+    self.set_font('rajdhani', 'B', 15)
+    self.cell(getCellWidth(str, font, 2.9), 4, f"{str}", ln=0)
 
 
   def printCorrectionMessage(self, amount):
 
     if amount < 0:
 
-      self.printInlineDescription("Customer overpayed by ")
-      self.set_text_color(0, 255, 0)
-      self.printInlineBold(str(0-amount))
+      self.printInlineBold("Customer overpayed by ")
+      self.set_text_color(4, 168, 30)
+      self.set_x(45)
+      self.printCorrectionNumber(f" £{str(0-amount)}")
       self.set_text_color(0, 0, 0)
 
     else:
-      self.printInlineDescription("Customer underpayed by ")
+      self.printInlineBold("Customer underpayed by ")
       self.set_text_color(255, 0, 0)
-      self.printInlineBold(str(0-amount))
+      self.set_x(45)
+      self.printCorrectionNumber(f"£{str(0-amount)}")
       self.set_text_color(0, 0, 0)
 
 
@@ -96,18 +101,19 @@ class TransactionUploadPDF(FPDF):
     # self.printInlineDescription(f"Invoice # {invoice.invoice_num} dated {invoice.date_issued.strftime('%d/%m/%Y')} for £{invoice.amount}")
     # self.printInlineDescription(f"Dated")
 
-
+    self.printInlineDescription("-")
+    self.printInlineBold(f" £{invoice.amount} ")
     self.printInlineDescription("Issued on ")
     self.printInlineBold(invoice.date_issued.strftime('%d/%m/%Y'))
     self.printInlineDescription("to ")
     self.printInlineBold(f" {invoice.issued_to}")
-    self.printInlineDescription("for ")
-    self.printInlineBold(f" £{invoice.amount}")
     self.ln(5)
     self.set_x(20)
 
+    self.printInlineDescription("-")
+    self.printInlineBold(f" £{transaction.amount} ")
     self.printInlineDescription("Paid on ")
-    self.printInlineBold(f"{invoice.date_issued.strftime('%d/%m/%Y')}")
+    self.printInlineBold(f"{transaction.paid_on.strftime('%d/%m/%Y')}")
     self.printInlineDescription("by ")
     self.printInlineBold(f" {transaction.paid_by}")
     self.printInlineDescription("Transaction Database ID =")
@@ -128,23 +134,22 @@ class TransactionUploadPDF(FPDF):
 
     self.set_x(20)
 
-
+    self.printInlineDescription("-")
+    self.printInlineBold(f" £{invoice.amount} ")
     self.printInlineDescription("Issued on ")
     self.printInlineBold(invoice.date_issued.strftime('%d/%m/%Y'))
     self.printInlineDescription("to ")
     self.printInlineBold(f" {invoice.issued_to}")
-    self.printInlineDescription("for ")
-    self.printInlineBold(f" £{invoice.amount}")
     self.ln(5)
 
     self.set_x(20)
 
+    self.printInlineDescription("-")
+    self.printInlineBold(f" £{transaction.amount} ")
     self.printInlineDescription("Paid on ")
-    self.printInlineBold(f"{invoice.date_issued.strftime('%d/%m/%Y')}")
+    self.printInlineBold(f"{transaction.paid_on.strftime('%d/%m/%Y')}")
     self.printInlineDescription("by ")
     self.printInlineBold(f" {transaction.paid_by}")
-    self.printInlineDescription("for ")
-    self.printInlineBold(f" £{str(transaction.amount)}")
     self.printInlineDescription("Transaction Database ID =")
     self.printInlineBold(str(transaction.transaction_id))
     self.ln(5)
@@ -154,12 +159,3 @@ class TransactionUploadPDF(FPDF):
     self.printCorrectionMessage(round(invoice.amount - transaction.amount, 2))
 
     self.ln(8)
-
-
-    
-
-  def printResults(self, category, resultsList):
-
-    self.set_font('times', 10)
-    self.set_x(20)
-    self.cell(0, 10, f'KFS Transaction Upload Report {resultsList}', border=0, new_y=YPos.NEXT)
