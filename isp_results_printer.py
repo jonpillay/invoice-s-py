@@ -1,10 +1,8 @@
 import sqlite3
 import os
 
-from fpdf import FPDF
-
 from output_test import outputDict as testOutputDict
-from isp_data_handlers import groupDataClassObjsByAttribute
+
 from isp_db_helpers import getCustomerNamesIDs, getCustomerIDs, genCustomerNamesIDsDict
 from isp_output_prep import populateCustomerOutputDict
 
@@ -19,8 +17,9 @@ def print_transaction_upload_results(outputDict):
   cur = con.cursor()
 
   results = TransactionUploadPDF('P', 'mm', 'A4')
-
+  
   results.add_page()
+  results.register_fonts()
 
   outputResults = populateCustomerOutputDict(outputDict)
 
@@ -58,6 +57,14 @@ def print_transaction_upload_results(outputDict):
 
             results.printMatchedSingles(matchedSingle)
 
+        elif category == 'correctedErrorsReport':
+
+          results.printCategoryTitle(category)
+
+          for errorCorrected in catResults:
+
+            results.printcorrectedErrorsReport(errorCorrected)
+
   cur.close()
   con.close()
 
@@ -67,7 +74,5 @@ def print_transaction_upload_results(outputDict):
       
 
 
-
-  
 
 print_transaction_upload_results(testOutputDict)

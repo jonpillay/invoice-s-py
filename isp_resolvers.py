@@ -20,6 +20,8 @@ def resolveNameMismatches(root, cur, conn, matchNameErrors):
   """
 
   errorCount = len(matchNameErrors)
+  print("this is the error count we are interested in")
+  print(matchNameErrors)
 
   unMatchable = []
   nameResolved = []
@@ -27,81 +29,79 @@ def resolveNameMismatches(root, cur, conn, matchNameErrors):
   # need a list to be returned for resolved names, but with payment error
   paymentErrors = []
 
-  while len(nameResolved) + len(unMatchable) < errorCount:
+  index = 0
+
+  for error in matchNameErrors:
 
     dbCustomers = getCustomerNamesIDs(cur)
 
     aliasesDict = constructCustomerAliasesDict(cur, dbCustomers)
-
-    for error in matchNameErrors:
       
-      transaction = error[0]
-      invoice = error[1]
-      
-      for name in aliasesDict:
+    transaction = error[0]
+    invoice = error[1]
+    
+    for name in aliasesDict:
 
-        if transaction.paid_by in aliasesDict[name] or transaction.paid_by == name:
+      if transaction.paid_by in aliasesDict[name] or transaction.paid_by == name:
 
-          if transaction.amount == invoice.amount:
+        if transaction.amount == invoice.amount:
 
-            prepMatchedTransforDB(error[0], error[1])
+          prepMatchedTransforDB(error[0], error[1])
 
-            nameResolved.append(error)
-            matchNameErrors.pop(0)
+          nameResolved.append(error)
+          index += 1
 
-            break
-
-          else:
-
-            paymentErrors.append([transaction, invoice])
-            matchNameErrors.pop(0)
-
-            break
-
-      else:
-
-        aliasBool = tk.BooleanVar()
-        rejectedBool = tk.BooleanVar()
-
-        openTransactionAliasPrompt(root, invoice, transaction, aliasBool, rejectedBool)
-
-        if aliasBool.get() == True:
-
-          # for customer in alisesDict:
-          #   if invoice.issued_to in alisesDict[customer]:
-          #     searchName = customer
-          #   else:
-          #     searchName = invoice.issued_to
-
-          addAliasToDB(transaction.paid_by, invoice.customer_id, cur)
-
-          conn.commit()
-
-          if transaction.amount == invoice.amount:
-
-            prepMatchedTransforDB(error[0], error[1])
-
-            nameResolved.append(error)
-            matchNameErrors.pop(0)
-            break
-
-          else:
-
-            paymentErrors.append([transaction, invoice])
-            matchNameErrors.pop(0)
-
-            break
-
-        elif aliasBool.get() == False and rejectedBool.get() == True:
-
-          unMatchable.append(error)
-          matchNameErrors.pop(0)
           break
 
         else:
+
+          paymentErrors.append([transaction, invoice])
+          index += 1
+
           break
 
-  # print(matchNameErrors)
+    else:
+
+      aliasBool = tk.BooleanVar()
+      rejectedBool = tk.BooleanVar()
+
+      openTransactionAliasPrompt(root, invoice, transaction, aliasBool, rejectedBool)
+
+      if aliasBool.get() == True:
+
+        # for customer in alisesDict:
+        #   if invoice.issued_to in alisesDict[customer]:
+        #     searchName = customer
+        #   else:
+        #     searchName = invoice.issued_to
+
+        addAliasToDB(transaction.paid_by, invoice.customer_id, cur)
+
+        conn.commit()
+
+        if transaction.amount == invoice.amount:
+
+          prepMatchedTransforDB(error[0], error[1])
+
+          nameResolved.append(error)
+          index += 1
+          continue
+
+        else:
+
+          paymentErrors.append([transaction, invoice])
+          index += 1
+
+          continue
+
+      elif aliasBool.get() == False and rejectedBool.get() == True:
+
+        unMatchable.append(error)
+        index += 1
+        continue
+
+      else:
+        continue
 
   return nameResolved, unMatchable, paymentErrors
 

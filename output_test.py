@@ -1,6 +1,5 @@
-import json
-import datetime
 from isp_dataframes import Transaction, Invoice
+import datetime
 
 f = open('../output.txt', 'r')
 
