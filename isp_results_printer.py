@@ -17,7 +17,7 @@ def print_transaction_upload_results(outputDict):
   cur = con.cursor()
 
   results = TransactionUploadPDF('P', 'mm', 'A4')
-  
+
   results.add_page()
   results.register_fonts()
 
@@ -63,7 +63,15 @@ def print_transaction_upload_results(outputDict):
 
           for errorCorrected in catResults:
 
-            results.printcorrectedErrorsReport(errorCorrected)
+            results.printCorrectedErrorsReport(errorCorrected)
+
+        elif category == 'correctionTransactionErrorsReport':
+
+          results.printCategoryTitle(category)
+
+          for correctionTransaction in catResults:
+
+            results.printCorrectionTransactionError(correctionTransaction)
 
   cur.close()
   con.close()

@@ -5,6 +5,7 @@ from PIL import ImageFont
 
 from datetime import datetime
 
+from isp_dataframes import Transaction, Invoice
 from isp_printer_helpers import getCellWidth, genFontPath
 
 class TransactionUploadPDF(FPDF):
@@ -125,7 +126,7 @@ class TransactionUploadPDF(FPDF):
 
     self.ln(8)
 
-  def printcorrectedErrorsReport(self, correctedError):
+  def printCorrectedErrorsReport(self, correctedError):
 
     transaction = correctedError[0][0]
     invoice = correctedError[0][1]
@@ -149,14 +150,131 @@ class TransactionUploadPDF(FPDF):
 
     self.ln(8)
 
-  def printcorrectionTransactionErrorsReport(self, correctionTransactions):
-    pass
+
+  # collection of functions for printing out the different outputs of printcorrectionTransactionError
+
+  def printErrorMatchedToSingleInvoice(self, singleErrorCorrectionTransaction):
+
+    transaction = singleErrorCorrectionTransaction[0][0]
+    invoice = singleErrorCorrectionTransaction[0][1]
+    matchedUnpaidInvoice = singleErrorCorrectionTransaction[1]
+
+    ogError = transaction.amount - invoice.amount
+
+    self.printInlineDescription(f"Incoming Transaction's Error ")
+    self.printInlineBold(f"(£{ogError})")
+    self.printInlineDescription(f" Pays For Unpaid Transaction")
+
+    self.ln(7)
+
+    self.printInvoice(invoice)
+    self.ln(5)
+    self.printTransaction(transaction)
+    self.ln(5)
+
+    self.printInlineDescription("Transaction pays for previous unpaid Invoice ")
+    self.printInlineBold(f"#{matchedUnpaidInvoice.invoice_num}")
+    self.printInlineDescription(" for ")
+    self.printInlineBold(f"{matchedUnpaidInvoice.amount}")
+
+    self.ln(5)
+  
+  
+  def printErrorMatchedToInvoiceGroup(self, multiErrorCorrectionTransaction):
+
+    transaction = multiErrorCorrectionTransaction[0][0]
+    invoice = multiErrorCorrectionTransaction[0][1]
+    invoiceGroup = multiErrorCorrectionTransaction[1]
+
+    ogError = transaction.amount - invoice.amount
+
+    invoiceGroupTotal = sum(invoiceGroup.amout)
+
+    self.printInlineDescription(f"Incoming Transaction's Error ")
+    self.printInlineBold(f"(£{ogError})")
+    self.printInlineDescription(f" Pays For Unpaid Transaction Group")
+
+    self.ln(7)
+
+    self.printInvoice(invoice)
+    self.ln(5)
+    self.printTransaction(transaction)
+    self.ln(5)
+
+    self.printInlineDescription("Transaction pays for previous unpaid Invoices between => ")
+    self.printInlineBold(f"{invoiceGroup[0].invoice_num} and {invoiceGroup[-1].invoice_num}")
+    self.ln(5)
+
+    self.set_x(30)
+
+    for matchedInvoice in invoiceGroup:
+
+      self.printInvoice(matchedInvoice)
+      self.ln(2)
+
+    self.set_x(25)
+
+    self.printInlineDescription("Transaction Error ")
+    self.printInlineBold(f"£{ogError}")
+    self.printInlineDescription(" = ")
+    self.printInlineBold(f"£{invoiceGroupTotal}")
+
+    self.ln(8)
+    self.set_x(20)
+
+  def printErrorMatchedToPreviousError(self, multiErrorCorrectionTransaction):
+
+    transaction = multiErrorCorrectionTransaction[0][0]
+    invoice = multiErrorCorrectionTransaction[0][1]
+
+    previousDummyTransaction = multiErrorCorrectionTransaction[1]
+
+    ogError = transaction.amount - invoice.amount
+
+    self.printInlineDescription(f"Incoming Transaction's Error ")
+    self.printInlineBold(f"(£{ogError})")
+    self.printInlineDescription(f" Corrects Previous Error")
+
+    self.ln(7)
+
+    self.printInvoice(invoice)
+    self.ln(5)
+    self.printTransaction(transaction)
+    self.ln(5)
+
+    self.printCorrectionMessage(ogError)
+    self.ln(5)
+
+    self.printInlineDescription("Mispayment is correction on Error from Invoice ")
+    self.printInlineBold(f"{previousDummyTransaction.invoice_num}")
+
+    self.ln(8)
+
+
+
+  def printCorrectionTransactionError(self, correctionTransaction):
+    
+    # first task is to distinguish between the different types of reamtched transactions and invoices we have
+
+    if isinstance(correctionTransaction[1], list):
+      # the element is a report on an error transaction that was matched to a group of unpaid invoices
+      self.printErrorMatchedToInvoiceGroup(correctionTransaction)
+    elif isinstance(correctionTransaction[1], Invoice):
+      # the element is a report on an error that has been matched to a single invoices
+      self.printErrorMatchedToSingleInvoice(correctionTransaction)
+    elif isinstance(correctionTransaction[1], Transaction):
+      # the element is a report on an error that has been matched to correct a previous error
+      pass
+    else:
+      print("we should not reach here")
+
+
 
     # The list shouold have 3 different lists of rematched errors in it.
 
     # One list represent an error transaction whose error has been matched to paying for an entire invoice => list [transaction, [invoice, previousPaidInvoice]] to [[transaction, invoice], prevPaidInvoice]
 
-    # a second list refers to an error transaction whose error have been found to pay for a group of unpaid invoices => list [transaction, invoice, [invoiceGroup]] to [[transaction, invoice], [invoiceGroup]]
+    # a second list refers to an error transaction whose error have been found to pay for a group of unpaid invoices => list [transaction, invoice, [invoiceGroup]] to [[transaction, invoice], invoiceGroup]
 
     # a third list referes to transactions that correct past error payments => list [transaction, [dummyTransaction, prevDummyTransaction]] to [[transaction, invoice], previousDummyTransaction]
 

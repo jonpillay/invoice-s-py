@@ -256,7 +256,7 @@ def checkIfTransactionListContainsErrorCorrections(root, correctedErrors, con, c
             updateInvoiceRec(invoice.invoice_id, 'error_notes', f'Paid for with SPLIT transaction shares with invoice # {candInvoice.invoice_num}', cur, con)
             updateInvoiceRec(candInvoice.invoice_id, 'error_notes', f'Paid for with SPLIT transaction shares with invoice # {invoice.invoice_num}', cur, con)
 
-            reMatched.append([transaction, [invoice, candInvoice]])
+            reMatched.append([transaction, invoice], candInvoice)
 
             correctedErrors.pop(0)
 
@@ -302,7 +302,7 @@ def checkIfTransactionListContainsErrorCorrections(root, correctedErrors, con, c
             # upload the dummy transactions to the DB
             addDummyNoteTransactionsToDB(dummyTransactionGroup, cur, con)
 
-            reMatched.append([transaction, invoice, invoiceGroup])
+            reMatched.append([transaction, invoice], invoiceGroup)
 
             correctedErrors.pop(0)
 
@@ -362,7 +362,7 @@ def checkIfTransactionListContainsErrorCorrections(root, correctedErrors, con, c
 
           updateTransactionRec(dummyTransaction.transaction_id, 'payment_method', "*SPLITCORRECTION*", cur, con)
 
-          reMatched.append([transaction, [dummyTransaction, prevDummyTransaction]])
+          reMatched.append([transaction, invoice], prevDummyTransaction)
           correctedErrors.pop(0)
           break
 
