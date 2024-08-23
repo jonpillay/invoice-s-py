@@ -55,9 +55,27 @@ class TransactionUploadPDF(FPDF):
 
   def printCorrectionNumber(self, str):
     font = ImageFont.truetype(genFontPath('Rajdhani-Bold.ttf'), 15)
-    self.set_x(60)
+    self.set_x(63)
     self.set_font('rajdhani', 'B', 15)
     self.cell(getCellWidth(str, font, 2.9), 4, f"{str}", ln=0)
+
+  def printInvoice(self, invoice):
+    self.printInlineDescription("-")
+    self.printInlineBold(f" £{invoice.amount} ")
+    self.printInlineDescription("Issued on ")
+    self.printInlineBold(invoice.date_issued.strftime('%d/%m/%Y'))
+    self.printInlineDescription("to ")
+    self.printInlineBold(f" {invoice.issued_to}")
+
+  def printTransaction(self, transaction):
+    self.printInlineDescription("-")
+    self.printInlineBold(f" £{transaction.amount} ")
+    self.printInlineDescription("Paid on ")
+    self.printInlineBold(f"{transaction.paid_on.strftime('%d/%m/%Y')}")
+    self.printInlineDescription("by ")
+    self.printInlineBold(f" {transaction.paid_by}")
+    self.printInlineDescription("Transaction Database ID =")
+    self.printInlineBold(str(transaction.transaction_id))
 
 
   def printCorrectionMessage(self, amount):
@@ -66,14 +84,14 @@ class TransactionUploadPDF(FPDF):
 
       self.printInlineBold("Customer overpayed by ")
       self.set_text_color(4, 168, 30)
-      self.set_x(45)
-      self.printCorrectionNumber(f" £{str(0-amount)}")
+      self.set_x(20)
+      self.printCorrectionNumber(f"£{str(0-amount)}")
       self.set_text_color(0, 0, 0)
 
     else:
       self.printInlineBold("Customer underpayed by ")
       self.set_text_color(255, 0, 0)
-      self.set_x(45)
+      self.set_x(20)
       self.printCorrectionNumber(f"£{str(0-amount)}")
       self.set_text_color(0, 0, 0)
 
@@ -98,30 +116,13 @@ class TransactionUploadPDF(FPDF):
 
     self.set_x(20)
 
-    # self.printInlineDescription(f"Invoice # {invoice.invoice_num} dated {invoice.date_issued.strftime('%d/%m/%Y')} for £{invoice.amount}")
-    # self.printInlineDescription(f"Dated")
+    self.printInvoice(invoice)
 
-    self.printInlineDescription("-")
-    self.printInlineBold(f" £{invoice.amount} ")
-    self.printInlineDescription("Issued on ")
-    self.printInlineBold(invoice.date_issued.strftime('%d/%m/%Y'))
-    self.printInlineDescription("to ")
-    self.printInlineBold(f" {invoice.issued_to}")
     self.ln(5)
     self.set_x(20)
 
-    self.printInlineDescription("-")
-    self.printInlineBold(f" £{transaction.amount} ")
-    self.printInlineDescription("Paid on ")
-    self.printInlineBold(f"{transaction.paid_on.strftime('%d/%m/%Y')}")
-    self.printInlineDescription("by ")
-    self.printInlineBold(f" {transaction.paid_by}")
-    self.printInlineDescription("Transaction Database ID =")
-    self.printInlineBold(str(transaction.transaction_id))
+    self.printTransaction(transaction)
 
-
-
-    # self.cell(2, 5, f"Paid for by Transaction dated {transaction.paid_on.strftime('%d/%m/%Y')} for {transaction.amount}", border=0, new_y=YPos.NEXT)
     self.ln(8)
 
   def printcorrectedErrorsReport(self, correctedError):
@@ -134,27 +135,15 @@ class TransactionUploadPDF(FPDF):
 
     self.set_x(20)
 
-    self.printInlineDescription("-")
-    self.printInlineBold(f" £{invoice.amount} ")
-    self.printInlineDescription("Issued on ")
-    self.printInlineBold(invoice.date_issued.strftime('%d/%m/%Y'))
-    self.printInlineDescription("to ")
-    self.printInlineBold(f" {invoice.issued_to}")
+    self.printInvoice(invoice)
     self.ln(5)
 
     self.set_x(20)
 
-    self.printInlineDescription("-")
-    self.printInlineBold(f" £{transaction.amount} ")
-    self.printInlineDescription("Paid on ")
-    self.printInlineBold(f"{transaction.paid_on.strftime('%d/%m/%Y')}")
-    self.printInlineDescription("by ")
-    self.printInlineBold(f" {transaction.paid_by}")
-    self.printInlineDescription("Transaction Database ID =")
-    self.printInlineBold(str(transaction.transaction_id))
+    self.printTransaction(transaction)
     self.ln(5)
 
-    self.set_x(18)
+    self.set_x(20)
 
     self.printCorrectionMessage(round(invoice.amount - transaction.amount, 2))
 
