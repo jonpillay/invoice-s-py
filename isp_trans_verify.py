@@ -362,6 +362,10 @@ def checkIfTransactionListContainsErrorCorrections(root, correctedErrors, con, c
 
           updateTransactionRec(dummyTransaction.transaction_id, 'payment_method', "*SPLITCORRECTION*", cur, con)
 
+          reMatched.append([transaction, [dummyTransaction, prevDummyTransaction]])
+          correctedErrors.pop(0)
+          break
+
       stillErrors.append(tupTransactionGroup)
       correctedErrors.pop(0)
       break

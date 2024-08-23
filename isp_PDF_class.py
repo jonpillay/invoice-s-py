@@ -148,3 +148,16 @@ class TransactionUploadPDF(FPDF):
     self.printCorrectionMessage(round(invoice.amount - transaction.amount, 2))
 
     self.ln(8)
+
+  def printcorrectionTransactionErrorsReport(self, correctionTransactions):
+    pass
+
+    # The list shouold have 3 different lists of rematched errors in it.
+
+    # One list represent an error transaction whose error has been matched to paying for an entire invoice => list [transaction, [invoice, previousPaidInvoice]] to [[transaction, invoice], prevPaidInvoice]
+
+    # a second list refers to an error transaction whose error have been found to pay for a group of unpaid invoices => list [transaction, invoice, [invoiceGroup]] to [[transaction, invoice], [invoiceGroup]]
+
+    # a third list referes to transactions that correct past error payments => list [transaction, [dummyTransaction, prevDummyTransaction]] to [[transaction, invoice], previousDummyTransaction]
+
+    # need to find a way to distinguish between them
