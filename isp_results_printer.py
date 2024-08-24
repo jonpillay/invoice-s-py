@@ -81,6 +81,14 @@ def print_transaction_upload_results(outputDict):
 
             results.printInCompMatchedPair(inCompMatch)
 
+        elif category == 'uploadedMultiTransactionPairs':
+
+          results.printCategoryTitle(category)
+
+          for multiInvoiceMatch in catResults:
+
+            results.printMultiInvoiceTransactionMatch(multiInvoiceMatch)
+
   cur.close()
   con.close()
 

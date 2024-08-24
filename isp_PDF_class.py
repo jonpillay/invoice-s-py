@@ -39,6 +39,11 @@ class TransactionUploadPDF(FPDF):
     self.set_x(15)
     self.cell(0, 8, f"#{invoiceNum}", border=0, new_y=YPos.NEXT)
 
+  def printMultiInvoiceNumber(self, lowInvoiceNum, highInvoiceNum):
+    self.set_font('alpha-slab', '', 15)
+    self.set_x(15)
+    self.cell(0, 8, f"#{lowInvoiceNum} - {highInvoiceNum}", border=0, new_y=YPos.NEXT)
+
   def printCategoryTitle(self, title):
     self.set_font('special-elite', '', 16)
     self.set_x(12)
@@ -188,7 +193,7 @@ class TransactionUploadPDF(FPDF):
 
     ogError = transaction.amount - invoice.amount
 
-    invoiceGroupTotal = sum(invoiceGroup.amout)
+    invoiceGroupTotal = sum(multiInvoice.amout for multiInvoice in invoiceGroup)
 
     self.printInlineDescription(f"Incoming Transaction's Error ")
     self.printInlineBold(f"(£{ogError})")
@@ -377,3 +382,34 @@ class TransactionUploadPDF(FPDF):
       self.printIncompErrorExactMatch(inCompErrorMatch)
     if len(inCompErrorMatch) == 4:
       self.printInCompErrorCloseMatch(inCompErrorMatch)
+
+
+
+  def printMultiInvoiceTransactionMatch(self, multiInvoiceTransactionMatch):
+    
+    parentTransaction = multiInvoiceTransactionMatch[0][0]
+    matchedInvoiceList = multiInvoiceTransactionMatch[1]
+
+    totalInvoiced = sum(invoiced.amount for invoiced in matchedInvoiceList)
+
+    self.printMultiInvoiceNumber(parentTransaction.invoice_num, parentTransaction.high_invoice)
+
+    self.printInlineDescription("Multi Invoice Transaction Match")
+    self.ln(5)
+
+    self.printTransaction(parentTransaction)
+    self.ln(4)
+    
+    self.printInlineBold("Pays For:")
+    self.ln(4)
+
+    for invoice in matchedInvoiceList:
+
+      self.printInvoice(invoice)
+      self.ln(3)
+
+    self.printInlineDescription("Total Invoiced = ")
+    self.printInlineBold(f"£{str(totalInvoiced)}")
+    self.ln(3)
+    self.printInlineDescription("Total Paid = ")
+    self.printInlineBold(f"£{str(parentTransaction.amount)}")
