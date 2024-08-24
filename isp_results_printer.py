@@ -73,13 +73,18 @@ def print_transaction_upload_results(outputDict):
 
             results.printCorrectionTransactionError(correctionTransaction)
 
+        elif category == 'inCompMatched':
+
+          results.printCategoryTitle(category)
+
+          for inCompMatch in catResults:
+
+            results.printInCompMatchedPair(inCompMatch)
+
   cur.close()
   con.close()
 
   results.output('../test.pdf')
-
-
-      
 
 
 

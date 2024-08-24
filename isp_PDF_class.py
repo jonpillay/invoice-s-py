@@ -269,13 +269,52 @@ class TransactionUploadPDF(FPDF):
       print("we should not reach here")
 
 
+  def printInCompExactMatch(self, inCompMatch):
 
-    # The list shouold have 3 different lists of rematched errors in it.
+    transaction = inCompMatch[0]
+    invoice = inCompMatch[1]
+    
+    self.printInvoiceNumber(invoice.invoice_num)
 
-    # One list represent an error transaction whose error has been matched to paying for an entire invoice => list [transaction, [invoice, previousPaidInvoice]] to [[transaction, invoice], prevPaidInvoice]
+    self.set_x(20)
 
-    # a second list refers to an error transaction whose error have been found to pay for a group of unpaid invoices => list [transaction, invoice, [invoiceGroup]] to [[transaction, invoice], invoiceGroup]
+    self.printInvoice(invoice)
 
-    # a third list referes to transactions that correct past error payments => list [transaction, [dummyTransaction, prevDummyTransaction]] to [[transaction, invoice], previousDummyTransaction]
+    self.ln(5)
+    self.set_x(20)
 
-    # need to find a way to distinguish between them
+    self.printTransaction(transaction)
+
+    self.ln(8)
+
+
+  def printIncompCloseMatch(self, inCompMatch):
+
+    transaction = inCompMatch[0]
+    invoice = inCompMatch[1]
+    errorAmount = inCompMatch[2]
+
+    self.printInlineDescription("Transaction matches to Invoice with Error.")
+    
+    self.printInvoiceNumber(invoice.invoice_num)
+
+    self.set_x(20)
+
+    self.printInvoice(invoice)
+
+    self.ln(5)
+    self.set_x(20)
+
+    self.printTransaction(transaction)
+
+    self.printCorrectionMessage(errorAmount)
+
+    self.ln(8)
+
+
+  def printInCompMatchedPair(self, inCompMatch):
+    
+    if len(inCompMatch) == 2:
+      self.printInCompExactMatch(inCompMatch)
+    else:
+      self.printIncompCloseMatch(inCompMatch)

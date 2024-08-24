@@ -329,7 +329,7 @@ def resolvePaymentErrors(root, paymentErrors, cur, con):
 def resolveNoMatchTransactions(root, incompTransactions, cur, con):
 
   """
-  Takes transactions that have either no invoice number or an invoice number which has been flagged and incorrect.
+  Takes transactions that have either no invoice number or an invoice number which has been flagged as incorrect.
 
   First attempts to match the transaction via amount against single unpaid invoices.
 
