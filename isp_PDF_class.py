@@ -318,3 +318,62 @@ class TransactionUploadPDF(FPDF):
       self.printInCompExactMatch(inCompMatch)
     else:
       self.printIncompCloseMatch(inCompMatch)
+
+
+  def printIncompErrorExactMatch(self, inCompErrorMatch):
+    
+    invoice = inCompErrorMatch[0]
+    transaction = inCompErrorMatch[1]
+    prevErrorTransaction = inCompErrorMatch[2]
+
+    self.printInlineDescription(f"Mispayment on Invoice ")
+    self.printInlineBold(f"{invoice.invoice_num}")
+    self.printInlineDescription("is correction for past error payment on invoice ")
+    self.printInlineBold(f"{prevErrorTransaction.invoice_num}")
+
+    self.printInvoiceNumber(invoice.invoice_num)
+
+    self.set_x(20)
+
+    self.printInvoice(invoice)
+
+    self.ln(5)
+    self.set_x(20)
+
+    self.printTransaction(transaction)
+
+
+    
+
+  def printInCompErrorCloseMatch(self, inCompErrorMatch):
+    
+    invoice = inCompErrorMatch[0]
+    transaction = inCompErrorMatch[1]
+    prevErrorTransaction = inCompErrorMatch[2]
+    difference = inCompErrorMatch[3]
+
+    self.printInlineDescription(f"Mispayment on Invoice ")
+    self.printInlineBold(f"{invoice.invoice_num}")
+    self.printInlineDescription("is correction for past error payment on invoice ")
+    self.printInlineBold(f"{prevErrorTransaction.invoice_num} ")
+
+    self.printInvoiceNumber(invoice.invoice_num)
+
+    self.set_x(20)
+
+    self.printInvoice(invoice)
+
+    self.ln(5)
+    self.set_x(20)
+
+    self.printTransaction(transaction)
+
+    self.printCorrectionMessage(difference)
+
+
+  def printIncompErrorCorrectionMatched(self, inCompErrorMatch):
+
+    if len(inCompErrorMatch) == 3:
+      self.printIncompErrorExactMatch(inCompErrorMatch)
+    if len(inCompErrorMatch) == 4:
+      self.printInCompErrorCloseMatch(inCompErrorMatch)
