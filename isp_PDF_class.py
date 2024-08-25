@@ -39,6 +39,11 @@ class TransactionUploadPDF(FPDF):
     self.set_x(15)
     self.cell(0, 8, f"#{invoiceNum}", border=0, new_y=YPos.NEXT)
 
+  def printInvoiceNumberInline(self, invoiceNum):
+    font = ImageFont.truetype(genFontPath('AlfaSlabOne-Regular.ttf'), 10)
+    self.set_font('alpha-slab', '', 10)
+    self.cell(getCellWidth(f"# {str(invoiceNum)} ", font, 2.9), 4, f"#{invoiceNum} ", border=0)
+
   def printMultiInvoiceNumber(self, lowInvoiceNum, highInvoiceNum):
     self.set_font('alpha-slab', '', 15)
     self.set_x(15)
@@ -91,14 +96,14 @@ class TransactionUploadPDF(FPDF):
       self.printInlineBold("Customer overpayed by ")
       self.set_text_color(4, 168, 30)
       self.set_x(20)
-      self.printCorrectionNumber(f"£{str(0-amount)}")
+      self.printCorrectionNumber(f"£{abs(amount)}")
       self.set_text_color(0, 0, 0)
 
     else:
       self.printInlineBold("Customer underpayed by ")
       self.set_text_color(255, 0, 0)
       self.set_x(20)
-      self.printCorrectionNumber(f"£{str(0-amount)}")
+      self.printCorrectionNumber(f"£{abs(amount)}")
       self.set_text_color(0, 0, 0)
 
 
@@ -156,7 +161,7 @@ class TransactionUploadPDF(FPDF):
     self.ln(8)
 
 
-  # collection of functions for printing out the different outputs of printcorrectionTransactionError
+  # collection of functions for printing out the different outputs of printCorrectionTransactionError
 
   def printErrorMatchedToSingleInvoice(self, singleErrorCorrectionTransaction):
 
@@ -298,10 +303,16 @@ class TransactionUploadPDF(FPDF):
     transaction = inCompMatch[0]
     invoice = inCompMatch[1]
     errorAmount = inCompMatch[2]
-
-    self.printInlineDescription("Transaction matches to Invoice with Error.")
     
     self.printInvoiceNumber(invoice.invoice_num)
+
+    self.ln(1)
+
+    self.set_x(18)
+
+    self.printInlineBold("Transaction matches to Invoice with Error.")
+
+    self.ln(8)
 
     self.set_x(20)
 
@@ -311,6 +322,9 @@ class TransactionUploadPDF(FPDF):
     self.set_x(20)
 
     self.printTransaction(transaction)
+
+    self.ln(5)
+    self.set_x(19)
 
     self.printCorrectionMessage(errorAmount)
 
@@ -394,22 +408,33 @@ class TransactionUploadPDF(FPDF):
 
     self.printMultiInvoiceNumber(parentTransaction.invoice_num, parentTransaction.high_invoice)
 
-    self.printInlineDescription("Multi Invoice Transaction Match")
-    self.ln(5)
+    self.set_x(15)
+
+    self.printInlineBold("Multi Invoice Transaction Match")
+    self.ln(8)
+
+    self.set_x(15)
 
     self.printTransaction(parentTransaction)
-    self.ln(4)
+    self.ln(8)
     
+    self.set_x(20)
+
     self.printInlineBold("Pays For:")
-    self.ln(4)
+    self.ln(8)
+
 
     for invoice in matchedInvoiceList:
 
+      self.set_x(25)
+      self.printInvoiceNumberInline(invoice.invoice_num)
       self.printInvoice(invoice)
-      self.ln(3)
+      self.ln(5)
 
-    self.printInlineDescription("Total Invoiced = ")
+    self.ln(8)
+    self.set_x(15)
+    self.printInlineDescription("Total Invoiced =")
     self.printInlineBold(f"£{str(totalInvoiced)}")
-    self.ln(3)
-    self.printInlineDescription("Total Paid = ")
+    self.printInlineDescription("Total Paid =")
     self.printInlineBold(f"£{str(parentTransaction.amount)}")
+    self.ln(10)
