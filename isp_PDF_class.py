@@ -404,7 +404,7 @@ class TransactionUploadPDF(FPDF):
     parentTransaction = multiInvoiceTransactionMatch[0][0]
     matchedInvoiceList = multiInvoiceTransactionMatch[1]
 
-    totalInvoiced = sum(invoiced.amount for invoiced in matchedInvoiceList)
+    totalInvoiced = round(sum(invoiced.amount for invoiced in matchedInvoiceList), 2)
 
     self.printMultiInvoiceNumber(parentTransaction.invoice_num, parentTransaction.high_invoice)
 
@@ -435,6 +435,6 @@ class TransactionUploadPDF(FPDF):
     self.set_x(15)
     self.printInlineDescription("Total Invoiced =")
     self.printInlineBold(f"£{str(totalInvoiced)}")
-    self.printInlineDescription("Total Paid =")
+    self.printInlineDescription("  Total Paid =")
     self.printInlineBold(f"£{str(parentTransaction.amount)}")
     self.ln(10)
