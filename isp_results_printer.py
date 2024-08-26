@@ -97,6 +97,30 @@ def print_transaction_upload_results(outputDict):
 
             results.printMultiInvoiceTransactionMatch(incompMultiInvoiceMatch)
 
+        elif category == 'multiErrorFlagged':
+
+          results.printCategoryTitle("Multi-Invoice Transactions Matched Via Amount, User Flagged as Error")
+
+          for multiInvoiceMatchFlagged in catResults:
+
+            results.printMultiInvoiceTransactionMatch(multiInvoiceMatchFlagged)
+
+        elif category == 'finalNoMatch':
+
+          results.printCategoryTitle("No Match Transactions")
+
+          for noMatch in catResults:
+
+            results.printNoMatchTransaction(noMatch)
+
+        elif category == 'newCustomerTransactions':
+
+          results.printCategoryTitle("New Customer Transactions (No Invoice in DB)")
+
+          for newCustomerTransaction in catResults:
+
+            results.printNewCustomerTransaction(newCustomerTransaction)
+
   cur.close()
   con.close()
 

@@ -439,3 +439,69 @@ class TransactionUploadPDF(FPDF):
     self.printInlineDescription("  Total Paid =")
     self.printInlineBold(f"£{str(parentTransaction.amount)}")
     self.ln(10)
+
+
+
+  def printMultiInvoiceTransactionError(self, multiInvoiceTransactionError):
+    
+    parentTransaction = multiInvoiceTransactionError[0][0]
+    errorInvoiceList = multiInvoiceTransactionError[1]
+
+    totalInvoiced = round(sum(invoiced.amount for invoiced in errorInvoiceList), 2)
+
+    self.printMultiInvoiceNumber(parentTransaction.invoice_num, parentTransaction.high_invoice)
+
+    self.set_x(15)
+
+    self.printInlineBold("Multi Invoice Transaction Match")
+    self.ln(8)
+
+    self.set_x(15)
+
+    self.printTransaction(parentTransaction)
+    self.ln(8)
+    
+    self.set_x(20)
+
+    self.printInlineBold("Pays For:")
+    self.ln(8)
+
+
+    for invoice in errorInvoiceList:
+
+      self.set_x(25)
+      self.printInvoiceNumberInline(invoice.invoice_num)
+      self.printInvoice(invoice)
+      self.ln(5)
+
+    self.ln(8)
+    self.set_x(15)
+    self.printInlineDescription("Total Invoiced =")
+    self.printInlineBold(f"£{str(totalInvoiced)}")
+    self.printInlineDescription("  Total Paid =")
+    self.printInlineBold(f"£{str(parentTransaction.amount)}")
+    self.ln(10)
+
+    self.printCorrectionMessage(round(parentTransaction.amount - totalInvoiced, 2))
+
+
+  def printNoMatchTransaction(self, transaction):
+
+    self.set_x(20)
+
+    self.printTransaction(transaction)
+
+    if transaction.error_notes != None:
+      self.ln(4)
+      self.printInlineBold("Notes: ")
+      self.printInlineDescription(transaction.error_notes)
+
+    self.ln(10)
+
+  def printNewCustomerTransaction(self, transaction):
+
+    self.set_x(20)
+
+    self.printTransaction(transaction)
+
+    self.ln(8)
