@@ -91,7 +91,7 @@ def print_transaction_upload_results(outputDict):
 
         elif category == 'inCompMultiMatch':
 
-          results.printCategoryTitle("Multi-Invoice Numberless Transactions Match Via Amount")
+          results.printCategoryTitle("Multi-Invoice Numberless Transactions Matched Via Amount")
 
           for incompMultiInvoiceMatch in catResults:
 
