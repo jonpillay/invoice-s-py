@@ -14,6 +14,8 @@ from isp_data_handlers import constructCustomerAliasesDict, constructCustomerIDi
 from isp_resolvers import resolveNameMismatches, resolvePaymentErrors, resolveMultiInvoiceTransactions, resolveNoMatchTransactions
 from isp_multi_invoice_prompt import openSelectBetweenInvoices
 
+from isp_results_printer import print_transaction_upload_results
+
 from isp_final_resolver import final_resolver
 
 from isp_dataframes import Transaction
@@ -320,13 +322,54 @@ def handleTransactionUpload(root, filename):
 
   outputPrintDict = {output[0]: output[1] for output in finalListOfLists}
 
-  print(type(outputPrintDict))
+  print_transaction_upload_results(outputPrintDict)
 
-  f = open("../output.txt", "a")
+  # print(type(outputPrintDict))
 
-  f.write(str(outputPrintDict))
+  # f = open("../output.txt", "a")
 
-  f.close()
+  # f.write(str(outputPrintDict))
+
+  # f.close()
+  
+
+  """
+  
+  - numbers from desanned data
+
+    This is the final count of all final transaction lists
+    320
+    255
+    5
+    0
+    23
+    0
+    7
+    0
+    0
+    0
+    28
+    2
+
+  - numbers from sensitive data
+  
+    This is the final count of all final transaction lists
+    320
+    255
+    5
+    0
+    23
+    0
+    7
+    0
+    0
+    0
+    28
+    2
+
+
+  """
+
   
 
 

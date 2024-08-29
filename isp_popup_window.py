@@ -7,7 +7,7 @@ def openNewCustomerPrompt(root, customer, dbCustomers, newCustomerReturn, newAli
     
   customerNames = []
 
-  promptWindow = tk.Toplevel(root)
+  promptWindow = tkb.Toplevel(root)
   promptWindow.title('New Customer?')
   promptWindow.geometry('800x600')
 
@@ -72,7 +72,7 @@ def openNewCustomerPrompt(root, customer, dbCustomers, newCustomerReturn, newAli
 
 def openTransactionAliasPrompt(root, invoice, transaction, aliasBool, rejectedBool):
     
-  promptWindow = tk.Toplevel(root)
+  promptWindow = tkb.Toplevel(root)
   promptWindow.title('New Customer?')
   promptWindow.geometry('800x500')
 
@@ -150,7 +150,7 @@ def openTransactionPaymentErrorPrompt(root, invoice, transaction, checkedBool, r
   # Invoices may need extra errors bool, so they can have a Transaction assotiated, but also have an error flag.
   # Means they can also be errorless even if the payment amount is still an error (through user veryfication.)
 
-  promptWindow = tk.Toplevel(root)
+  promptWindow = tkb.Toplevel(root)
   promptWindow.title('Payment Error')
   promptWindow.geometry('800x600')
 

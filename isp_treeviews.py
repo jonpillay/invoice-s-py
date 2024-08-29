@@ -1,8 +1,9 @@
 from tkinter import ttk
+import ttkbootstrap as tkb
 
 def renderSimplePromptInvoices(parentWindow, invoiceList):
 
-  invoiceTable = ttk.Treeview(parentWindow, show='headings', height=len(invoiceList))
+  invoiceTable = tkb.Treeview(parentWindow, style='success', show='headings', height=len(invoiceList))
 
   invoiceTable['columns'] = ('invoice_num', 'issued_to', 'amount', 'date_issued')
 
@@ -27,15 +28,15 @@ def renderSimplePromptInvoices(parentWindow, invoiceList):
 
   invoiceTable.pack()
 
-  style = ttk.Style(invoiceTable)
-  style.theme_use('alt')
-  style.configure("Treeview",
-    rowheight=30
-  )
+  # style = tkb.Style(invoiceTable)
+  # style.theme_use('alt')
+  # style.configure("Treeview",
+  #   rowheight=30
+  # )
 
 def renderPromptInvoices(parentWindow, invoiceList):
 
-  invoiceTable = ttk.Treeview(parentWindow, show='headings', height=len(invoiceList))
+  invoiceTable = tkb.Treeview(parentWindow, style='success', show='headings', height=len(invoiceList))
 
   invoiceTable['columns'] = ('invoice_num', 'issued_to', 'amount', 'date_issued', 'notes')
 
@@ -63,15 +64,15 @@ def renderPromptInvoices(parentWindow, invoiceList):
 
   invoiceTable.pack(padx=10)
 
-  style = ttk.Style(invoiceTable)
-  style.theme_use('alt')
-  style.configure("Treeview",
-    rowheight=30
-  )
+  # style = tkb.Style(invoiceTable)
+  # style.theme_use('alt')
+  # style.configure("Treeview",
+  #   rowheight=30
+  # )
 
 def renderPromptTransactions(parentWindow, transactionList):
 
-  transactionTable = ttk.Treeview(parentWindow, columns=('invoice_num', 'paid_by', 'amount', 'paid_on', 'payment_method'), show='headings', height=len(transactionList))
+  transactionTable = tkb.Treeview(parentWindow, style='success', columns=('invoice_num', 'paid_by', 'amount', 'paid_on', 'payment_method'), show='headings', height=len(transactionList))
 
   transactionTable.column('invoice_num', width=100, anchor='center')
   transactionTable.heading('invoice_num', text='Invoice #')
@@ -88,11 +89,11 @@ def renderPromptTransactions(parentWindow, transactionList):
   transactionTable.column('payment_method', width=90, anchor='center')
   transactionTable.heading('payment_method', text='Method')
 
-  style = ttk.Style(transactionTable)
-  style.theme_use('alt')
-  style.configure("Treeview",
-    rowheight=30
-  )
+  # style = tkb.Style(transactionTable)
+  # style.theme_use('alt')
+  # style.configure("Treeview",
+  #   rowheight=30
+  # )
 
   transactionTable.pack(pady=10)
 
@@ -106,7 +107,7 @@ def renderPromptTransactions(parentWindow, transactionList):
 
 def renderPromptMulitTransactions(parentWindow, transactionList):
 
-  multiTransactionTable = ttk.Treeview(parentWindow, columns=('low_invoice', 'high_invoice', 'paid_by', 'amount', 'paid_on', 'payment_method'), show='headings', height=len(transactionList))
+  multiTransactionTable = tkb.Treeview(parentWindow, style='success', columns=('low_invoice', 'high_invoice', 'paid_by', 'amount', 'paid_on', 'payment_method'), show='headings', height=len(transactionList))
 
   multiTransactionTable.column('low_invoice', width=100, anchor='center')
   multiTransactionTable.heading('low_invoice', text='From #')
@@ -126,11 +127,11 @@ def renderPromptMulitTransactions(parentWindow, transactionList):
   multiTransactionTable.column('payment_method', width=90, anchor='center')
   multiTransactionTable.heading('payment_method', text='Method')
 
-  style = ttk.Style(multiTransactionTable)
-  style.theme_use('alt')
-  style.configure("Treeview",
-    rowheight=30
-  )
+  # style = tkb.Style(multiTransactionTable)
+  # style.theme_use('alt')
+  # style.configure("Treeview",
+  #   rowheight=30
+  # )
 
   multiTransactionTable.pack(pady=20)
 

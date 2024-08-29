@@ -83,7 +83,7 @@ def openMultiInvoicePrompt(root, transaction, invoiceList, checkedBool, verifyBo
 
 def openMatchedMultiInvoicePrompt(root, transaction, invoiceList, verifyBool):
 
-    promptWindow = tk.Toplevel(root)
+    promptWindow = tkb.Toplevel(root)
     promptWindow.title('Invoices Match?')
     promptWindow.geometry('1100x600')
 
@@ -153,7 +153,7 @@ def openSelectBetweenInvoices(root, transaction, candInvoices, invoiceIDVar):
 
   invoiceList = candInvoices
 
-  promptWindow = tk.Toplevel(root)
+  promptWindow = tkb.Toplevel(root)
   promptWindow.title('Invoices Match?')
   promptWindow.geometry('1100x600')
 
@@ -181,7 +181,7 @@ def openSelectBetweenInvoices(root, transaction, candInvoices, invoiceIDVar):
 
   renderPromptMulitTransactions(main_frame, [transaction])
 
-  invoiceTable = ttk.Treeview(main_frame, show='headings', height=len(invoiceList), selectmode=tk.BROWSE)
+  invoiceTable = tkb.Treeview(main_frame, style='success', show='headings', height=len(invoiceList), selectmode=tk.BROWSE)
 
   invoiceTable['columns'] = ('invoice_num', 'issued_to', 'amount', 'date_issued', 'notes')
 
@@ -208,11 +208,11 @@ def openSelectBetweenInvoices(root, transaction, candInvoices, invoiceIDVar):
 
   invoiceTable.pack(padx=10)
 
-  style = ttk.Style(invoiceTable)
-  style.theme_use('alt')
-  style.configure("Treeview",
-    rowheight=30
-  )
+  # style = ttk.Style(invoiceTable)
+  # style.theme_use('alt')
+  # style.configure("Treeview",
+  #   rowheight=30
+  # )
 
   verification_frame = tkb.Frame(main_frame)
   verification_frame.pack(pady=10)

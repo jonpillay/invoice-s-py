@@ -51,7 +51,7 @@ def print_transaction_upload_results(outputDict):
         
         if category == 'matchedSingles':
 
-          results.printCategoryTitle(category)
+          results.printCategoryTitle("Single Invoice Transactions - Exact Match")
 
           for matchedSingle in catResults:
 
@@ -59,7 +59,7 @@ def print_transaction_upload_results(outputDict):
 
         elif category == 'correctedErrorsReport':
 
-          results.printCategoryTitle(category)
+          results.printCategoryTitle("Single Invoice Transactions -  Corrected Payment Errors")
 
           for errorCorrected in catResults:
 
@@ -67,7 +67,7 @@ def print_transaction_upload_results(outputDict):
 
         elif category == 'correctionTransactionErrorsReport':
 
-          results.printCategoryTitle(category)
+          results.printCategoryTitle("Transaction Payments Correcting Past Errors")
 
           for correctionTransaction in catResults:
 
@@ -75,7 +75,7 @@ def print_transaction_upload_results(outputDict):
 
         elif category == 'inCompMatched':
 
-          results.printCategoryTitle(category)
+          results.printCategoryTitle("Transactions Matched Via Amount")
 
           for inCompMatch in catResults:
 
@@ -83,7 +83,7 @@ def print_transaction_upload_results(outputDict):
 
         elif category == 'uploadedMultiTransactionPairs':
 
-          results.printCategoryTitle(category)
+          results.printCategoryTitle("Multi-Invoice Transactions")
 
           for multiInvoiceMatch in catResults:
 
@@ -107,7 +107,7 @@ def print_transaction_upload_results(outputDict):
 
         elif category == 'finalNoMatch':
 
-          results.printCategoryTitle("No Match Transactions")
+          results.printCategoryTitle("Unable to Find Matches")
 
           for noMatch in catResults:
 
@@ -115,7 +115,7 @@ def print_transaction_upload_results(outputDict):
 
         elif category == 'newCustomerTransactions':
 
-          results.printCategoryTitle("New Customer Transactions (No Invoice in DB)")
+          results.printCategoryTitle("New Customer Transactions (No Invoices in DB)")
 
           for newCustomerTransaction in catResults:
 
@@ -128,4 +128,4 @@ def print_transaction_upload_results(outputDict):
 
 
 
-print_transaction_upload_results(testOutputDict)
+# print_transaction_upload_results(testOutputDict)

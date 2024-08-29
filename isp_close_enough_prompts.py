@@ -13,7 +13,7 @@ from isp_data_handlers import genInvoiceDCobj
 
 def openVerifyCloseEnoughtMatch(root, transaction, invoice, matchVerifiedBool):
 
-  promptWindow = tk.Toplevel(root)
+  promptWindow = tkb.Toplevel(root)
   promptWindow.title('Match Close Enough')
   promptWindow.geometry('1100x600')
 
@@ -41,7 +41,7 @@ def openVerifyCloseEnoughtMatch(root, transaction, invoice, matchVerifiedBool):
 
   renderPromptTransactions(main_frame, [transaction])
 
-  invoiceTable = ttk.Treeview(main_frame, show='headings', height=1, selectmode=tk.BROWSE)
+  invoiceTable = tkb.Treeview(main_frame, style='success', show='headings', height=1, selectmode=tk.BROWSE)
 
   invoiceTable['columns'] = ('invoice_num', 'issued_to', 'amount', 'date_issued', 'notes')
 
@@ -66,11 +66,11 @@ def openVerifyCloseEnoughtMatch(root, transaction, invoice, matchVerifiedBool):
 
   invoiceTable.pack(padx=10)
 
-  style = ttk.Style(invoiceTable)
-  style.theme_use('alt')
-  style.configure("Treeview",
-    rowheight=30
-  )
+  # style = ttk.Style(invoiceTable)
+  # style.theme_use('alt')
+  # style.configure("Treeview",
+  #   rowheight=30
+  # )
 
   verification_frame = tkb.Frame(main_frame)
   verification_frame.pack(pady=10)
@@ -138,7 +138,7 @@ def openSelectBetweenCloseEnoughInvoices(root, transaction, closeEnoughMatched, 
 
   renderPromptMulitTransactions(main_frame, [transaction])
 
-  invoiceTable = ttk.Treeview(main_frame, show='headings', height=len(invoiceList), selectmode=tk.BROWSE)
+  invoiceTable = tkb.Treeview(main_frame, style='success', show='headings', height=len(invoiceList), selectmode=tk.BROWSE)
 
   invoiceTable['columns'] = ('invoice_num', 'issued_to', 'amount', 'date_issued', 'notes')
 
@@ -273,7 +273,7 @@ def openVerifyErrorCorrectionCloseEnoughMatch(root, transaction, matchedInvoice,
   invoice_match_label = tkb.Label(prompt_frame, text=f"Invoice Num {matchedInvoice.invoice_num} now matches with a difference", font=('Helvetica-bold', 11), justify='center')
   invoice_match_label.pack(pady=10)
 
-  invoiceTable = ttk.Treeview(main_frame, show='headings', height=1, selectmode=tk.BROWSE)
+  invoiceTable = tkb.Treeview(main_frame, style='success', show='headings', height=1, selectmode=tk.BROWSE)
 
   invoiceTable['columns'] = ('invoice_num', 'issued_to', 'amount', 'date_issued', 'notes')
 
