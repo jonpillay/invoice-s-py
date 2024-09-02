@@ -36,7 +36,7 @@ def checkPaymentErrorAgainstUnpaidInvoices(cur, con, matchPaymentErrors):
     transaction = paymentErrorPair[0]
     invoice = paymentErrorPair[1]
 
-    candInvoices = fetchUnpaidInvoicesByCustomer(transaction.customer_id, cur)
+    candInvoices = fetchUnpaidInvoicesByCustomer(invoice.customer_id, cur)
 
     print(candInvoices)
 

@@ -88,9 +88,9 @@ def fetchInvoicesByCustomerBeforeDate(beforeDate, customerID, cur):
 
 def fetchUnpaidInvoicesByCustomer(customerID, cur):
 
-  sql = "SELECT id, invoice_num, amount, date_issued, issued_to, customer_id FROM INVOICES WHERE NOT EXISTS (SELECT 1 FROM TRANSACTIONS WHERE INVOICES.id = TRANSACTIONS.invoice_id) ORDER BY invoice_num"
+  sql = "SELECT id, invoice_num, amount, date_issued, issued_to, customer_id FROM INVOICES WHERE NOT EXISTS (SELECT 1 FROM TRANSACTIONS WHERE INVOICES.id = TRANSACTIONS.invoice_id) and INVOICES.customer_id = ? ORDER BY invoice_num"
 
-  cur.execute(sql, ())
+  cur.execute(sql, (customerID, ))
 
   invoices = cur.fetchall()
 
