@@ -44,10 +44,10 @@ def renderMain(root):
   upload_frame.rowconfigure(0, weight=1)
 
 
-  invoice_upload = tkb.Button(upload_frame, text='Invoice Upload', bootstyle='primary', command= lambda: handleInvoiceUploadClick(root))
+  invoice_upload = tkb.Button(upload_frame, text='Invoice Upload', bootstyle='primary', name="uploadInvoice", command= lambda: handleInvoiceUploadClick(root))
   invoice_upload.grid(row=0, column=0)
 
-  statement_upload = tkb.Button(upload_frame, text='Statement Upload', bootstyle='primary', command= lambda: handleTransactionUploadClick(root))
+  statement_upload = tkb.Button(upload_frame, text='Statement Upload', bootstyle='primary', name="uploadTransaction", command= lambda: handleTransactionUploadClick(root))
   statement_upload.grid(row=0, column=1)
 
   # Report Gen Widget Panel. Report Gen By Date Range and Customer. Gen both OnScreen and PDF.

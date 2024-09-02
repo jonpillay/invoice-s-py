@@ -66,12 +66,6 @@ def openVerifyCloseEnoughtMatch(root, transaction, invoice, matchVerifiedBool):
 
   invoiceTable.pack(padx=10)
 
-  # style = ttk.Style(invoiceTable)
-  # style.theme_use('alt')
-  # style.configure("Treeview",
-  #   rowheight=30
-  # )
-
   verification_frame = tkb.Frame(main_frame)
   verification_frame.pack(pady=10)
 
@@ -103,7 +97,6 @@ def openVerifyCloseEnoughtMatch(root, transaction, invoice, matchVerifiedBool):
       promptWindow.destroy()
       
   promptWindow.wait_window()
-
 
 
 def openSelectBetweenCloseEnoughInvoices(root, transaction, closeEnoughMatched, invoiceIDVar):

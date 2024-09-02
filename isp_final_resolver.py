@@ -1,6 +1,5 @@
 import tkinter as tk
 
-from isp_noMatch_list import noMatchList
 from isp_data_handlers import groupDataClassObjsByAttribute, genDBInvoiceDCobj, genDBTransactionDCobj, prepMatchedTransforDB
 from isp_db_helpers import fetchInvoicesByCustomerBeforeDate, fetchTransactionsByInvoiceID, updateTransactionRec, updateInvoiceRec, addTransactionToDB, addDummyNoteTransactionsToDB
 from isp_trans_verify import checkIfNoNumTransactionErrorIsCorrection
