@@ -85,9 +85,31 @@ def fetchInvoicesByCustomerBeforeDate(beforeDate, customerID, cur):
   return invoices
 
 
+
+def fetchUnpaidInvoicesByCustomer(customerID, cur):
+
+  sql = "SELECT id, invoice_num, amount, date_issued, issued_to, customer_id FROM INVOICES WHERE NOT EXISTS (SELECT 1 FROM TRANSACTIONS WHERE INVOICES.id = TRANSACTIONS.invoice_id) ORDER BY invoice_num"
+
+  cur.execute(sql, ())
+
+  invoices = cur.fetchall()
+
+  return invoices
+
+# def fetchUnpaidInvoicesByCustomer(customerID, cur):
+
+#   sql = "SELECT INVOICES.id, INVOICES.invoice_num, INVOICES.amount, INVOICES.date_issued, INVOICES.issued_to, INVOICES.customer_id FROM INVOICES LEFT JOIN TRANSACTIONS ON INVOICES.customer_id = TRANSACTIONS.customer_id WHERE INVOICES.customer_id=? AND TRANSACTIONS.invoice_id IS NULL ORDER BY INVOICES.invoice_num"
+
+#   cur.execute(sql, (customerID, ))
+
+#   invoices = cur.fetchall()
+
+#   return invoices
+
+
 def fetchUnpaidInvoicesByCustomerBeforeDate(beforeDate, customerID, cur):
 
-  sql = "SELECT INVOICES.id, INVOICES.invoice_num, INVOICES.amount, INVOICES.date_issued, INVOICES.issued_to, INVOICES.customer_id FROM INVOICES LEFT JOIN TRANSACTIONS ON INVOICES.id = TRANSACTIONS.invoice_id WHERE date_issued < ? and INVOICES.customer_id=? ORDER BY INVOICES.invoice_num"
+  sql = "SELECT INVOICES.id, INVOICES.invoice_num, INVOICES.amount, INVOICES.date_issued, INVOICES.issued_to, INVOICES.customer_id FROM INVOICES LEFT JOIN TRANSACTIONS ON INVOICES.id = TRANSACTIONS.invoice_id WHERE date_issued < ? AND INVOICES.customer_id=? AND TRANSACTIONS.invoice_id IS NULL ORDER BY INVOICES.invoice_num"
 
   cur.execute(sql, (beforeDate, customerID))
 
@@ -112,7 +134,7 @@ def fetchInvoicesByCustomerDateRange(lowDate, highDate, customerID, cur):
 
 def fetchUnpaidInvoicesByCustomerDateRange(lowDate, highDate, customerID, cur):
 
-  sql = "SELECT INVOICES.id, INVOICES.invoice_num, INVOICES.amount, INVOICES.date_issued, INVOICES.issued_to, INVOICES.customer_id FROM INVOICES LEFT JOIN TRANSACTIONS ON INVOICES.id = TRANSACTIONS.invoice_id WHERE INVOICES.date_issued BETWEEN ? and ? and INVOICES.customer_id=? ORDER BY INVOICES.invoice_num"
+  sql = "SELECT INVOICES.id, INVOICES.invoice_num, INVOICES.amount, INVOICES.date_issued, INVOICES.issued_to, INVOICES.customer_id FROM INVOICES LEFT JOIN TRANSACTIONS ON INVOICES.id = TRANSACTIONS.invoice_id WHERE INVOICES.date_issued BETWEEN ? AND ? AND INVOICES.customer_id=? AND TRANSACTIONS.invoice_id IS NULL ORDER BY INVOICES.invoice_num"
 
   cur.execute(sql, (lowDate, highDate, customerID))
 

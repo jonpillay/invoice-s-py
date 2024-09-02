@@ -19,10 +19,6 @@ def resolveNameMismatches(root, cur, conn, matchNameErrors):
   
   """
 
-  errorCount = len(matchNameErrors)
-  print("this is the error count we are interested in")
-  print(matchNameErrors)
-
   unMatchable = []
   nameResolved = []
   

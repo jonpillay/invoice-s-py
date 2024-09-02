@@ -249,6 +249,7 @@ def prepMatchedTransforDB(transaction, invoice):
   transaction.invoice_num = invoice.invoice_num
 
 
+
 def reMatchPaymentErrors(matchPaymentErrors, cur):
   # print(matchPaymentErrors[0])
   # print(matchPaymentErrors[1])
@@ -274,7 +275,7 @@ def reMatchPaymentErrors(matchPaymentErrors, cur):
       if transaction.error_notes == None:
         existNote = ""
       else:
-        existNote = transaction.error_notes        
+        existNote = transaction.error_notes
 
       transaction.error_flagged = 1
       transaction.error_notes = " ".join(["INVOICE NUM ERROR", existNote])

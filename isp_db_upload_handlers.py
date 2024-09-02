@@ -13,6 +13,7 @@ from isp_db_helpers import getInvoiceNumsIDs, fetchInvoiceByNum, fetchUnpaidInvo
 from isp_data_handlers import constructCustomerAliasesDict, constructCustomerIDict, prepInvoiceUploadList, genInvoiceDCobj, genTransactionDCobj, genMultiTransactionDCobj, prepMatchedTransforDB, genMultiTransactions, reMatchPaymentErrors, genNoNumTransactionDCobj
 from isp_resolvers import resolveNameMismatches, resolvePaymentErrors, resolveMultiInvoiceTransactions, resolveNoMatchTransactions
 from isp_multi_invoice_prompt import openSelectBetweenInvoices
+from isp_error_payment_check import checkPaymentErrorAgainstUnpaidInvoices
 
 from isp_results_printer import print_transaction_upload_results
 
@@ -135,13 +136,13 @@ def handleTransactionUpload(root, filename):
 
   matchedSingles = ['matchedSingles', []]
 
+  con = sqlite3.connect(os.getenv("DB_NAME"))
+
+  con.execute('PRAGMA foreign_keys = ON')
+
+  cur = con.cursor()
+
   for transaction in compRec:
-
-    con = sqlite3.connect(os.getenv("DB_NAME"))
-
-    con.execute('PRAGMA foreign_keys = ON')
-
-    cur = con.cursor()
 
     invoiceNum = transaction.invoice_num
 
@@ -227,6 +228,8 @@ def handleTransactionUpload(root, filename):
 
 
   # Resolve Payment Errors
+
+  checkPaymentErrorAgainstUnpaidInvoices(cur, con, matchPaymentError)
 
 
   # rematch payment errors against updated DB
