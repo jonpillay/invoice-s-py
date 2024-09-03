@@ -2,9 +2,6 @@ import tkinter as tk
 import ttkbootstrap as tkb
 from tkinter import ttk
 
-import sqlite3
-import os
-
 from isp_treeviews import renderPromptInvoices, renderPromptTransactions, renderPromptMulitTransactions
 from isp_db_helpers import fetchUnpaidInvoicesByCustomerBeforeDate
 from isp_data_handlers import genInvoiceDCobj

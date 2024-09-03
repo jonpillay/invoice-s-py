@@ -31,6 +31,9 @@ def checkPaymentErrorAgainstUnpaidInvoices(cur, con, matchPaymentErrors):
 
   # print(matchPaymentErrors)
 
+  reMatched = []
+  stillMatchPaymentError = []
+
   for paymentErrorPair in matchPaymentErrors:
 
     transaction = paymentErrorPair[0]
@@ -38,7 +41,11 @@ def checkPaymentErrorAgainstUnpaidInvoices(cur, con, matchPaymentErrors):
 
     candInvoices = fetchUnpaidInvoicesByCustomer(invoice.customer_id, cur)
 
-    print(candInvoices)
+    for candInvoice in candInvoices:
+
+      if candInvoice.amount == transaction.amount:
+
+        pass
 
 
 checkPaymentErrorAgainstUnpaidInvoices(cur, con, matchPaymentErrorTestList)

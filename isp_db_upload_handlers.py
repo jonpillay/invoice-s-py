@@ -157,10 +157,6 @@ def handleTransactionUpload(root, filename):
       invoice = genInvoiceDCobj(invoiceClean)
       matches.append([transaction, invoice])
 
-  for i in matches:
-    print(i[0].amount)
-    print(i[0].paid_by)
-
 
   for transaction, invoice in matches:
 
