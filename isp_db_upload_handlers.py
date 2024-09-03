@@ -225,11 +225,11 @@ def handleTransactionUpload(root, filename):
 
   # Resolve Payment Errors
 
-  checkPaymentErrorAgainstUnpaidInvoices(cur, con, matchPaymentError)
+  invoiceNumCorrected, stillMatchPaymentError = checkPaymentErrorAgainstUnpaidInvoices(cur, con, root, matchPaymentError)
 
 
   # rematch payment errors against updated DB
-  reMatched, noMatch = reMatchPaymentErrors(matchPaymentError, cur)
+  reMatched, noMatch = reMatchPaymentErrors(stillMatchPaymentError, cur)
 
 
   # print("Transaction count @line 220")

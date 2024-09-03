@@ -21,12 +21,10 @@ def openRematchTransactionPrompt(root, transaction, errorInvoice, reMatchInvoice
   prompt_frame = tkb.Frame(main_frame)
   prompt_frame.pack()
 
-  formattedTransDate = transaction.date_issued.strftime("%d/%m/%Y")
-
   prompt_label = tkb.Label(prompt_frame, text=f"Transaction from {transaction.paid_by} marked with invoice # {transaction.invoice_num}", font=('Helvetica-bold', 11), justify='center')
   prompt_label.pack(pady=10)
 
-  renderPromptTransactions(root, [transaction])
+  renderPromptTransactions(prompt_frame, [transaction])
 
   errorAmount = round(errorInvoice.amount - transaction.amount, 2)
 
@@ -34,17 +32,17 @@ def openRematchTransactionPrompt(root, transaction, errorInvoice, reMatchInvoice
   prompt_label.pack(pady=10)
 
   if errorInvoice.error_notes == None:
-    renderSimplePromptInvoices(root, [errorInvoice])
+    renderSimplePromptInvoices(prompt_frame, [errorInvoice])
   else:
-    renderPromptInvoices(root, [errorInvoice])
+    renderPromptInvoices(prompt_frame, [errorInvoice])
 
   prompt_label = tkb.Label(prompt_frame, text=f"Transaction amount matches exactly to Invoice # {reMatchInvoice.invoice_num}", font=('Helvetica-bold', 11), justify='center')
   prompt_label.pack(pady=10)
 
   if reMatchInvoice.error_notes == None:
-    renderSimplePromptInvoices(root, [reMatchInvoice])
+    renderSimplePromptInvoices(prompt_frame, [reMatchInvoice])
   else:
-    renderPromptInvoices(root, [reMatchInvoice])
+    renderPromptInvoices(prompt_frame, [reMatchInvoice])
 
   verification_frame = tkb.Frame(main_frame)
   verification_frame.pack(pady=10)

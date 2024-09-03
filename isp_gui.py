@@ -24,5 +24,7 @@ def startApp():
 
   root.mainloop()
 
+  return root
+
 if __name__ == "__main__":
   startApp()
