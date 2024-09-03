@@ -225,8 +225,9 @@ def handleTransactionUpload(root, filename):
 
   # Resolve Payment Errors
 
-  invoiceNumCorrected, stillMatchPaymentError = checkPaymentErrorAgainstUnpaidInvoices(cur, con, root, matchPaymentError)
+  invoiceNumCorrectedList, stillMatchPaymentError = checkPaymentErrorAgainstUnpaidInvoices(cur, con, root, matchPaymentError)
 
+  invoiceNumRematchedReport = ['invoiceNumRematchedReport', invoiceNumCorrectedList]
 
   # rematch payment errors against updated DB
   reMatched, noMatch = reMatchPaymentErrors(stillMatchPaymentError, cur)
@@ -315,9 +316,8 @@ def handleTransactionUpload(root, filename):
   print(len(finalNoMatch[1])) #28
   print(len(newCustomerTransactions[1])) #2
 
-  finalListOfLists = [matchedSingles, correctedErrorsReport, correctionTransactionErrorsReport, inCompMatched, inCompErrorCorrectionMatched, uploadedMultiTransactionPairs, multiErrorFlagged, multiInvoiceErrors, inCompMultiMatch, finalNoMatch, newCustomerTransactions]
+  finalListOfLists = [matchedSingles, correctedErrorsReport, invoiceNumRematchedReport, correctionTransactionErrorsReport, inCompMatched, inCompErrorCorrectionMatched, uploadedMultiTransactionPairs, multiErrorFlagged, multiInvoiceErrors, inCompMultiMatch, finalNoMatch, newCustomerTransactions]
 
-  finalListOfListsStr = [str(resultCat) for resultCat in finalListOfLists]
 
   outputPrintDict = {output[0]: output[1] for output in finalListOfLists}
 

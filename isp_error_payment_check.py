@@ -1,6 +1,7 @@
 from isp_db_helpers import fetchUnpaidInvoicesByCustomer
 from isp_rematch_trans_prompt import openRematchTransactionPrompt
 from isp_data_handlers import genInvoiceDCobj
+from isp_db_helpers import addErrorTransactionToDB
 from isp_dataframes import Transaction, Invoice
 
 import tkinter as tk
@@ -56,9 +57,14 @@ def checkPaymentErrorAgainstUnpaidInvoices(cur, con, root, matchPaymentErrors):
 
         if reMatchVerifyBool.get() == True:
 
-          transaction.error_notes == f"*INVOICE NUM CORRECTED* from {invoice.invoice_num}"
-          transaction.invoice_num == candInvoiceDC.invoice_num
-          transaction.invoice_id ==  candInvoiceDC.invoice_id
+          transaction.error_notes = f"*INVOICE NUM CORRECTED* from {invoice.invoice_num}"
+          transaction.invoice_num = candInvoiceDC.invoice_num
+          transaction.invoice_id = candInvoiceDC.invoice_id
+          transaction.error_flagged = 0
+          transaction.customer_id = candInvoiceDC.customer_id
+          transaction.invoice_id = candInvoiceDC.invoice_id
+
+          addErrorTransactionToDB(transaction.as_tuple(), con, cur)
 
           resultList = [transaction, invoice, candInvoiceDC]
 

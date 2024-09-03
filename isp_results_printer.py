@@ -57,6 +57,14 @@ def print_transaction_upload_results(outputDict):
 
             results.printMatchedSingles(matchedSingle)
 
+        elif category == 'invoiceNumRematchedReport':
+
+          results.printCategoryTitle("Invoice Number Corrected - Transaction Rematched")
+
+          for correctInvoiceNum in catResults:
+
+            results.printInvoiceNumCorrectedReport(correctInvoiceNum)
+
         elif category == 'correctedErrorsReport':
 
           results.printCategoryTitle("Single Invoice Transactions -  Corrected Payment Errors")

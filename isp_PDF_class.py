@@ -136,6 +136,43 @@ class TransactionUploadPDF(FPDF):
 
     self.ln(8)
 
+  def printInvoiceNumCorrectedReport(self, invoiceNumCorrected):
+
+    transaction = invoiceNumCorrected[0]
+    errorInvoice = invoiceNumCorrected[1]
+    correctInvoice = invoiceNumCorrected[2]
+
+    self.printInvoiceNumber(correctInvoice)
+
+    self.ln(8)
+    self.set_x(20)
+
+    self.printInlineDescription(f"Incoming Transaction Had Errornous Invoice Number {errorInvoice.invoice_num} (now corrected)")
+
+    self.ln(5)
+
+    self.printTransaction(transaction)
+
+    self.ln(5)
+    self.set_x(20)
+
+    self.printInlineDescription(f"Does Not Match")
+
+    self.ln(5)
+
+    self.printInvoice(errorInvoice)
+
+    self.ln(5)
+
+    self.printInlineDescription(f"Matches amount on invoice # {correctInvoice.invoice_num} via amount {correctInvoice.amount}")
+
+    self.ln(5)
+
+    self.printInvoice(correctInvoice)
+
+    self.ln(8)
+
+
   def printCorrectedErrorsReport(self, correctedError):
 
     transaction = correctedError[0][0]
