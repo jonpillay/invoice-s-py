@@ -135,5 +135,5 @@ def print_transaction_upload_results(outputDict):
   results.output('../test.pdf')
 
 
-
-# print_transaction_upload_results(testOutputDict)
+if __name__ == "__main__":
+  print_transaction_upload_results(testOutputDict)

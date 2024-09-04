@@ -203,11 +203,17 @@ def handleTransactionUpload(root, filename):
  
   multiVerified, multiErrorFlaggedList, multiInvoiceErrorsList = resolveMultiInvoiceTransactions(root, cur, con, multiRec)
 
+  # upLoad parent transaction and gen multi dummy transactions.
+
   dummyTransactions, uploadedMultiTransactionPairsList = genMultiTransactions(multiVerified, cur, con)
 
   dummyTransactionTuples = [dummyTrans.as_tuple() for dummyTrans in dummyTransactions]
 
   addDummyTransactionsToDB(dummyTransactionTuples, cur, con)
+
+  # need to upload the incomng multi transactions from multiErrors and also multi flagged - both should have error notes
+  # multi error elements are tuples => (incoming transaction, invoices supposed to pay for)
+  # multi error flagged are lists => [incoming transaction, invoices supposed to pay for] 
 
   con.commit()
 
@@ -323,13 +329,13 @@ def handleTransactionUpload(root, filename):
 
   print_transaction_upload_results(outputPrintDict)
 
-  # print(type(outputPrintDict))
+  print(type(outputPrintDict))
 
-  # f = open("../output.txt", "a")
+  f = open("../output.txt", "a")
 
-  # f.write(str(outputPrintDict))
+  f.write(str(outputPrintDict))
 
-  # f.close()
+  f.close()
   
 
   """

@@ -142,31 +142,37 @@ class TransactionUploadPDF(FPDF):
     errorInvoice = invoiceNumCorrected[1]
     correctInvoice = invoiceNumCorrected[2]
 
-    self.printInvoiceNumber(correctInvoice)
+    self.printInvoiceNumber(correctInvoice.invoice_num)
 
-    self.ln(8)
-    self.set_x(20)
+    self.set_x(15)
 
-    self.printInlineDescription(f"Incoming Transaction Had Errornous Invoice Number {errorInvoice.invoice_num} (now corrected)")
+    self.printInlineDescription(f"Incoming Transaction Had Errornous Invoice Number")
+    self.set_x(90)
+    self.printInlineBold(f"{errorInvoice.invoice_num} ")
+    self.printInlineDescription(" (now corrected)")
 
     self.ln(5)
+    self.set_x(20)
 
     self.printTransaction(transaction)
 
     self.ln(5)
-    self.set_x(20)
+    self.set_x(15)
 
     self.printInlineDescription(f"Does Not Match")
 
     self.ln(5)
+    self.set_x(20)
 
     self.printInvoice(errorInvoice)
 
     self.ln(5)
+    self.set_x(15)
 
     self.printInlineDescription(f"Matches amount on invoice # {correctInvoice.invoice_num} via amount {correctInvoice.amount}")
 
     self.ln(5)
+    self.set_x(20)
 
     self.printInvoice(correctInvoice)
 
@@ -269,6 +275,7 @@ class TransactionUploadPDF(FPDF):
     self.ln(8)
     self.set_x(20)
 
+
   def printErrorMatchedToPreviousError(self, multiErrorCorrectionTransaction):
 
     transaction = multiErrorCorrectionTransaction[0][0]
@@ -311,7 +318,7 @@ class TransactionUploadPDF(FPDF):
       self.printErrorMatchedToSingleInvoice(correctionTransaction)
     elif isinstance(correctionTransaction[1], Transaction):
       # the element is a report on an error that has been matched to correct a previous error
-      pass
+      self.printErrorMatchedToPreviousError(correctionTransaction)
     else:
       print("we should not reach here")
 
