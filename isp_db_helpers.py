@@ -253,6 +253,14 @@ def addParentTransactionToDB(transactionTuple, cur, con):
 
   return transID
 
+def addParentErrorTransactionsToDB(transactionTuples, cur, con):
+  
+  sql = "INSERT INTO TRANSACTIONS (amount, paid_on, company_name, payment_method, og_string, invoice_num, high_invoice, error_flagged, error_notes, customer_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
+
+  cur.executemany(sql, transactionTuples)
+
+  con.commit()
+
 
 
 def addDummyTransactionsToDB(transactionUploadList, cur, con):

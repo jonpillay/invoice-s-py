@@ -12,13 +12,6 @@ from datetime import datetime
 
 def resolveNameMismatches(root, cur, conn, matchNameErrors):
 
-  """
-  
-  Getting double transaction records. With IDs jusmping 23, and then if shows again 22, think I have a problem with a loop,
-  I think it may be this loop. Will start with testing the length of matchNameErrors... in the morning.
-  
-  """
-
   unMatchable = []
   nameResolved = []
   
@@ -195,9 +188,13 @@ def resolveMultiInvoiceTransactions(root, cur, con, multiRecs):
 
       multiInvoiceMatches.append(matchTuple)
     else:
-      errorTuple = (rec, invoiceOBJs)
 
-      multiInvoiceErrors.append(errorTuple)
+      rec.error_flagged = 1
+      rec.error_notes = f"Transaction Supposed to pay for {rec.low_invoice} - {rec.high_invoice}. Amounts Do Not Match."
+
+      errorList = [rec, invoiceOBJs]
+
+      multiInvoiceErrors.append(errorList)
 
   matchCount = len(multiInvoiceMatches)
 
@@ -225,6 +222,9 @@ def resolveMultiInvoiceTransactions(root, cur, con, multiRecs):
           multiInvoiceMatches.pop(0)
           break
         elif verifyBool.get() == False:
+
+          checkTrans.error_flagged = 1
+          checkTrans.error_notes = f"Transaction Supposed To Pay For {checkTrans.low_invoice} - {checkTrans.high_invoice}. Error Flagged By User"
           
           errorList = [checkTrans, checkInvoices]
 

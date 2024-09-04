@@ -9,7 +9,7 @@ import json
 
 from isp_csv_helpers import cleanTransactionRaw, cleanInvoiceListRawGenCustomerList
 from isp_trans_verify import verifyTransactionDetails, verifyAlias, verifyTransactionAmount, checkIfTransactionListContainsErrorCorrections
-from isp_db_helpers import getInvoiceNumsIDs, fetchInvoiceByNum, fetchUnpaidInvoiceByNum, addTransactionsToDB, addNewCustomersToDB, getDBInvoiceNums, getCustomerNamesIDs, resolveNewCustomersDB, addCashInvoicesAndTransactions, addInvoicesToDB, addDummyTransactionsToDB, addCorrectedTransactionPairsDB
+from isp_db_helpers import getInvoiceNumsIDs, fetchInvoiceByNum, fetchUnpaidInvoiceByNum, addTransactionsToDB, addNewCustomersToDB, getDBInvoiceNums, getCustomerNamesIDs, resolveNewCustomersDB, addCashInvoicesAndTransactions, addInvoicesToDB, addDummyTransactionsToDB, addCorrectedTransactionPairsDB, addParentErrorTransactionsToDB
 from isp_data_handlers import constructCustomerAliasesDict, constructCustomerIDict, prepInvoiceUploadList, genInvoiceDCobj, genTransactionDCobj, genMultiTransactionDCobj, prepMatchedTransforDB, genMultiTransactions, reMatchPaymentErrors, genNoNumTransactionDCobj
 from isp_resolvers import resolveNameMismatches, resolvePaymentErrors, resolveMultiInvoiceTransactions, resolveNoMatchTransactions
 from isp_multi_invoice_prompt import openSelectBetweenInvoices
@@ -178,6 +178,8 @@ def handleTransactionUpload(root, filename):
 
   # resolve name mismatches
   nameResolved, namesUnresolved, resolvedNamePaymentErrors = resolveNameMismatches(root, cur, con, matchNameError)
+
+  incompRec.append(namesUnresolved)
   
   # print(len(matchPaymentError)+len(nameResolved)+len(matchedSingles)+len(noMatchFromNum)+len(incompRec)+len(multiRec))
   # records are complete at this point
@@ -212,8 +214,16 @@ def handleTransactionUpload(root, filename):
   addDummyTransactionsToDB(dummyTransactionTuples, cur, con)
 
   # need to upload the incomng multi transactions from multiErrors and also multi flagged - both should have error notes
-  # multi error elements are tuples => (incoming transaction, invoices supposed to pay for)
   # multi error flagged are lists => [incoming transaction, invoices supposed to pay for] 
+  # multi error elements are tuples => (incoming transaction, invoices supposed to pay for)
+
+  multiErrorFlaggedTuples = [errorFlagged.as_tuple() for errorFlagged in multiErrorFlaggedList]
+  multiInvoiceErrorTuples = [multiInvoiceError.as_tuple() for multiInvoiceError in multiInvoiceErrorsList]
+
+
+  addParentErrorTransactionsToDB(multiErrorFlaggedTuples, cur, con)
+  addParentErrorTransactionsToDB(multiInvoiceErrorTuples, cur, con)
+
 
   con.commit()
 
