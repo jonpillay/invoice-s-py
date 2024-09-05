@@ -10,6 +10,11 @@ from isp_printer_helpers import getCellWidth, genFontPath
 
 class TransactionUploadPDF(FPDF):
 
+  def __init__(self, *args, **kwargs):
+      super().__init__(*args, **kwargs)
+
+      self.set_auto_page_break(auto=True, margin=10) 
+
   def register_fonts(self):
     self.add_font("alpha-slab", fname="./fonts/AlfaSlabOne-Regular.ttf")
     self.add_font("jersey10", fname="./fonts/Jersey10-Regular.ttf")
@@ -21,13 +26,19 @@ class TransactionUploadPDF(FPDF):
 
   def header(self):
 
-    self.set_font('times', 'BU', 25)
-    self.set_x(20)
-    self.cell(0, 15, 'KFS Transaction Upload Report', border=0, new_y=YPos.NEXT)
-    self.set_font('times', 'b', 15)
-    self.set_x(25)
-    self.cell(0, 7, f'This is some holder text')
-    self.ln(10)
+    if self.page_no() == 1:
+
+      self.set_font('times', 'BU', 25)
+      self.set_x(20)
+      self.cell(0, 15, 'KFS Transaction Upload Report', border=0, new_y=YPos.NEXT)
+      self.set_font('times', 'b', 15)
+      self.set_x(25)
+      self.cell(0, 7, f'This is some holder text')
+      self.ln(10)
+
+    else:
+      self.set_x(20)
+      self.set_y(15)
 
   def printCustomerName(self, customer):
     self.set_font('ultra', 'U', 20)
