@@ -218,6 +218,19 @@ def addTransactionToDB(transactionTuple, con, cur):
   return transID
 
 
+def addErrorNoteTransactionToDB(transactionTuple, con, cur):
+  
+  sql = "INSERT INTO TRANSACTIONS (amount, paid_on, company_name, payment_method, og_string, invoice_num, error_notes, customer_id, invoice_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)"
+
+  cur.execute(sql, transactionTuple)
+
+  con.commit()
+
+  transID = cur.lastrowid
+
+  return transID
+
+
 
 def addErrorTransactionToDB(transactionTuple, con, cur):
   

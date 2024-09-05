@@ -212,7 +212,7 @@ def genMultiTransactions(multiTransInvPairs, cur, con):
 
   """  
 
-  transactionUploadList = []
+  dummyTransactionUploadList = []
 
   uploadedMultiTransactionPairs = []
   
@@ -235,12 +235,12 @@ def genMultiTransactions(multiTransInvPairs, cur, con):
       dummyTransaction.invoice_id = invoice.invoice_id
       dummyTransaction.parent_trans = transactionID
 
-      transactionUploadList.append(dummyTransaction)
+      dummyTransactionUploadList.append(dummyTransaction)
       splitTransactions.append(dummyTransaction)
 
     uploadedMultiTransactionPairs.append([splitTransactions, invoices])
 
-  return transactionUploadList, uploadedMultiTransactionPairs
+  return dummyTransactionUploadList, uploadedMultiTransactionPairs
 
 
 def prepMatchedTransforDB(transaction, invoice):

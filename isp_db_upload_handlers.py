@@ -97,6 +97,7 @@ def handleTransactionUpload(root, filename):
       
       if len(cleanedEntry[0]) == 0:
         transDC = genNoNumTransactionDCobj(cleanedEntry)
+        transDC.error_note = "No Invoice Number Attatched"
         unsortedIncompRec.append(transDC)
       elif len(cleanedEntry[0]) == 1:
         num = cleanedEntry[0][0]
@@ -179,7 +180,7 @@ def handleTransactionUpload(root, filename):
   # resolve name mismatches
   nameResolved, namesUnresolved, resolvedNamePaymentErrors = resolveNameMismatches(root, cur, con, matchNameError)
 
-  incompRec.append(namesUnresolved)
+  incompRec.extend(namesUnresolved)
   
   # print(len(matchPaymentError)+len(nameResolved)+len(matchedSingles)+len(noMatchFromNum)+len(incompRec)+len(multiRec))
   # records are complete at this point
@@ -313,17 +314,31 @@ def handleTransactionUpload(root, filename):
 
   inCompErrorCorrectionMatchedList, finalNoMatchList = final_resolver(root, noMatches, cur, con)
 
+  errorNoteCount = 0
+
+  print("Final No match list count")
+  print(len(finalNoMatchList))
+
+  for i in finalNoMatchList:
+
+    if i.error_notes != None:
+      errorNoteCount += 1
+
+  print(errorNoteCount)
+
   inCompErrorCorrectionMatched = ['inCompErrorCorrectionMatched', inCompErrorCorrectionMatchedList]
 
   finalNoMatch = ['finalNoMatch', finalNoMatchList]
 
   print("This is the final count of all final transaction lists")
-  print(len(matchedSingles[1]) + len(correctedErrorsReport[1]) + len(correctionTransactionErrorsReport[1]) + len(inCompMatched[1]) + len(inCompErrorCorrectionMatched[1]) + len(uploadedMultiTransactionPairs[1]) + len(inCompMultiMatch[1]) + len(finalNoMatch[1]) + len(multiErrorFlagged[1]) + len(multiInvoiceErrors[1]) + len(newCustomerTransactions[1]))
+
+  print(len(matchedSingles[1]) + len(correctedErrorsReport[1]) + len(invoiceNumRematchedReport[1]) + len(correctionTransactionErrorsReport[1]) + len(inCompMatched[1]) + len(inCompErrorCorrectionMatched[1]) + len(uploadedMultiTransactionPairs[1]) + len(inCompMultiMatch[1]) + len(finalNoMatch[1]) + len(multiErrorFlagged[1]) + len(multiInvoiceErrors[1]) + len(newCustomerTransactions[1]))
 
   print(len(matchedSingles[1])) #255
-  print(len(correctedErrorsReport[1])) #6
+  print(len(correctedErrorsReport[1])) #0
+  print(len(invoiceNumRematchedReport[1])) #2
   print(len(correctionTransactionErrorsReport[1])) #0
-  print(len(inCompMatched[1])) #22
+  print(len(inCompMatched[1])) #21
   print(len(inCompErrorCorrectionMatched[1])) #0
   print(len(uploadedMultiTransactionPairs[1])) #7
   print(len(multiErrorFlagged[1])) #0
@@ -341,7 +356,7 @@ def handleTransactionUpload(root, filename):
 
   print(type(outputPrintDict))
 
-  f = open("../output.txt", "a")
+  f = open("../output.txt", "w")
 
   f.write(str(outputPrintDict))
 

@@ -1,5 +1,5 @@
 from isp_dataframes import Transaction, Invoice
-from isp_db_helpers import getCustomerID, fetchRangeInvoicesByCustomer, getCustomerNamesIDs, addAliasToDB, addNewCustomerToDB, addTransactionToDB, findCustomerIDInTup, fetchUnpaidInvoicesByCustomerDateRange, fetchUnpaidInvoicesByCustomerBeforeDate, updateInvoiceRec, addDummyTransactionsToDB, addDummyNoteTransactionsToDB, addErrorTransactionToDB
+from isp_db_helpers import getCustomerID, fetchRangeInvoicesByCustomer, getCustomerNamesIDs, addAliasToDB, addNewCustomerToDB, addTransactionToDB, findCustomerIDInTup, fetchUnpaidInvoicesByCustomerDateRange, fetchUnpaidInvoicesByCustomerBeforeDate, updateInvoiceRec, addDummyTransactionsToDB, addDummyNoteTransactionsToDB, addErrorTransactionToDB, addErrorNoteTransactionToDB
 from isp_popup_window import openTransactionAliasPrompt, openTransactionPaymentErrorPrompt, openNewCustomerPrompt
 from isp_data_handlers import constructCustomerAliasesDict, genInvoiceDCobj, genNoNumTransactionDCobj, prepMatchedTransforDB, constructCustomerIDict, getCustomerIDForTrans, prepNewlyMatchedTransactionForDB, prepNewlyMatchedErrorTransactionForDB, genMultiTransactions
 from isp_data_comparers import compareCustomerToAliasesDict, getCustomerDBName
@@ -86,6 +86,7 @@ def resolveNameMismatches(root, cur, conn, matchNameErrors):
       elif aliasBool.get() == False and rejectedBool.get() == True:
 
         unMatchable.append(error)
+        error.error_notes = "Names Do Not Match. Assumed incorrect invoice number."
         index += 1
         continue
 
@@ -369,9 +370,11 @@ def resolveNoMatchTransactions(root, incompTransactions, cur, con):
 
         preppedTransaction = prepNewlyMatchedTransactionForDB(transaction, matchedInvoice)
 
+        preppedTransaction.error_notes = "Matched Via Amount to Invoice."
+
         transactionTuple = preppedTransaction.as_tuple()
 
-        addTransactionToDB(transactionTuple, con, cur)
+        addErrorNoteTransactionToDB(transactionTuple, con, cur)
 
         paidInvoiceMemo.append(matchedInvoice.invoice_num)
 
@@ -400,9 +403,11 @@ def resolveNoMatchTransactions(root, incompTransactions, cur, con):
 
           preppedTransaction = prepNewlyMatchedTransactionForDB(transaction, selectedInvoice)
 
+          preppedTransaction.error_notes = "Matched Via Amount To Invoice. User Selected."
+
           transactionTuple = preppedTransaction.as_tuple()
 
-          addTransactionToDB(transactionTuple, con, cur)
+          addErrorNoteTransactionToDB(transactionTuple, con, cur)
 
           matched.append([preppedTransaction, selectedInvoice])
 

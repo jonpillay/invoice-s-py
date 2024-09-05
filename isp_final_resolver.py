@@ -1,7 +1,7 @@
 import tkinter as tk
 
 from isp_data_handlers import groupDataClassObjsByAttribute, genDBInvoiceDCobj, genDBTransactionDCobj, prepMatchedTransforDB
-from isp_db_helpers import fetchInvoicesByCustomerBeforeDate, fetchTransactionsByInvoiceID, updateTransactionRec, updateInvoiceRec, addTransactionToDB, addDummyNoteTransactionsToDB
+from isp_db_helpers import fetchInvoicesByCustomerBeforeDate, fetchTransactionsByInvoiceID, updateTransactionRec, updateInvoiceRec, addTransactionToDB, addDummyNoteTransactionsToDB, addErrorNoteTransactionToDB
 from isp_trans_verify import checkIfNoNumTransactionErrorIsCorrection
 from isp_close_enough_prompts import openVerifyErrorCorrectionCloseEnoughMatch
 
@@ -27,8 +27,6 @@ def final_resolver(root, matchlessList, cur, con):
 
       # each Transaction here has been unable to match to an invoice, either it doesn't have an invoice number,
       # or invoice number was an error.
-
-      possibleMatches = []
 
       bestMatch = None
 
@@ -142,7 +140,7 @@ def final_resolver(root, matchlessList, cur, con):
 
             transTup = transaction.as_tuple()
 
-            recordedTrans = addTransactionToDB(transTup, con, cur)
+            recordedTrans = addErrorNoteTransactionToDB(transTup, con, cur)
 
             dummyTransactionErrorNote = f"Transaction is corrected by trans ID {recordedTrans}"
 
@@ -177,7 +175,7 @@ def final_resolver(root, matchlessList, cur, con):
 
             transTup = transaction.as_tuple()
 
-            recordedTrans = addTransactionToDB(transTup, con, cur)
+            recordedTrans = addErrorNoteTransactionToDB(transTup, con, cur)
 
             dummyTransactionErrorNote = f"Transaction is corrected by trans ID {recordedTrans}"
 

@@ -31,9 +31,6 @@ against the customers unpaid invoices to see if a closer amount match can be mad
 
 def checkPaymentErrorAgainstUnpaidInvoices(cur, con, root, matchPaymentErrors):
 
-  print("match payment error list for testing")
-
-  # print(matchPaymentErrors)
 
   reMatched = []
   stillMatchPaymentError = []
@@ -46,6 +43,8 @@ def checkPaymentErrorAgainstUnpaidInvoices(cur, con, root, matchPaymentErrors):
     candInvoices = fetchUnpaidInvoicesByCustomer(invoice.customer_id, cur)
 
     candInvoiceDCs = [genInvoiceDCobj(candInvoice) for candInvoice in candInvoices]
+
+    matched = False
 
     for candInvoiceDC in candInvoiceDCs:
 
@@ -70,9 +69,16 @@ def checkPaymentErrorAgainstUnpaidInvoices(cur, con, root, matchPaymentErrors):
 
           reMatched.append(resultList)
 
+          matched = True
+
+          break
+
         else:
 
           stillMatchPaymentError.append(paymentErrorPair)
+
+    if not matched:
+      stillMatchPaymentError.append(paymentErrorPair)
 
   return reMatched, stillMatchPaymentError
 
