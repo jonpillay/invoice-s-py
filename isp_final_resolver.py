@@ -186,7 +186,6 @@ def final_resolver(root, matchlessList, cur, con):
             matched.append([transaction, matchedInvoice, errorTransaction, bestMatch[0]])
 
         else:
-          
           nonMatchable.append(transaction)
 
       else:

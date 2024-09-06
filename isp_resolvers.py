@@ -1,5 +1,5 @@
 from isp_dataframes import Transaction, Invoice
-from isp_db_helpers import getCustomerID, fetchRangeInvoicesByCustomer, getCustomerNamesIDs, addAliasToDB, addNewCustomerToDB, addTransactionToDB, findCustomerIDInTup, fetchUnpaidInvoicesByCustomerDateRange, fetchUnpaidInvoicesByCustomerBeforeDate, updateInvoiceRec, addDummyTransactionsToDB, addDummyNoteTransactionsToDB, addErrorTransactionToDB, addErrorNoteTransactionToDB
+from isp_db_helpers import getCustomerID, fetchRangeInvoicesByCustomer, getCustomerNamesIDs, addAliasToDB, addNewCustomerToDB, addTransactionToDB, findCustomerIDInTup, fetchUnpaidInvoicesByCustomerDateRange, fetchUnpaidInvoicesByCustomerBeforeDate, updateInvoiceRec, addDummyTransactionsToDB, addDummyNoteTransactionsToDB, addErrorTransactionToDB, addErrorNoteTransactionToDB, addNewCustomerTransactionsToDB
 from isp_popup_window import openTransactionAliasPrompt, openTransactionPaymentErrorPrompt, openNewCustomerPrompt
 from isp_data_handlers import constructCustomerAliasesDict, genInvoiceDCobj, genNoNumTransactionDCobj, prepMatchedTransforDB, constructCustomerIDict, getCustomerIDForTrans, prepNewlyMatchedTransactionForDB, prepNewlyMatchedErrorTransactionForDB, genMultiTransactions
 from isp_data_comparers import compareCustomerToAliasesDict, getCustomerDBName
@@ -307,7 +307,7 @@ def resolvePaymentErrors(root, paymentErrors, cur, con):
 
         transaction.error_flagged = 1
 
-        transaction.error_notes = f"Transaction Invoice # Error - {noteString.get()}"
+        transaction.error_notes = f"Incorrect Invoice Number - {noteString.get()}"
 
         errors.append(transaction)
 
@@ -338,6 +338,7 @@ def resolveNoMatchTransactions(root, incompTransactions, cur, con):
 
   existingCustomerTransactions, newCustomersTransactions = getCustomerIDForTrans(root, incompTransactions, cur, con)
 
+  addNewCustomerTransactionsToDB(newCustomersTransactions, con, cur)
 
   matched = []
   noMatches = []
@@ -356,6 +357,7 @@ def resolveNoMatchTransactions(root, incompTransactions, cur, con):
       candInvoices = fetchUnpaidInvoicesByCustomerBeforeDate(transaction.paid_on, transaction.customer_id, cur)
 
       if len(candInvoices) == 0:
+        transaction.error_notes = ""
         noMatches.append(transaction)
         existingCustomerTransactions.pop(0)
         break
@@ -475,7 +477,7 @@ def resolveNoMatchTransactions(root, incompTransactions, cur, con):
             correctionAmount = round((invoice.amount - transaction.amount), 2)
 
             transaction.error_flagged = 1
-            transaction.error_notes = f"CORRECTED BY = {correctionAmount}"
+            transaction.error_notes = f"CORRECTED BY = {correctionAmount}. User Verified."
 
             preppedTransaction = prepNewlyMatchedErrorTransactionForDB(transaction, invoice)
 

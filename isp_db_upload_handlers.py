@@ -97,7 +97,7 @@ def handleTransactionUpload(root, filename):
       
       if len(cleanedEntry[0]) == 0:
         transDC = genNoNumTransactionDCobj(cleanedEntry)
-        transDC.error_note = "No Invoice Number Attatched"
+        transDC.error_notes = "No Invoice Number Attatched"
         unsortedIncompRec.append(transDC)
       elif len(cleanedEntry[0]) == 1:
         num = cleanedEntry[0][0]
@@ -152,6 +152,7 @@ def handleTransactionUpload(root, filename):
     invoice = fetchInvoiceByNum(invoiceNum, cur)
 
     if len(invoice) == 0:
+      transaction.error_notes = "No Match For Invoice Number Found."
       incompRec.append(transaction)
     else:
       invoiceClean = [el for el in invoice[0] if el != None]
@@ -257,6 +258,10 @@ def handleTransactionUpload(root, filename):
 
   # print(len(reMatched))
 
+  """
+    *** seems counter intuative to run this here as the system should possibly check if the errors are corrections first? ***
+  """
+
   correctedErrors, incorrectInvoiceNums = resolvePaymentErrors(root, reMatched, cur, con)
 
 
@@ -281,6 +286,11 @@ def handleTransactionUpload(root, filename):
   # function now returns two lists. correctedErrorsReport is a list of incoming transactions that have had to be corrected
   # and have not found a previous error they relate to.
   # correctionTransactionErrorsReport is a list of the incoming transaction and the invoice/s or dummy transaction they pay for.
+
+  """
+    *** This (checkIfTransactionListContainsErrorCorrections) should possibly be reordered to before resolvePaymentErrors.
+        At the moment forces the user to come back to the transactions previously examined/verified.
+  """
 
   correctedErrorsReportList, correctionTransactionErrorsReportList = checkIfTransactionListContainsErrorCorrections(root, updatedCorrectedErrors, con, cur)
 
@@ -319,10 +329,13 @@ def handleTransactionUpload(root, filename):
   print("Final No match list count")
   print(len(finalNoMatchList))
 
-  for i in finalNoMatchList:
+  dateToday = datetime.today()
 
-    if i.error_notes != None:
-      errorNoteCount += 1
+  for transaction in finalNoMatchList:
+
+    updateErrorNote = transaction.error_notes + f" - No Match Found On {dateToday}"
+
+    transaction.error_note = updateErrorNote
 
   print(errorNoteCount)
 

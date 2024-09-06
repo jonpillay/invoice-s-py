@@ -297,6 +297,13 @@ def addDummyNoteTransactionsToDB(transactionUploadList, con, cur):
 
   return transID
 
+def addNewCustomerTransactionsToDB(newCustomerTransactions, con, cur):
+
+  sql = "INSERT INTO TRANSACTIONS (amount, paid_on, company_name, payment_method, og_string, error_flagged, error_notes, customer_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?)"
+
+  cur.executemany(sql, newCustomerTransactions)
+
+  con.commit()
 
 
 def addNewCustomerToDB(customerName, cur):

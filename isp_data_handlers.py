@@ -357,7 +357,7 @@ def getCustomerIDForTrans(root, transList, cur, con):
 
         if newCustomerBool.get() == True:
 
-          errorStr = f"{datetime.today().strftime('%Y-%m-%d')} CUSTOMER ADDED TO DATABASE"
+          errorStr = f"{datetime.today().strftime('%d-%m-%Y')} CUSTOMER ADDED TO DATABASE - NO INVOICE PRESENT"
 
           transaction.customer_id = customerID
           transaction.error_flagged = 1
