@@ -338,7 +338,9 @@ def resolveNoMatchTransactions(root, incompTransactions, cur, con):
 
   existingCustomerTransactions, newCustomersTransactions = getCustomerIDForTrans(root, incompTransactions, cur, con)
 
-  addNewCustomerTransactionsToDB(newCustomersTransactions, con, cur)
+  newCustomersTransactionsTups = [newCustomerTransaction.as_tuple() for newCustomerTransaction in newCustomersTransactions]
+
+  addNewCustomerTransactionsToDB(newCustomersTransactionsTups, con, cur)
 
   matched = []
   noMatches = []
@@ -610,14 +612,11 @@ def resolveNoMatchTransactions2(root, incompTransactions, cur, con):
     if len(candInvoices) == 0:
       noMatches.append(transaction)
       existingCustomerTransactions.pop(0)
-      print("here innit")
       continue
 
     formattedInvoices = [genInvoiceDCobj(curInvoice) for curInvoice in candInvoices]
 
     paymentMatches = [customerInvoice for customerInvoice in formattedInvoices if verifyTransactionAmount(transaction, customerInvoice, 0.01) == True and customerInvoice.invoice_num not in paidInvoiceMemo]
-
-    print(paymentMatches)
 
     if len(paymentMatches) == 1:
 
@@ -696,8 +695,6 @@ def resolveNoMatchTransactions2(root, incompTransactions, cur, con):
         # Error here where for some reason I had a loop. Need to write popup to verify between close enoughs
 
         invoiceIDVar = tk.IntVar()
-
-        print(closeEnoughMatched)
 
         openSelectBetweenCloseEnoughInvoices(root, transaction, closeEnoughMatched, invoiceIDVar)
 

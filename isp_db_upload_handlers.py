@@ -324,11 +324,6 @@ def handleTransactionUpload(root, filename):
 
   inCompErrorCorrectionMatchedList, finalNoMatchList = final_resolver(root, noMatches, cur, con)
 
-  errorNoteCount = 0
-
-  print("Final No match list count")
-  print(len(finalNoMatchList))
-
   dateToday = datetime.today()
 
   for transaction in finalNoMatchList:
@@ -337,7 +332,7 @@ def handleTransactionUpload(root, filename):
 
     transaction.error_note = updateErrorNote
 
-  print(errorNoteCount)
+  print(finalNoMatchList)
 
   inCompErrorCorrectionMatched = ['inCompErrorCorrectionMatched', inCompErrorCorrectionMatchedList]
 
