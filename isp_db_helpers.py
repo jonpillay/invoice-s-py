@@ -306,6 +306,15 @@ def addNewCustomerTransactionsToDB(newCustomerTransactions, con, cur):
   con.commit()
 
 
+def addNoMatchTransactionsToDB(noMatchTransactions, con, cur):
+
+  sql = "INSERT INTO TRANSACTIONS (amount, paid_on, company_name, payment_method, og_string, error_flagged, error_notes, customer_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?)"
+
+  cur.executemany(sql, noMatchTransactions)
+
+  con.commit()
+
+
 def addNewCustomerToDB(customerName, cur):
 
   sql = "INSERT OR IGNORE INTO CUSTOMERS (customer_name) VALUES (?)"

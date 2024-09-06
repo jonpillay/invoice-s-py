@@ -9,7 +9,7 @@ import json
 
 from isp_csv_helpers import cleanTransactionRaw, cleanInvoiceListRawGenCustomerList
 from isp_trans_verify import verifyTransactionDetails, verifyAlias, verifyTransactionAmount, checkIfTransactionListContainsErrorCorrections
-from isp_db_helpers import getInvoiceNumsIDs, fetchInvoiceByNum, fetchUnpaidInvoiceByNum, addTransactionsToDB, addNewCustomersToDB, getDBInvoiceNums, getCustomerNamesIDs, resolveNewCustomersDB, addCashInvoicesAndTransactions, addInvoicesToDB, addDummyTransactionsToDB, addCorrectedTransactionPairsDB, addParentErrorTransactionsToDB
+from isp_db_helpers import getInvoiceNumsIDs, fetchInvoiceByNum, fetchUnpaidInvoiceByNum, addTransactionsToDB, addNewCustomersToDB, getDBInvoiceNums, getCustomerNamesIDs, resolveNewCustomersDB, addCashInvoicesAndTransactions, addInvoicesToDB, addDummyTransactionsToDB, addCorrectedTransactionPairsDB, addParentErrorTransactionsToDB, addNoMatchTransactionsToDB
 from isp_data_handlers import constructCustomerAliasesDict, constructCustomerIDict, prepInvoiceUploadList, genInvoiceDCobj, genTransactionDCobj, genMultiTransactionDCobj, prepMatchedTransforDB, genMultiTransactions, reMatchPaymentErrors, genNoNumTransactionDCobj
 from isp_resolvers import resolveNameMismatches, resolvePaymentErrors, resolveMultiInvoiceTransactions, resolveNoMatchTransactions
 from isp_multi_invoice_prompt import openSelectBetweenInvoices
@@ -324,15 +324,22 @@ def handleTransactionUpload(root, filename):
 
   inCompErrorCorrectionMatchedList, finalNoMatchList = final_resolver(root, noMatches, cur, con)
 
-  dateToday = datetime.today()
+  dateToday = datetime.today().strftime("%d-%m-%Y")
 
   for transaction in finalNoMatchList:
 
-    updateErrorNote = transaction.error_notes + f" - No Match Found On {dateToday}"
+    transaction.error_flagged = 1
+    transaction.invoice_num = None
 
-    transaction.error_note = updateErrorNote
+    if transaction.error_notes == None:
+      transaction.error_notes = f"No Match Found On {dateToday}"
+    else:
+      updatedErrorNote = f"{transaction.error_notes} - No Match Found On {dateToday}"
+      transaction.error_notes = updatedErrorNote
 
-  print(finalNoMatchList)
+  noMatchTransactionTups = [noMatchTransaction.as_tuple() for noMatchTransaction in finalNoMatchList]
+
+  addNoMatchTransactionsToDB(noMatchTransactionTups, con, cur)
 
   inCompErrorCorrectionMatched = ['inCompErrorCorrectionMatched', inCompErrorCorrectionMatchedList]
 
