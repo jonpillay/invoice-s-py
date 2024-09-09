@@ -151,9 +151,10 @@ def genDBTransactionDCobj(transaction):
     og_string=transaction[6],
     error_flagged=transaction[7],
     error_notes=transaction[8],
-    invoice_id=transaction[9],
-    customer_id=transaction[10],
-    parent_trans=transaction[11]
+    high_invoice=transaction[9],
+    invoice_id=transaction[10],
+    customer_id=transaction[11],
+    parent_trans=transaction[12]
   )
 
   return transactionDC

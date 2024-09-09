@@ -55,6 +55,10 @@ def final_resolver(root, matchlessList, cur, con):
               elif "CORDUM" in candTransaction[5]:
                 dummyTransaction = genDBTransactionDCobj(candTransaction)
 
+            print("This is from the final resolver")
+            print(dummyTransaction)
+            print(errorTransaction)
+
             # pass all three into funct to see if the error correction and any other unpaid invoice match the transaction amount
             matchCheck = checkIfNoNumTransactionErrorIsCorrection(transaction, invoiceDC, dummyTransaction, cur, con)
 

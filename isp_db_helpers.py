@@ -145,7 +145,7 @@ def fetchUnpaidInvoicesByCustomerDateRange(lowDate, highDate, customerID, cur):
 
 def fetchTransactionsByInvoiceID(invoiceID, cur):
   
-  sql = "SELECT id, invoice_num, amount, paid_on, company_name, payment_method, og_string, error_flagged, error_notes, invoice_id, customer_id, parent_trans FROM TRANSACTIONS WHERE invoice_id=?"
+  sql = "SELECT * FROM TRANSACTIONS WHERE invoice_id=?"
 
   cur.execute(sql, (invoiceID,))
 
@@ -163,6 +163,29 @@ def fetchTransactionsByCustomerPaymentMethod(paymentMethod, customerID, cur):
   transactions = cur.fetchall()
 
   return transactions
+
+
+def fetchTransactionByParentID(parentID, cur):
+  
+  sql = "SELECT * FROM TRANSACTIONS WHERE parent_trans=?"
+
+  cur.execute(sql, (parentID,))
+
+  transaction = cur.fetchall()
+
+  return transaction
+
+
+
+def fetchTransactionByID(ID, cur):
+  
+  sql = "SELECT * FROM TRANSACTIONS WHERE id=?"
+
+  cur.execute(sql, (ID,))
+
+  transaction = cur.fetchall()
+
+  return transaction
 
 
 def deleteDummyTransactionsByParentID(paarentTransID, cur, con):

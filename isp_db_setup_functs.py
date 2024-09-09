@@ -106,7 +106,7 @@ def createTransactionsTable(cur):
       error_flagged INTEGER DEFAULT NULL,
       error_notes VARCHAR(255),
       high_invoice INTEGER DEFAULT NULL,
-      invoice_id INTEGER,
+      invoice_id INTEGER DEFAULT NULL,
       customer_id INTEGER,
       parent_trans INTEGER,
       FOREIGN KEY(invoice_id) REFERENCES INVOICES(id),
