@@ -5,13 +5,8 @@ from datetime import datetime
 from isp_data_handlers import genDBInvoiceDCobj, genDBTransactionDCobj
 from isp_db_helpers import fetchTransactionByID
 
-con = sqlite3.connect(os.getenv("DB_NAME"))
 
-con.execute('PRAGMA foreign_keys = ON')
-
-cur = con.cursor()
-
-def constructInvTransMatchedPairsReport(customer_id, afterDate):
+def constructInvTransMatchedPairsReport(customer_id, afterDate, con, cur):
 
   formattedDate = datetime.strptime(afterDate, '%Y-%m-%d')
 
@@ -106,7 +101,7 @@ def constructInvTransMatchedPairsReport(customer_id, afterDate):
 
 
 
-def constructUnmatchedTransactionReport(customerID, afterDate):
+def constructUnmatchedTransactionReport(customerID, afterDate, con, cur):
   
   formattedDate = datetime.strptime(afterDate, '%Y-%m-%d')
 
@@ -147,11 +142,12 @@ The paid list returned from constructInvTransMatchedPairsReport contains both pa
 
 """
 
-def constructCreditReportDictionary(customer_id, afterDate):
+def constructCreditReportDictionary(customer_id, afterDate, con, cur):
+  
 
-  paid, unpaid, correctionAmount = constructInvTransMatchedPairsReport(customer_id, afterDate)
+  paid, unpaid, correctionAmount = constructInvTransMatchedPairsReport(customer_id, afterDate, con, cur)
 
-  unMatchedTransactions = constructUnmatchedTransactionReport(customer_id, afterDate)
+  unMatchedTransactions = constructUnmatchedTransactionReport(customer_id, afterDate, con, cur)
 
   unPaidInvoicesTotal = sum([unpaidInvoice.amount for unpaidInvoice in unpaid])
 
@@ -170,13 +166,9 @@ def constructCreditReportDictionary(customer_id, afterDate):
                       "unPaidInvoicesTotal":unPaidInvoicesTotal,
                       "unMatchedTransactionsTotal": unMatchedTransactionsTotal,
                       "ballance":ballance,
-                      "correctedBallance":correctedBalance
+                      "correctedBallance":correctedBalance,
+                      "customerID": customer_id,
+                      "afterDate":afterDate
                       }
 
   return creditReportDict
-
-print(constructCreditReportDictionary(9, '2020-10-01'))
-
-
-cur.close()
-con.close()

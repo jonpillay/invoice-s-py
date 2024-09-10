@@ -30,7 +30,7 @@ class TransactionUploadPDF(FPDF):
 
       self.set_font('times', 'BU', 25)
       self.set_x(20)
-      self.cell(0, 15, 'KFS Transaction Upload Report', border=0, new_y=YPos.NEXT)
+      self.cell(0, 15, f"KFS Report {datetime.today().strftime('%d/%m/%Y')}", border=0, new_y=YPos.NEXT)
       self.set_font('times', 'b', 15)
       self.set_x(25)
       self.cell(0, 7, f'This is some holder text')
