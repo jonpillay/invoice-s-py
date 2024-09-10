@@ -102,7 +102,7 @@ def constructInvTransMatchedPairsReport(customer_id, afterDate):
   return paid, unpaid, correctionAmount
 
 
-constructInvTransMatchedPairsReport(9, '2020-10-01')
+# constructInvTransMatchedPairsReport(9, '2020-10-01')
 
 
 
@@ -110,14 +110,17 @@ def constructUnmatchedTransactionReport(customerID, afterDate):
   
   formattedDate = datetime.strptime(afterDate, '%Y-%m-%d')
 
-  sql = f"SELECT * FROM TRANSACTIONS WHERE customer_id = ? AND paid_on > ? AND invoice_id IS NULL"
+  # fetch all transactions that have no invoice_id attached (do not pay a single transaction) and also have no high_invoice number attached (is not a multi invoice transaction).
+
+  sql = f"SELECT * FROM TRANSACTIONS WHERE customer_id = ? AND paid_on > ? AND invoice_id IS NULL AND high_invoice IS NULL"
 
   cur.execute(sql, (customerID, formattedDate))
 
   unMatchedTransactions = cur.fetchall()
 
-  for i in unMatchedTransactions:
-    print(i)
+  unMatchedTransactionDCs = [genDBTransactionDCobj(unMatched) for unMatched in unMatchedTransactions]
+
+  return unMatchedTransactionDCs
 
 
 # constructUnmatchedTransactionReport(10, '2020-10-01')
@@ -143,6 +146,36 @@ The paid list returned from constructInvTransMatchedPairsReport contains both pa
   
 
 """
+
+def constructCreditReportDictionary(customer_id, afterDate):
+
+  paid, unpaid, correctionAmount = constructInvTransMatchedPairsReport(customer_id, afterDate)
+
+  unMatchedTransactions = constructUnmatchedTransactionReport(customer_id, afterDate)
+
+  unPaidInvoicesTotal = sum([unpaidInvoice.amount for unpaidInvoice in unpaid])
+
+  unMatchedTransactionsTotal = sum([unMatchedTrans.amount for unMatchedTrans in unMatchedTransactions])
+
+  ballance = unMatchedTransactionsTotal - unPaidInvoicesTotal
+
+  correctedBalance = ballance + correctionAmount
+
+  invoicesIssued = len(paid) + len(unpaid)
+
+  creditReportDict = {"invoicesIssued":invoicesIssued, 
+                      "paid":paid, 
+                      "unpaid":unpaid, 
+                      "unMatchedTransactions":unMatchedTransactions, 
+                      "unPaidInvoicesTotal":unPaidInvoicesTotal,
+                      "unMatchedTransactionsTotal": unMatchedTransactionsTotal,
+                      "ballance":ballance,
+                      "correctedBallance":correctedBalance
+                      }
+
+  return creditReportDict
+
+print(constructCreditReportDictionary(9, '2020-10-01'))
 
 
 cur.close()
