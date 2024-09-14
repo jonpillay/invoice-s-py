@@ -4,6 +4,7 @@ import os
 from output_test import outputDict as testOutputDict
 
 from isp_db_helpers import genCustomerNamesIDsDict
+from isp_dataframes import Invoice, Transaction
 
 from isp_PDF_class import TransactionUploadPDF
 
@@ -21,7 +22,126 @@ def creditReportPrinter(creditReportDict, con, cur):
 
   customerName = customerIDsDict[creditReportDict["customerID"]]
 
-  results.printCategoryTitle(f"Credit Report for {customerName} From {creditReportDict['afterDate']}")
+  results.printCategoryTitle(f"Credit Report for ")
+  results.set_x(20)
+  results.printCustomerName(f"{customerName}")
+  results.ln(2)
+  results.set_x(25)
+
+  results.printInlineDescription("From")
+  results.printInlineBold(f"{creditReportDict['afterDate']}")
+  results.printInlineDescription("To Present -")
+  results.printInlineDescription("Invoices Issued =")
+  results.printInlineBold(f"{creditReportDict['invoicesIssued']}")
+  results.printInlineDescription(" Invoices Paid =")
+  results.printInlineBold(f"{creditReportDict['invoicesPaid']}")
+  results.ln(7)
+  results.set_x(25)
+
+  results.printInlineDescription(f"Balance To Date =")
+  results.set_x(50)
+  results.printInlineBold(f"£{creditReportDict['ballance']} ")
+  results.printInlineDescription(f"  Corrections = ")
+  results.printInlineBold(f"£{creditReportDict['correctionAmount']}")
+
+  results.ln(8)
+
+  results.printCategoryTitle("PAID")
+
+  for paidPair in creditReportDict['paid']:
+
+    # check if the el is a single invoice payment or multi invoice payment - if first el in the subject is an Invoice obj 
+    # the subject will be a single invoice payment, if it is a Transaction, it will be a multi invoice payment.
+    if type(paidPair[0]) == Invoice:
+      
+      print("shit")
+      results.printMatchedSingles(paidPair)
+
+    elif type(paidPair[0]) == Transaction:
+
+      results.printMultiInvoiceTransactionMatch(paidPair)
+
+    else:
+      results.printInlineBold("Corrupted creditReportDict Entry")
+
+  results.ln(10)
+
+  # print unpaid invoices
+
+  results.printCategoryTitle("Unpaid Invoices")
+
+  unpaidTotal = 0
+
+  for unpaidInvoice in creditReportDict['unpaid']:
+
+    unpaidTotal += unpaidInvoice.amount
+
+    results.printInvoiceNumber(unpaidInvoice.invoice_num)
+    results.set_x(20) 
+    results.printInvoice(unpaidInvoice)
+    results.ln(5)
+
+  results.ln(5)
+  results.printInlineDescription("Total Unpaid Invoices = ")
+  results.printInlineBold(f"£{str(creditReportDict['unPaidInvoicesTotal'])}")
+  results.ln(5)
+
+  results.printCategoryTitle("UnMatched Transactions")
+  results.ln(5)
+
+  for unMatchedTransaction in creditReportDict['unMatchedTransactions']:
+
+    results.set_x(25)
+    results.printTransaction(unMatchedTransaction)
+  
+    if unMatchedTransaction.error_notes != None:
+
+      results.ln(5)
+      results.set_x(30)
+      results.printInlineDescription(unMatchedTransaction.error_notes)
+
+    results.ln(8)
+
+  results.set_x(20)
+  results.printInlineDescription("Un-Matched Transaction Total = ")
+  results.printInlineBold(f"£{str(creditReportDict['unMatchedTransactionsTotal'])}")
+  results.ln(10)
+
+  results.set_x(18)
+  results.printInlineDescriptionLarge("Invoices Issued for Period = ")
+  results.printInlineBoldLarge(str(creditReportDict['invoicesIssued']))
+  results.ln(10)
+
+  results.set_x(18)
+  results.printInlineDescriptionLarge("Invoices Paid for Period = ")
+  results.printInlineBoldLarge(str(creditReportDict['invoicesPaid']))
+  results.ln(10)
+
+  results.set_x(18)
+  results.printInlineDescriptionLarge("Total Un-Paid Invoices = ")
+  results.printInlineBoldLarge(f"£{str(creditReportDict['unPaidInvoicesTotal'])}")
+  results.ln(10)
+
+  results.set_x(18)
+  results.printInlineDescriptionLarge("Total Un-Matched Transactions = ")
+  results.printInlineBoldLarge(f"£{str(creditReportDict['unMatchedTransactionsTotal'])}")
+  results.ln(10)
+
+  results.set_x(18)
+  results.printInlineDescriptionLarge("Corrections for Period = ")
+  results.printInlineBoldLarge(f"£{str(0 - creditReportDict['correctionAmount'])}")
+  results.ln(5)
+  results.set_x(20)
+  results.printInlineDescription("Correction amount is the total of corrected errors on matched Invoices for period.")
+  results.ln(4)
+  results.set_x(20)
+  results.printInlineDescription("Positive number is in Customer's favour.")
+  results.ln(8)
+
+  results.set_x(18)
+  results.printInlineDescriptionLarge("Closing Balance = ")
+  results.printInlineBoldLarge(f"£{str(creditReportDict['ballance'])}")
+  results.ln(10)
 
   results.output('../testCredit.pdf')
 
@@ -35,7 +155,7 @@ con.execute('PRAGMA foreign_keys = ON')
 
 cur = con.cursor()
 
-reportDict = constructCreditReportDictionary(9, '2020-10-01', con, cur)
+reportDict = constructCreditReportDictionary(10, '2023-02-04', con, cur)
 
 creditReportPrinter(reportDict, con, cur)
 

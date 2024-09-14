@@ -41,6 +41,8 @@ def print_transaction_upload_results(outputDict):
 
     customerName = customerIDsDict[customer]
 
+    results.set_x(8)
+
     results.printCustomerName(customerName)
 
     for category in customerResultsDict:

@@ -367,13 +367,14 @@ def handleTransactionUpload(root, filename):
 
   outputPrintDict = {output[0]: output[1] for output in finalListOfLists}
 
+  f = open("../output.txt", "w")
+
+  f.write(str(outputPrintDict))
+
   print_transaction_upload_results(outputPrintDict)
 
   print(type(outputPrintDict))
 
-  f = open("../output.txt", "w")
-
-  f.write(str(outputPrintDict))
 
   f.close()
   

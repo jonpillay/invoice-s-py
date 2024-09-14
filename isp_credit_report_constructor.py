@@ -5,6 +5,8 @@ from datetime import datetime
 from isp_data_handlers import genDBInvoiceDCobj, genDBTransactionDCobj
 from isp_db_helpers import fetchTransactionByID
 
+from isp_dataframes import Transaction, Invoice
+
 
 def constructInvTransMatchedPairsReport(customer_id, afterDate, con, cur):
 
@@ -18,7 +20,7 @@ def constructInvTransMatchedPairsReport(customer_id, afterDate, con, cur):
   # followed by pairs of paid invoices and the dummy transaction that pays them. 
   runningMulti = []
 
-  sql = f"SELECT * FROM INVOICES WHERE customer_id=? AND date_issued >= ?"
+  sql = f"SELECT * FROM INVOICES WHERE customer_id=? AND date_issued >= ? ORDER BY invoice_num"
 
   cur.execute(sql, (customer_id, formattedDate))
 
@@ -31,8 +33,10 @@ def constructInvTransMatchedPairsReport(customer_id, afterDate, con, cur):
   dummyIDMemo = 0
 
   for invoice in invoiceDCs:
+
+    print(invoice.invoice_num)
     
-    sql = f"SELECT * FROM TRANSACTIONS WHERE invoice_id = {invoice.invoice_id}"
+    sql = f"SELECT * FROM TRANSACTIONS WHERE invoice_id = {invoice.invoice_id} AND high_invoice IS NULL"
 
     cur.execute(sql)
 
@@ -46,9 +50,9 @@ def constructInvTransMatchedPairsReport(customer_id, afterDate, con, cur):
 
         # check if the incoming transaction is part of the current running multi list report (see line 18) if not append 
         # the matches to the paid and clear runningMulti to start next records.
-        if runningMulti[-1][1].parent_trans != transactionDC.parent_trans:
+        if transactionDC.parent_trans == None or invDummyTransPairs[-1][1].parent_trans != transactionDC.parent_trans:
 
-          multiInvoiceTotal = sum([multiPair[0].amount for multiPair in runningMulti[1:]])
+          multiInvoiceTotal = sum([multiPair[0].amount for multiPair in invDummyTransPairs])
 
           parentTransaction = runningMulti[0]
 
@@ -56,9 +60,13 @@ def constructInvTransMatchedPairsReport(customer_id, afterDate, con, cur):
 
           correctionTotal += correctionAmount
 
+          runningMulti.append(invDummyTransPairs)
+
           paid.append(runningMulti)
 
           runningMulti = []
+
+          invDummyTransPairs = []
 
           correctionAmount = 0
 
@@ -66,22 +74,24 @@ def constructInvTransMatchedPairsReport(customer_id, afterDate, con, cur):
 
         if dummyIDMemo == transactionDC.parent_trans:
 
-          runningMulti.append([invoice, transactionDC])
+          invDummyTransPairs.append([invoice, transactionDC])
 
-          multiInvoicePaymentDict[transactionDC.parent_trans].append([invoice, transactionDC])
+          # multiInvoicePaymentDict[transactionDC.parent_trans].append([invoice, transactionDC])
 
         else:
+
+          invDummyTransPairs = []
 
           parentTransaction = fetchTransactionByID(transactionDC.parent_trans, cur)
 
           parentTransactionDC = genDBTransactionDCobj(parentTransaction[0])
 
           runningMulti.append(parentTransactionDC)
-          runningMulti.append([invoice, transactionDC])
+          invDummyTransPairs.append([invoice, transactionDC])
 
-          multiInvoicePaymentDict[transactionDC.parent_trans] = [[parentTransaction], [invoice, transactionDC]]
+          # multiInvoicePaymentDict[transactionDC.parent_trans] = [[parentTransaction], [invoice, transactionDC]]
 
-          dummyIDMemo = transactionDC.parent_trans
+          dummyIDMemo = parentTransactionDC.transaction_id
       
       else:
 
@@ -94,7 +104,9 @@ def constructInvTransMatchedPairsReport(customer_id, afterDate, con, cur):
     else:
       unpaid.append(invoice)
 
-  return paid, unpaid, correctionAmount
+  roundedCorrectionTotal = round(correctionTotal, 2)
+
+  return paid, unpaid, roundedCorrectionTotal
 
 
 # constructInvTransMatchedPairsReport(9, '2020-10-01')
@@ -103,11 +115,11 @@ def constructInvTransMatchedPairsReport(customer_id, afterDate, con, cur):
 
 def constructUnmatchedTransactionReport(customerID, afterDate, con, cur):
   
-  formattedDate = datetime.strptime(afterDate, '%Y-%m-%d')
+  formattedDate = datetime.strptime(afterDate, '%Y-%m-%d').strftime('%d-%m-%Y')
 
   # fetch all transactions that have no invoice_id attached (do not pay a single transaction) and also have no high_invoice number attached (is not a multi invoice transaction).
 
-  sql = f"SELECT * FROM TRANSACTIONS WHERE customer_id = ? AND paid_on > ? AND invoice_id IS NULL AND high_invoice IS NULL"
+  sql = f"SELECT * FROM TRANSACTIONS WHERE customer_id = ? AND paid_on >= ? AND invoice_id IS NULL AND high_invoice IS NULL"
 
   cur.execute(sql, (customerID, formattedDate))
 
@@ -149,15 +161,27 @@ def constructCreditReportDictionary(customer_id, afterDate, con, cur):
 
   unMatchedTransactions = constructUnmatchedTransactionReport(customer_id, afterDate, con, cur)
 
-  unPaidInvoicesTotal = sum([unpaidInvoice.amount for unpaidInvoice in unpaid])
+  unPaidInvoicesTotal = round(sum([unpaidInvoice.amount for unpaidInvoice in unpaid]), 2)
 
-  unMatchedTransactionsTotal = sum([unMatchedTrans.amount for unMatchedTrans in unMatchedTransactions])
+  unMatchedTransactionsTotal = round(sum([unMatchedTrans.amount for unMatchedTrans in unMatchedTransactions]), 2)
 
   ballance = unMatchedTransactionsTotal - unPaidInvoicesTotal
 
   correctedBalance = ballance + correctionAmount
 
   invoicesIssued = len(paid) + len(unpaid)
+
+  invoicesPaid = 0
+
+  for paidPair in paid:
+
+    if isinstance(paidPair[0], Transaction):
+
+      invoicesPaid += len(paidPair[1])
+
+    else:
+
+      invoicesPaid += 1
 
   creditReportDict = {"invoicesIssued":invoicesIssued, 
                       "paid":paid, 
@@ -166,9 +190,11 @@ def constructCreditReportDictionary(customer_id, afterDate, con, cur):
                       "unPaidInvoicesTotal":unPaidInvoicesTotal,
                       "unMatchedTransactionsTotal": unMatchedTransactionsTotal,
                       "ballance":ballance,
+                      "correctionAmount": correctionAmount,
                       "correctedBallance":correctedBalance,
                       "customerID": customer_id,
-                      "afterDate":afterDate
+                      "afterDate":afterDate,
+                      "invoicesPaid":invoicesPaid
                       }
 
   return creditReportDict

@@ -140,10 +140,17 @@ def genDBTransactionDCobj(transaction):
     date_paid = datetime.strptime(transaction[3], "%Y-%m-%d %H:%M:%S")
   except ValueError:
       date_paid = datetime.strptime(transaction[3], "%Y-%m-%d")
+
+  invoiceNum = None
+
+  if transaction[1] == None:
+    invoiceNum = transaction[1]
+  else:
+    invoiceNum = int(transaction[1])
   
   transactionDC = Transaction(
     transaction_id=transaction[0],
-    invoice_num=int(transaction[1]),
+    invoice_num=invoiceNum,
     amount=transaction[2],
     paid_on=date_paid,
     paid_by=transaction[4],
@@ -219,9 +226,17 @@ def genMultiTransactions(multiTransInvPairs, cur, con):
   
   for transaction, invoices in multiTransInvPairs:
 
-    splitTransactions = [transaction]
+    multiInvoiceTransactionGroup = []
+
+    parentTransaction = transaction
+
+    multiInvoiceTransactionGroup.append(parentTransaction)
     
     transactionID = addParentTransactionToDB(transaction.as_tuple(), cur, con)
+
+    parentTransaction.transaction_id = transactionID
+
+    invTransPairs = []
 
     for invoice in invoices:
 
@@ -235,11 +250,15 @@ def genMultiTransactions(multiTransInvPairs, cur, con):
       dummyTransaction.high_invoice = None
       dummyTransaction.invoice_id = invoice.invoice_id
       dummyTransaction.parent_trans = transactionID
+      dummyTransaction.transaction_id = None
 
       dummyTransactionUploadList.append(dummyTransaction)
-      splitTransactions.append(dummyTransaction)
 
-    uploadedMultiTransactionPairs.append([splitTransactions, invoices])
+      invTransPairs.append([invoice, dummyTransaction])
+
+    multiInvoiceTransactionGroup.append(invTransPairs)
+
+    uploadedMultiTransactionPairs.append(multiInvoiceTransactionGroup)
 
   return dummyTransactionUploadList, uploadedMultiTransactionPairs
 

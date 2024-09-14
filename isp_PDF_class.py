@@ -42,7 +42,6 @@ class TransactionUploadPDF(FPDF):
 
   def printCustomerName(self, customer):
     self.set_font('ultra', 'U', 20)
-    self.set_x(8)
     self.cell(0, 10, f"{customer}", border=0, new_y=YPos.NEXT)
 
   def printInvoiceNumber(self, invoiceNum):
@@ -75,11 +74,33 @@ class TransactionUploadPDF(FPDF):
     self.set_font('rajdhani', 'B', 12)
     self.cell(getCellWidth(str, font, 2.6), 4, f"{str}", ln=0)
 
+  def printInlineDescriptionLarge(self, str):
+    font = ImageFont.truetype(genFontPath('Rajdhani-Regular.ttf'), 20)
+    self.set_font('rajdhani', '', 20)
+    self.cell(getCellWidth(str, font, 2.7), 4, f"{str}", ln=0)
+
+  def printInlineBoldLarge(self, str):
+    font = ImageFont.truetype(genFontPath('Rajdhani-Bold.ttf'), 20)
+    self.set_font('rajdhani', 'B', 20)
+    self.cell(getCellWidth(str, font, 2.7), 4, f"{str}", ln=0)
+
   def printCorrectionNumber(self, str):
     font = ImageFont.truetype(genFontPath('Rajdhani-Bold.ttf'), 15)
     self.set_x(63)
     self.set_font('rajdhani', 'B', 15)
     self.cell(getCellWidth(str, font, 2.9), 4, f"{str}", ln=0)
+
+  def printReportResultsTitle(self, title):
+    self.set_font('special-elite', '', 16)
+    self.cell(10, 10, f"{title}", border=0, new_y=YPos.NEXT)
+
+  def printReportResultsNumber(self, str):
+    # font = ImageFont.truetype(genFontPath('Rajdhani-Bold.ttf'), 15)
+    # self.set_font('rajdhani', 'B', 15)
+    # self.cell(getCellWidth(str, font, 2.9), 4, f"{str}", ln=0)
+
+    self.set_font('special-elite', '', 20)
+    self.cell(10, 10, f"{str}", border=0, new_y=YPos.NEXT)
 
   def printInvoice(self, invoice):
     self.printInlineDescription("-")
@@ -131,8 +152,12 @@ class TransactionUploadPDF(FPDF):
 
   def printMatchedSingles(self, matchedSinglePair):
     
-    transaction = matchedSinglePair[0]
-    invoice = matchedSinglePair[1]
+    if matchedSinglePair[0] == Transaction:
+      transaction = matchedSinglePair[0]
+      invoice = matchedSinglePair[1]
+    else:
+      transaction = matchedSinglePair[1]
+      invoice = matchedSinglePair[0]
 
     self.printInvoiceNumber(invoice.invoice_num)
 
@@ -146,6 +171,8 @@ class TransactionUploadPDF(FPDF):
     self.printTransaction(transaction)
 
     self.ln(8)
+
+
 
   def printInvoiceNumCorrectedReport(self, invoiceNumCorrected):
 
@@ -457,10 +484,10 @@ class TransactionUploadPDF(FPDF):
 
   def printMultiInvoiceTransactionMatch(self, multiInvoiceTransactionMatch):
     
-    parentTransaction = multiInvoiceTransactionMatch[0][0]
+    parentTransaction = multiInvoiceTransactionMatch[0]
     matchedInvoiceList = multiInvoiceTransactionMatch[1]
 
-    totalInvoiced = round(sum(invoiced.amount for invoiced in matchedInvoiceList), 2)
+    totalInvoiced = round(sum(invoiced[0].amount for invoiced in matchedInvoiceList), 2)
 
     self.printMultiInvoiceNumber(parentTransaction.invoice_num, parentTransaction.high_invoice)
 
@@ -480,12 +507,19 @@ class TransactionUploadPDF(FPDF):
     self.ln(8)
 
 
-    for invoice in matchedInvoiceList:
+    for invoicePair in matchedInvoiceList:
+
+      invoice = invoicePair[0]
+      payingTransaction = invoicePair[1]
 
       self.set_x(25)
       self.printInvoiceNumberInline(invoice.invoice_num)
       self.printInvoice(invoice)
       self.ln(5)
+      self.set_x(32)
+      self.printInlineDescription("Invoice paid for by Transaction ID = ")
+      self.printInlineBold(str(payingTransaction.transaction_id))
+      self.ln(6)
 
     self.ln(8)
     self.set_x(15)
