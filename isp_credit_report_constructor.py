@@ -3,7 +3,7 @@ import os
 from datetime import datetime
 
 from isp_data_handlers import genDBInvoiceDCobj, genDBTransactionDCobj
-from isp_db_helpers import fetchTransactionByID
+from isp_db_helpers import fetchTransactionByID, fetchTransactionByParentID, fetchInvoiceByID
 
 from isp_dataframes import Transaction, Invoice
 
@@ -33,8 +33,6 @@ def constructInvTransMatchedPairsReport(customer_id, afterDate, con, cur):
   dummyIDMemo = 0
 
   for invoice in invoiceDCs:
-
-    print(invoice.invoice_num)
     
     sql = f"SELECT * FROM TRANSACTIONS WHERE invoice_id = {invoice.invoice_id} AND high_invoice IS NULL"
 
@@ -52,6 +50,29 @@ def constructInvTransMatchedPairsReport(customer_id, afterDate, con, cur):
         # the matches to the paid and clear runningMulti to start next records.
         if transactionDC.parent_trans == None or invDummyTransPairs[-1][1].parent_trans != transactionDC.parent_trans:
 
+          fullMultiList = fetchTransactionByParentID(parentTransactionDC.transaction_id, cur)
+
+          if len(invDummyTransPairs) != len(fullMultiList):
+
+            partialIndex = len(fullMultiList) - len(invDummyTransPairs)
+
+            fullMultiListDCs = [genDBTransactionDCobj(trans) for trans in fullMultiList]
+
+            pairHolder = []
+
+            for missedTransaction in fullMultiListDCs[-0:partialIndex]:
+
+              missedInvoice = fetchInvoiceByID(missedTransaction.invoice_id, cur)
+
+              missedInvoiceDC = genDBInvoiceDCobj(missedInvoice[0])
+
+              print(missedInvoice)
+
+              pairHolder.append([missedInvoiceDC, missedTransaction])
+
+            invDummyTransPairs[:0] = pairHolder
+
+
           multiInvoiceTotal = sum([multiPair[0].amount for multiPair in invDummyTransPairs])
 
           parentTransaction = runningMulti[0]
@@ -59,6 +80,7 @@ def constructInvTransMatchedPairsReport(customer_id, afterDate, con, cur):
           correctionAmount = parentTransaction.amount - multiInvoiceTotal
 
           correctionTotal += correctionAmount
+
 
           runningMulti.append(invDummyTransPairs)
 

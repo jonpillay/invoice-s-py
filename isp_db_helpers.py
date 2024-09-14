@@ -31,7 +31,7 @@ def fetchInvoiceByNum(invoiceNumber, cur):
 
 def fetchInvoiceByID(invoiceID, cur):
 
-  sql = "SELECT * FROM INVOICES WHERE invoice_id=?"
+  sql = "SELECT * FROM INVOICES WHERE id=?"
 
   cur.execute(sql, (invoiceID,))
 
@@ -167,7 +167,7 @@ def fetchTransactionsByCustomerPaymentMethod(paymentMethod, customerID, cur):
 
 def fetchTransactionByParentID(parentID, cur):
   
-  sql = "SELECT * FROM TRANSACTIONS WHERE parent_trans=?"
+  sql = "SELECT * FROM TRANSACTIONS WHERE parent_trans=? ORDER BY invoice_num"
 
   cur.execute(sql, (parentID,))
 

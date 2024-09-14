@@ -155,7 +155,7 @@ con.execute('PRAGMA foreign_keys = ON')
 
 cur = con.cursor()
 
-reportDict = constructCreditReportDictionary(10, '2023-02-04', con, cur)
+reportDict = constructCreditReportDictionary(16, '2023-03-04', con, cur)
 
 creditReportPrinter(reportDict, con, cur)
 
