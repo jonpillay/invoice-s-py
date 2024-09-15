@@ -373,7 +373,7 @@ def handleTransactionUpload(root, filename):
 
   print_transaction_upload_results(outputPrintDict)
 
-  print(type(outputPrintDict))
+  # print(type(outputPrintDict))
 
 
   f.close()

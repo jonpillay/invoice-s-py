@@ -2,10 +2,16 @@ from isp_dataframes import Transaction, Invoice
 import datetime
 
 
-f = open('../output.txt', 'r')
+def readOutputDictRaw():
 
-if f != "TEST":
+  f = open('../output.txt', 'r')
 
-  outputDict = eval(f.read())
+  outputDict = None
 
-  print(type(outputDict))
+  if f != "TEST":
+
+    outputDict = eval(f.read())
+
+  return outputDict
+
+  # print(type(outputDict))

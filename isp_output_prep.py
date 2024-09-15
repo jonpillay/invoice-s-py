@@ -1,7 +1,6 @@
 import sqlite3
 import os
 
-from output_test import outputDict as testOutputDict
 from isp_data_handlers import groupDataClassObjsByAttribute
 from isp_dataframes import Transaction, Invoice
 from isp_db_helpers import getCustomerNamesIDs, getCustomerIDs

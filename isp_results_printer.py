@@ -1,7 +1,7 @@
 import sqlite3
 import os
 
-from output_test import outputDict as testOutputDict
+from output_test import readOutputDictRaw
 
 from isp_db_helpers import getCustomerNamesIDs, getCustomerIDs, genCustomerNamesIDsDict
 from isp_output_prep import populateCustomerOutputDict
@@ -138,4 +138,7 @@ def print_transaction_upload_results(outputDict):
 
 
 if __name__ == "__main__":
+
+  testOutputDict = readOutputDictRaw()
+
   print_transaction_upload_results(testOutputDict)

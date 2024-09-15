@@ -152,12 +152,14 @@ class TransactionUploadPDF(FPDF):
 
   def printMatchedSingles(self, matchedSinglePair):
     
-    if matchedSinglePair[0] == Transaction:
+    if type(matchedSinglePair[0]) == Transaction:
       transaction = matchedSinglePair[0]
       invoice = matchedSinglePair[1]
-    else:
+    elif type(matchedSinglePair[0]) == Invoice:
       transaction = matchedSinglePair[1]
       invoice = matchedSinglePair[0]
+    else:
+      print(matchedSinglePair)
 
     self.printInvoiceNumber(invoice.invoice_num)
 

@@ -225,10 +225,6 @@ def openVerifyErrorCorrectionCloseEnoughMatch(root, transaction, matchedInvoice,
 
   # render the transaction that doesn't match directly by amount
 
-  print(transaction.paid_on)
-  print(type(transaction.paid_on))
-
-
   formattedTransDate = transaction.paid_on.strftime("%d/%m/%Y")
 
   og_trans_prompt_label = tkb.Label(prompt_frame, text=f"Transaction dated {formattedTransDate} does not match by Amount", font=('Helvetica-bold', 11), justify='center')
@@ -243,9 +239,6 @@ def openVerifyErrorCorrectionCloseEnoughMatch(root, transaction, matchedInvoice,
 
 
   # Render Error corrected transaction
-
-  print(OGerrorTrans.paid_on)
-  print(type(OGerrorTrans.paid_on))
 
   formattedOGerrorTransDate = OGerrorTrans.paid_on.strftime("%d/%m/%Y")
 

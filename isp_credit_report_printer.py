@@ -1,8 +1,6 @@
 import sqlite3
 import os
 
-from output_test import outputDict as testOutputDict
-
 from isp_db_helpers import genCustomerNamesIDsDict
 from isp_dataframes import Invoice, Transaction
 
@@ -148,17 +146,17 @@ def creditReportPrinter(creditReportDict, con, cur):
 
 
 
+if __name__ == "__main__":
+  con = sqlite3.connect(os.getenv("DB_NAME"))
 
-con = sqlite3.connect(os.getenv("DB_NAME"))
+  con.execute('PRAGMA foreign_keys = ON')
 
-con.execute('PRAGMA foreign_keys = ON')
+  cur = con.cursor()
 
-cur = con.cursor()
+  reportDict = constructCreditReportDictionary(3, '2023-03-04', con, cur)
 
-reportDict = constructCreditReportDictionary(16, '2023-03-04', con, cur)
+  creditReportPrinter(reportDict, con, cur)
 
-creditReportPrinter(reportDict, con, cur)
+  cur.close()
 
-cur.close()
-
-con.close()
+  con.close()
