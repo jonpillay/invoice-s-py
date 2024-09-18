@@ -3,6 +3,9 @@ from ttkbootstrap.constants import *
 import ttkbootstrap as tkb
 from isp_frontend_functions import handleInvoiceUploadClick, handleTransactionUploadClick
 
+from tkinter import messagebox
+from datetime import date, datetime, timedelta
+
 
 def renderMain(root):
   root.title("InvoicesPY")
@@ -28,8 +31,8 @@ def renderMain(root):
   controls_frame.grid(row=0, column=0, sticky='nesw')
   results_frame.grid(row=1, column=0, sticky='nesw')
 
-  controls_frame.columnconfigure(0, weight=6)
-  controls_frame.columnconfigure(1, weight=3)
+  controls_frame.columnconfigure(0, weight=1)
+  controls_frame.columnconfigure(1, weight=1)
   controls_frame.rowconfigure(0, weight=1)
 
   results_frame.rowconfigure(0, weight=1)
@@ -50,9 +53,37 @@ def renderMain(root):
   statement_upload = tkb.Button(upload_frame, text='Statement Upload', bootstyle='primary', name="uploadTransaction", command= lambda: handleTransactionUploadClick(root))
   statement_upload.grid(row=0, column=1)
 
-  # Report Gen Widget Panel. Report Gen By Date Range and Customer. Gen both OnScreen and PDF.
-  report_gen_dummy = tkb.Label(controls_frame, text='Report Gen Controls Dummy', background='green')
-  report_gen_dummy.grid(row=0, column=1, sticky='nesw')
+  # Report Gen Widget Panel. Report Gen By Date Range and Customer.
+  report_gen_controls = tkb.Frame(controls_frame, bootstyle="success")
+  report_gen_controls.columnconfigure(0, weight=5)
+  report_gen_controls.columnconfigure(1, weight=5)
+  report_gen_controls.columnconfigure(2, weight=3)
+  report_gen_controls.rowconfigure(0, weight=1)
+  report_gen_controls.grid(row=0, column=1, sticky='nesw')
+
+  report_gen_customer_selector_frame = tkb.Frame(report_gen_controls)
+  report_gen_customer_selector_frame.rowconfigure(0, weight=3)
+  report_gen_customer_selector_frame.rowconfigure(1, weight=5)
+  report_gen_customer_selector_frame.columnconfigure(0, weight=1)
+  report_gen_customer_selector_frame.grid(row=0, column=0, sticky='nesw')
+
+  report_gen_customer_selector = tkb.Combobox(report_gen_customer_selector_frame, values=["poop", "beep", "bop"])
+  report_gen_customer_selector.grid(row=0, column=0, sticky='s')
+
+  report_gen_customer_label = tkb.Label(report_gen_customer_selector_frame, text="Select a Customer")
+  report_gen_customer_label.grid(row=1, column=0, sticky='n', pady=20)
+
+  report_gen_date_selector_frame = tkb.Frame(report_gen_controls)
+  report_gen_date_selector_frame.rowconfigure(0, weight=1)
+  report_gen_date_selector_frame.rowconfigure(1, weight=1)
+  report_gen_date_selector_frame.columnconfigure(0, weight=1)
+  report_gen_date_selector_frame.grid(row=0, column=1)
+
+  report_gen_date_selector = tkb.DateEntry(report_gen_date_selector_frame, startdate=datetime.today()-timedelta())
+  report_gen_date_selector.grid(row=0, column=0)
+
+  report_gen_date_label = tkb.Label(report_gen_date_selector_frame, text="this")
+  report_gen_date_label.grid(row=1, column=0)
 
   # Tabs for switching between different portions of results (paid, outstanding, possible errors)
   results_dummy_tabs = tkb.Label(results_frame, text='Results Dummy Tabs', background='#8B8000')
