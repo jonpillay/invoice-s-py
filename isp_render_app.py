@@ -2,13 +2,18 @@ import tkinter as tk
 from ttkbootstrap.constants import *
 import ttkbootstrap as tkb
 from isp_frontend_functions import handleInvoiceUploadClick, handleTransactionUploadClick
+from isp_frontend_display_functions import fetchCreditPreviewNumbers
 from isp_db_helpers import genCustomerNamesIDsDict
+from isp_credit_report_constructor import constructCreditReportDictionary
+from isp_credit_report_printer import creditReportPrinter
 
 from tkinter import messagebox
 from datetime import date, datetime, timedelta
 
 import os
 import sqlite3
+
+
 
 
 def renderMain(root):
@@ -99,17 +104,6 @@ def renderMain(root):
   report_gen_controls.rowconfigure(2, weight=15)
   report_gen_controls.grid(row=0, column=1, sticky='nesw')
 
-  report_gen_controls_customer_title = tkb.Label(report_gen_controls, text="Gen Report For")
-  report_gen_controls_customer_title.grid(row=0, column=0, sticky='s')
-
-  report_gen_controls_date_title = tkb.Label(report_gen_controls, text="From Date")
-  report_gen_controls_date_title.grid(row=0, column=1, sticky='s')
-
-  report_gen_customer_selector_frame = tkb.Frame(report_gen_controls)
-  report_gen_customer_selector_frame.rowconfigure(0, weight=3)
-  report_gen_customer_selector_frame.rowconfigure(1, weight=5)
-  report_gen_customer_selector_frame.columnconfigure(0, weight=1)
-  report_gen_customer_selector_frame.grid(row=1, column=0, sticky='n')
 
   conn = sqlite3.connect(os.getenv("DB_NAME"))
 
@@ -123,7 +117,49 @@ def renderMain(root):
   cur.close()
   conn.close()
 
+  def onCustomerSelected(event):
+
+    print("THAT")
+    
+    if report_gen_date_selector.entry.get():
+
+      customer = report_gen_customer_selector.get()
+      fromDate = report_gen_date_selector.entry.get()
+
+      # fromDateObj = datetime.strptime(fromDate, '%m/%d/%Y')
+      customerID = customersIdsDict[customer]
+
+      conn = sqlite3.connect(os.getenv("DB_NAME"))
+
+      conn.execute('PRAGMA foreign_keys = ON')
+
+      cur = conn.cursor()
+
+      invoiceCount, unpaidInvoiceCount = fetchCreditPreviewNumbers(fromDate, customerID, cur, conn)
+
+      cur.close()
+
+      conn.close()
+
+      report_gen_invoice_total_label.config(text=f"Total Invoices Issued for {customer} since {fromDate} = {invoiceCount}")
+      report_gen_unpaid_invoice_total_label.config(text=f"Total Unpaid Invoices for Period = {unpaidInvoiceCount}")
+
+  report_gen_controls_customer_title = tkb.Label(report_gen_controls, text="Gen Report For")
+  report_gen_controls_customer_title.grid(row=0, column=0, sticky='s')
+
+  report_gen_controls_date_title = tkb.Label(report_gen_controls, text="From Date")
+  report_gen_controls_date_title.grid(row=0, column=1, sticky='s')
+
+  report_gen_customer_selector_frame = tkb.Frame(report_gen_controls)
+  report_gen_customer_selector_frame.rowconfigure(0, weight=3)
+  report_gen_customer_selector_frame.rowconfigure(1, weight=5)
+  report_gen_customer_selector_frame.columnconfigure(0, weight=1)
+  report_gen_customer_selector_frame.grid(row=1, column=0, sticky='n')
+
   report_gen_customer_selector = tkb.Combobox(report_gen_customer_selector_frame, values=nameList)
+
+  report_gen_customer_selector.bind("<<ComboboxSelected>>", onCustomerSelected)
+
   report_gen_customer_selector.grid(row=0, column=0, sticky='s')
 
   report_gen_customer_label = tkb.Label(report_gen_customer_selector_frame, text="Select a Customer")
@@ -140,7 +176,23 @@ def renderMain(root):
       customer = report_gen_customer_selector.get()
       fromDate = report_gen_date_selector.entry.get()
 
-      print("peepee!")
+      # fromDateObj = datetime.strptime(fromDate, '%m/%d/%Y')
+      customerID = customersIdsDict[customer]
+
+      conn = sqlite3.connect(os.getenv("DB_NAME"))
+
+      conn.execute('PRAGMA foreign_keys = ON')
+
+      cur = conn.cursor()
+
+      invoiceCount, unpaidInvoiceCount = fetchCreditPreviewNumbers(fromDate, customerID, cur, conn)
+
+      cur.close()
+
+      conn.close()
+
+      report_gen_invoice_total_label.config(text=f"Total Invoices Issued for {customer} since {fromDate} = {invoiceCount}")
+      report_gen_unpaid_invoice_total_label.config(text=f"Total Unpaid Invoices for Period = {unpaidInvoiceCount}")
 
       # run function to collect number of invoices, and unpaid invoices
       # take results of functions and print them to label below
@@ -151,15 +203,13 @@ def renderMain(root):
   report_gen_date_selector_frame.columnconfigure(0, weight=1)
   report_gen_date_selector_frame.grid(row=1, column=1, sticky='n')
 
-  selectedDate = tk.StringVar()
-
   report_gen_date_selector = tkb.DateEntry(report_gen_date_selector_frame, startdate=datetime.today()-timedelta())
 
   report_gen_date_selector.entry.bind("<FocusIn>", onDateSelected)
 
   report_gen_date_selector.grid(row=0, column=0, sticky='s')
 
-  report_gen_date_label = tkb.Label(report_gen_date_selector_frame, text="this")
+  report_gen_date_label = tkb.Label(report_gen_date_selector_frame, text="Select a Date")
   report_gen_date_label.grid(row=1, column=0, sticky='n')
 
   report_gen_button_frame = tkb.Frame(report_gen_controls)
@@ -168,14 +218,59 @@ def renderMain(root):
   report_gen_button_frame.rowconfigure(1, weight=6)
   report_gen_button_frame.grid(row=1, column=2, sticky='n')
 
-  report_gen_button = tkb.Button(report_gen_button_frame, text="Gen Report", bootstyle='primary', name="uploadTransaction",)
+  def triggerGenCreditReport():
+
+    if not report_gen_date_selector.entry.get():
+
+      report_gen_invoice_total_label.config(text=f"Please Select a Starting Date")
+
+      return None
+    
+    elif not report_gen_customer_selector.get():
+
+      report_gen_invoice_total_label.config(text=f"Please Select a Customer")
+
+      return None
+    
+    else:
+    
+      customerID = customersIdsDict[report_gen_customer_selector.get()]
+      startDate = report_gen_date_selector.entry.get()
+
+      conn = sqlite3.connect(os.getenv("DB_NAME"))
+
+      conn.execute('PRAGMA foreign_keys = ON')
+
+      cur = conn.cursor()
+      
+      creditReportDict = constructCreditReportDictionary(customerID, startDate, conn, cur)
+
+      creditReportPrinter(creditReportDict, conn, cur)
+
+      print("success")
+    
+
+
+
+
+
+  report_gen_button = tkb.Button(report_gen_button_frame, text="Gen Report", bootstyle='success', name="genReport", command=triggerGenCreditReport)
   report_gen_button.grid(row=0, column=0, sticky='s')
 
-  report_gen_invoice_total_frame = tkb.Frame(report_gen_controls)
-  report_gen_invoice_total_frame.grid(row=2, column=0, columnspan=2, sticky='nesw')
+  report_gen_preview_frame = tkb.Frame(report_gen_controls)
+  report_gen_preview_frame.rowconfigure(0, weight=1)
+  report_gen_preview_frame.rowconfigure(1, weight=1)
+  report_gen_preview_frame.rowconfigure(2, weight=1)
+  report_gen_preview_frame.grid(row=2, column=0, columnspan=2)
 
-  report_gen_invoice_total_label = tkb.Label(report_gen_invoice_total_frame, text="Make selection for preview results.")
-  report_gen_invoice_total_label.grid(row=0, column=0, padx=20, columnspan=2)
+  report_gen_invoice_total_label = tkb.Label(report_gen_preview_frame, text="Make selection for preview results.")
+  report_gen_invoice_total_label.grid(row=0, column=0, columnspan=2)
+
+  report_gen_unpaid_invoice_total_label = tkb.Label(report_gen_preview_frame, text="")
+  report_gen_unpaid_invoice_total_label.grid(row=1, column=0, padx=20, columnspan=2)
+
+  report_gen_balance_label = tkb.Label(report_gen_preview_frame, text="")
+  report_gen_balance_label.grid(row=2, column=0, padx=20, columnspan=2)
 
   # report_gen_invoice_paid_frame = tkb.Frame(report_gen_controls, bootstyle="dark")
   # report_gen_invoice_paid_frame.grid(row=2, column=1, sticky='nesw')

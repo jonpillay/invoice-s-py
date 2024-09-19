@@ -10,7 +10,7 @@ from isp_dataframes import Transaction, Invoice
 
 def constructInvTransMatchedPairsReport(customer_id, afterDate, con, cur):
 
-  formattedDate = datetime.strptime(afterDate, '%Y-%m-%d')
+  # formattedDate = datetime.strptime(afterDate, '%Y-%m-%d')
 
   unpaid = []
   paid = []
@@ -22,7 +22,7 @@ def constructInvTransMatchedPairsReport(customer_id, afterDate, con, cur):
 
   sql = f"SELECT * FROM INVOICES WHERE customer_id=? AND date_issued >= ? ORDER BY invoice_num"
 
-  cur.execute(sql, (customer_id, formattedDate))
+  cur.execute(sql, (customer_id, afterDate))
 
   invoices = cur.fetchall()
 
@@ -137,13 +137,13 @@ def constructInvTransMatchedPairsReport(customer_id, afterDate, con, cur):
 
 def constructUnmatchedTransactionReport(customerID, afterDate, con, cur):
   
-  formattedDate = datetime.strptime(afterDate, '%Y-%m-%d').strftime('%d-%m-%Y')
+  # formattedDate = datetime.strptime(afterDate, '%Y-%m-%d').strftime('%d-%m-%Y')
 
   # fetch all transactions that have no invoice_id attached (do not pay a single transaction) and also have no high_invoice number attached (is not a multi invoice transaction).
 
   sql = f"SELECT * FROM TRANSACTIONS WHERE customer_id = ? AND paid_on >= ? AND invoice_id IS NULL AND high_invoice IS NULL"
 
-  cur.execute(sql, (customerID, formattedDate))
+  cur.execute(sql, (customerID, afterDate))
 
   unMatchedTransactions = cur.fetchall()
 

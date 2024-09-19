@@ -132,13 +132,24 @@ def fetchInvoicesByCustomerDateRange(lowDate, highDate, customerID, cur):
 
 def countInvoicesByCustomerAfterDate(startDate, customerID, cur):
 
-  sql = "SELECT COUNT(id) FROM INVOICES WHERE INVOICES.date_issued BETWEEN ? and ? and INVOICES.customer_id=? ORDER BY invoice_num"
+  sql = "SELECT COUNT(id) FROM INVOICES WHERE date_issued > ? and customer_id=? ORDER BY invoice_num"
 
   cur.execute(sql, (startDate, customerID))
 
-  invoices = cur.fetchall()
+  invoiceCount = cur.fetchone()[0]
 
-  return invoices
+  return invoiceCount
+
+
+def countUnpaidInvoicesByCustomerAfterDate(startDate, customerID, cur):
+
+  sql = "SELECT COUNT(INVOICES.id) FROM INVOICES LEFT JOIN TRANSACTIONS ON INVOICES.id = TRANSACTIONS.invoice_id WHERE INVOICES.date_issued > ? AND INVOICES.customer_id=? AND TRANSACTIONS.invoice_id IS NULL ORDER BY INVOICES.invoice_num"
+
+  cur.execute(sql, (startDate, customerID))
+
+  invoiceCount = cur.fetchone()[0]
+
+  return invoiceCount
 
 
 
