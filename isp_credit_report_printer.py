@@ -1,5 +1,6 @@
 import sqlite3
 import os
+from datetime import datetime
 
 from isp_db_helpers import genIDsCustomerNamesDict
 from isp_dataframes import Invoice, Transaction
@@ -7,6 +8,8 @@ from isp_dataframes import Invoice, Transaction
 from isp_PDF_class import TransactionUploadPDF
 
 from isp_credit_report_constructor import constructCreditReportDictionary
+
+import time
 
 
 def creditReportPrinter(creditReportDict, con, cur):
@@ -141,7 +144,19 @@ def creditReportPrinter(creditReportDict, con, cur):
   results.printInlineBoldLarge(f"£{str(creditReportDict['ballance'])}")
   results.ln(10)
 
-  results.output('../testCredit.pdf')
+  dateFrom = creditReportDict['afterDate'].replace('/', '_')
+  dateToday = datetime.today().strftime("%d_%m_%Y")
+  formattedCustomerName = customerName.replace(" ", "_")
+  
+  outputDir = os.path.join("..", "ISPCreditReports", formattedCustomerName)
+  outputFile = os.path.join(outputDir, f"{formattedCustomerName}-{dateFrom}-{dateToday}.pdf")
+
+  if not os.path.exists(os.path.join("..", "ISPCreditReports", formattedCustomerName)):
+
+    os.makedirs(outputDir, exist_ok=True)
+
+  results.output(outputFile)
+
 
 
 
