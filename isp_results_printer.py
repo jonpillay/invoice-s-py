@@ -3,7 +3,7 @@ import os
 
 from output_test import readOutputDictRaw
 
-from isp_db_helpers import getCustomerNamesIDs, getCustomerIDs, genCustomerNamesIDsDict
+from isp_db_helpers import getCustomerNamesIDs, getCustomerIDs, genIDsCustomerNamesDict
 from isp_output_prep import populateCustomerOutputDict
 
 from isp_PDF_class import TransactionUploadPDF
@@ -23,7 +23,7 @@ def print_transaction_upload_results(outputDict):
 
   outputResults = populateCustomerOutputDict(outputDict)
 
-  customerIDsDict = genCustomerNamesIDsDict(cur)
+  customerIDsDict = genIDsCustomerNamesDict(cur)
 
   for customer in outputResults:
 

@@ -1,7 +1,7 @@
 import sqlite3
 import os
 
-from isp_db_helpers import genCustomerNamesIDsDict
+from isp_db_helpers import genIDsCustomerNamesDict
 from isp_dataframes import Invoice, Transaction
 
 from isp_PDF_class import TransactionUploadPDF
@@ -16,7 +16,7 @@ def creditReportPrinter(creditReportDict, con, cur):
   results.add_page()
   results.register_fonts()
 
-  customerIDsDict = genCustomerNamesIDsDict(cur)
+  customerIDsDict = genIDsCustomerNamesDict(cur)
 
   customerName = customerIDsDict[creditReportDict["customerID"]]
 

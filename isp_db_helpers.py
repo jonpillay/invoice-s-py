@@ -128,6 +128,18 @@ def fetchInvoicesByCustomerDateRange(lowDate, highDate, customerID, cur):
 
   return invoices
 
+# quick count of invoices after a date by customer for fast retrieval for frontend display
+
+def countInvoicesByCustomerAfterDate(startDate, customerID, cur):
+
+  sql = "SELECT COUNT(id) FROM INVOICES WHERE INVOICES.date_issued BETWEEN ? and ? and INVOICES.customer_id=? ORDER BY invoice_num"
+
+  cur.execute(sql, (startDate, customerID))
+
+  invoices = cur.fetchall()
+
+  return invoices
+
 
 
 # Needs to fetch invoices by customer and also only before the transaction was paid
@@ -410,7 +422,7 @@ def getCustomerNamesIDs(cur):
   return [(customer[0], customer[1]) for customer in customerNames]
 
 
-def genCustomerNamesIDsDict(cur):
+def genIDsCustomerNamesDict(cur):
 
   fetctInvNumSQL = "SELECT id, customer_name from CUSTOMERS"
 
@@ -419,6 +431,17 @@ def genCustomerNamesIDsDict(cur):
   customerNames = cur.fetchall()
 
   return {customer[0]: customer[1] for customer in customerNames}
+
+
+def genCustomerNamesIDsDict(cur):
+
+  fetctInvNumSQL = "SELECT id, customer_name from CUSTOMERS"
+
+  cur.execute(fetctInvNumSQL)
+
+  customerNames = cur.fetchall()
+
+  return {customer[1]: customer[0] for customer in customerNames}
 
 
 def getCustomerIDs(cur):

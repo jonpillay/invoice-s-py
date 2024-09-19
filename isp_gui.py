@@ -18,7 +18,7 @@ def startApp():
   cur.close()
   conn.close()
 
-  root = tkb.Window(themename="solar")
+  root = tkb.Window(themename="simplex")
 
   renderMain(root)
 
