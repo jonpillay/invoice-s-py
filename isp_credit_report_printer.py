@@ -9,6 +9,7 @@ from isp_PDF_class import TransactionUploadPDF
 
 from isp_credit_report_constructor import constructCreditReportDictionary
 
+import subprocess
 import time
 
 
@@ -55,7 +56,6 @@ def creditReportPrinter(creditReportDict, con, cur):
     # the subject will be a single invoice payment, if it is a Transaction, it will be a multi invoice payment.
     if type(paidPair[0]) == Invoice:
       
-      print("shit")
       results.printMatchedSingles(paidPair)
 
     elif type(paidPair[0]) == Transaction:
@@ -156,6 +156,8 @@ def creditReportPrinter(creditReportDict, con, cur):
     os.makedirs(outputDir, exist_ok=True)
 
   results.output(outputFile)
+
+  subprocess.Popen([outputFile], shell=True)
 
 
 

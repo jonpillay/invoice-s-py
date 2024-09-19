@@ -1,5 +1,7 @@
 import sqlite3
 import os
+import subprocess
+from datetime import datetime
 
 from output_test import readOutputDictRaw
 
@@ -133,6 +135,19 @@ def print_transaction_upload_results(outputDict):
 
   cur.close()
   con.close()
+
+  dateToday = datetime.today().strftime("%d_%m_%Y")
+  
+  outputDir = os.path.join("..", "ISPTransactionUploadReports")
+  outputFile = os.path.join(outputDir, f"transcation_upload_report-{dateToday}.pdf")
+
+  if not os.path.exists(outputDir):
+
+    os.makedirs(outputDir, exist_ok=True)
+
+  results.output(outputFile)
+
+  subprocess.Popen([outputFile], shell=True)
 
   results.output('../test.pdf')
 

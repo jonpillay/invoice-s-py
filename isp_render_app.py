@@ -118,8 +118,6 @@ def renderMain(root):
   conn.close()
 
   def onCustomerSelected(event):
-
-    print("THAT")
     
     if report_gen_date_selector.entry.get():
 
@@ -166,10 +164,6 @@ def renderMain(root):
   report_gen_customer_label.grid(row=1, column=0, sticky='n')
 
   def onDateSelected(event):
-
-    print("THIS")
-
-    print(report_gen_date_selector.entry.get())
     
     if report_gen_customer_selector.get():
 
@@ -246,14 +240,7 @@ def renderMain(root):
       creditReportDict = constructCreditReportDictionary(customerID, startDate, conn, cur)
 
       creditReportPrinter(creditReportDict, conn, cur)
-
-      print("success")
     
-
-
-
-
-
   report_gen_button = tkb.Button(report_gen_button_frame, text="Gen Report", bootstyle='success', name="genReport", command=triggerGenCreditReport)
   report_gen_button.grid(row=0, column=0, sticky='s')
 

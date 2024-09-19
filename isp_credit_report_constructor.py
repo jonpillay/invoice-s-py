@@ -66,8 +66,6 @@ def constructInvTransMatchedPairsReport(customer_id, afterDate, con, cur):
 
               missedInvoiceDC = genDBInvoiceDCobj(missedInvoice[0])
 
-              print(missedInvoice)
-
               pairHolder.append([missedInvoiceDC, missedTransaction])
 
             invDummyTransPairs[:0] = pairHolder
