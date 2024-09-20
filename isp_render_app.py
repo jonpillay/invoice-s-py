@@ -18,13 +18,13 @@ import sqlite3
 
 def renderMain(root):
   root.title("InvoicesPY")
-  root.geometry('1400x600')
+  root.geometry('1400x650')
 
   root.rowconfigure(0, weight=1)
   root.rowconfigure(1, weight=20)
   root.columnconfigure(0, weight=1)
 
-  title_label = tkb.Label(root, text="InvoicesPY for...", background='red')
+  title_label = tkb.Label(root, text="InvoicesPY for...", background='yellow')
   title_label.grid(row=0, column=0, sticky='nesw')
 
   main_frame = tkb.Frame(root, border=2, relief='raised')
@@ -63,7 +63,7 @@ def renderMain(root):
 
   credit_controls_top_frame.columnconfigure(0, weight=1)
   # credit_controls_top_frame.columnconfigure(1, weight=9)
-  credit_controls_top_frame.rowconfigure(0, weight=1)
+  credit_controls_top_frame.rowconfigure(0, weight=4)
   credit_controls_top_frame.rowconfigure(1, weight=10)
 
   # system status info
@@ -197,7 +197,7 @@ def renderMain(root):
   report_gen_date_selector_frame.columnconfigure(0, weight=1)
   report_gen_date_selector_frame.grid(row=1, column=1, sticky='n')
 
-  report_gen_date_selector = tkb.DateEntry(report_gen_date_selector_frame, startdate=datetime.today()-timedelta())
+  report_gen_date_selector = tkb.DateEntry(report_gen_date_selector_frame, startdate=datetime.today()-timedelta(days=704))
 
   report_gen_date_selector.entry.bind("<FocusIn>", onDateSelected)
 
