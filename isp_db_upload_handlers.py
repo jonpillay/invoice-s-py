@@ -26,6 +26,8 @@ def handleInvoiceUpload(root, filename):
 
   conn = sqlite3.connect(os.getenv("DB_NAME"))
 
+  print(os.getenv("DB_NAME"))
+
   conn.execute('PRAGMA foreign_keys = ON')
 
   cur = conn.cursor()
@@ -96,6 +98,7 @@ def handleTransactionUpload(root, filename):
       """ Check to see if the Transaction entry has one, numerous, or no invoice number matches """
       
       if len(cleanedEntry[0]) == 0:
+        print(cleanedEntry)
         transDC = genNoNumTransactionDCobj(cleanedEntry)
         transDC.error_notes = "No Invoice Number Attatched"
         unsortedIncompRec.append(transDC)
@@ -121,6 +124,7 @@ def handleTransactionUpload(root, filename):
 
 
   print("This is the transaction count at line 117")
+  print(len(incompRec))
   print(len(compRec)+len(incompRec)+len(multiRec))
 
   upLoadedPairs = []
@@ -147,6 +151,8 @@ def handleTransactionUpload(root, filename):
     # fetch invoice via number on transaction
 
     invoice = fetchInvoiceByNum(invoiceNum, cur)
+
+    print(invoice)
 
     if len(invoice) == 0:
       transaction.error_notes = "No Match For Invoice Number Found."

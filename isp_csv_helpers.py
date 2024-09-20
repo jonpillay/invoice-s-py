@@ -5,6 +5,8 @@ from datetime import datetime
 
 from isp_dataframes import Invoice
 
+from isp_regex import CSV_TRANSACTION_REGEX
+
 load_dotenv()
 
 from tkinter import filedialog
@@ -22,7 +24,9 @@ def getFilename ():
 
 def cleanTransactionRaw(entry):
 
-  invMatches = re.findall(os.getenv('CSV_TRANSACTION_REGEX'), entry[2])
+  invMatches = re.findall(CSV_TRANSACTION_REGEX, entry[2])
+
+  print(invMatches)
 
   customer = entry[2].split(',')[0].strip()
 
