@@ -5,7 +5,7 @@ a = Analysis(
     ['isp_gui.py'],
     pathex=[],
     binaries=[],
-    datas=[],
+    datas=[("./fonts", "fonts")],
     hiddenimports=[],
     hookspath=[],
     hooksconfig={},
@@ -40,5 +40,5 @@ coll = COLLECT(
     strip=False,
     upx=True,
     upx_exclude=[],
-    name='isp_gui',
+    name='InvoiceS_PY',
 )

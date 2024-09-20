@@ -1,8 +1,15 @@
 from PIL import ImageFont
+import os
+import sys
 
 def genFontPath(fileName):
 
-  return f"./fonts/{fileName}"
+  if getattr(sys, 'frozen', False):
+    font_dir = os.path.join(sys._MEIPASS, "fonts", fileName)
+  else:
+    font_dir = f"./fonts/{fileName}"
+
+  return font_dir
 
 def getCellWidth(str, font, denom):
 

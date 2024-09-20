@@ -8,7 +8,17 @@ from isp_render_app import renderMain
 import sqlite3
 import os
 
-def startApp(): 
+def startApp():
+
+  basedir = os.path.dirname(__file__)
+
+  try:
+      from ctypes import windll  # Only exists on Windows.
+
+      myappid = "mycompany.myproduct.subproduct.version"
+      windll.shell32.SetCurrentProcessExplicitAppUserModelID(myappid)
+  except ImportError:
+      pass
 
   conn = sqlite3.connect(os.getenv("DB_NAME"))
   cur = conn.cursor()

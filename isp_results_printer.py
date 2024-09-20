@@ -148,10 +148,3 @@ def print_transaction_upload_results(outputDict):
   subprocess.Popen([outputFile], shell=True)
 
   results.output('../test.pdf')
-
-
-if __name__ == "__main__":
-
-  testOutputDict = readOutputDictRaw()
-
-  print_transaction_upload_results(testOutputDict)

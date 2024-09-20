@@ -1,3 +1,6 @@
+import os
+import sys
+
 from fpdf import FPDF
 from fpdf.enums import XPos, YPos
 
@@ -16,12 +19,18 @@ class TransactionUploadPDF(FPDF):
       self.set_auto_page_break(auto=True, margin=10) 
 
   def register_fonts(self):
-    self.add_font("alpha-slab", fname="./fonts/AlfaSlabOne-Regular.ttf")
-    self.add_font("jersey10", fname="./fonts/Jersey10-Regular.ttf")
-    self.add_font("special-elite", fname="./fonts/SpecialElite-Regular.ttf")
-    self.add_font("ultra", fname="./fonts/Ultra-Regular.ttf")
-    self.add_font("rajdhani", fname="./fonts/Rajdhani-Regular.ttf")
-    self.add_font("rajdhani", style='B', fname="./fonts/Rajdhani-Bold.ttf")
+
+    if getattr(sys, 'frozen', False):
+      font_dir = os.path.join(sys._MEIPASS, "fonts")
+    else:
+      font_dir = "./fonts"
+
+    self.add_font("alpha-slab", fname=os.path.join(font_dir, "AlfaSlabOne-Regular.ttf"))
+    self.add_font("jersey10", fname=os.path.join(font_dir, "Jersey10-Regular.ttf"))
+    self.add_font("special-elite", fname=os.path.join(font_dir, "SpecialElite-Regular.ttf"))
+    self.add_font("ultra", fname=os.path.join(font_dir, "Ultra-Regular.ttf"))
+    self.add_font("rajdhani", fname=os.path.join(font_dir, "Rajdhani-Regular.ttf"))
+    self.add_font("rajdhani", style='B', fname=os.path.join(font_dir, "Rajdhani-Bold.ttf"))
 
 
   def header(self):

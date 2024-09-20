@@ -40,6 +40,8 @@ def resolveNameMismatches(root, cur, conn, matchNameErrors):
           nameResolved.append(error)
           index += 1
 
+          print("Match single here")
+
           break
 
         else:
@@ -199,6 +201,8 @@ def resolveMultiInvoiceTransactions(root, cur, con, multiRecs):
   while len(multiVerified) + len(multiErrorFlagged) < matchCount:
 
     for checkTrans, checkInvoices in multiInvoiceMatches:
+
+      print("here multi match")
 
       checkedBool = tk.BooleanVar()
       verifyBool = tk.BooleanVar()
