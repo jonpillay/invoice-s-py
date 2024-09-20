@@ -86,8 +86,6 @@ def prepInvoiceUploadList(invoiceList, customerAliasIDict):
 
 def genInvoiceDCobj(invoice):
 
-  # print(invoice)
-
   date_issued = datetime.strptime(invoice[3], "%Y-%m-%d")
 
   invoiceDC = Invoice(
@@ -271,8 +269,6 @@ def prepMatchedTransforDB(transaction, invoice):
 
 
 def reMatchPaymentErrors(matchPaymentErrors, cur):
-  # print(matchPaymentErrors[0])
-  # print(matchPaymentErrors[1])
 
   rematched = []
   noMatch = []

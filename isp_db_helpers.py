@@ -514,13 +514,9 @@ def resolveNewCustomersDB(root, invoiceCustomers, aliasesDict, cur, conn):
 
         addNewCustomerToDB(customer, cur)
 
-        print(cur.lastrowid)
-
         conn.commit()
 
       elif aliasName != "":
-
-        print(aliasName + "this is from the alias")
 
         customerID = findCustomerIDInTup(aliasName, dbCustomers)
 
@@ -539,8 +535,6 @@ def resolveNewCustomersDB(root, invoiceCustomers, aliasesDict, cur, conn):
         addAliasToDB(customer, customerID, cur)
 
         conn.commit()
-      else:
-        print("Nothing happened")
 
 
 
@@ -554,13 +548,6 @@ def addCorrectedTransactionPairsDB(correctedErrors, con, cur):
     parentID = addErrorTransactionToDB(parentTransaction.as_tuple(), con, cur)
 
     parentTransaction.transaction_id = parentID
-
-    # if len(parentTransactionTup) == 8:
-    #   print(parentTransactionTup)
-    #   parentID = addTransactionToDB(parentTransactionTup, con, cur)
-    # else:
-    #   print(parentTransactionTup)
-    #   parentID = addDummyNoteTransactionsToDB([parentTransactionTup], con, cur)
 
     correctionTransation.parent_trans = parentID
 

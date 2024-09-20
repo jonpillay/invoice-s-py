@@ -1,8 +1,6 @@
 import datetime
 from dataclasses import dataclass, field
 
-# print(dataclasses.__version__)
-
 """Class for rendering backend information to the frontend"""
 
 @dataclass

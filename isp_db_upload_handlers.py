@@ -109,8 +109,6 @@ def handleTransactionUpload(root, filename):
         unsortedMultiRec.append(transactionDC)
 
   # Sort lists by date_paid
-
-  print("this is count at line 107")
   print(count)
 
   # comprec is transactions with a single invoice number
