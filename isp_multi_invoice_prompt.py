@@ -1,14 +1,7 @@
 import tkinter as tk
 import ttkbootstrap as tkb
-from tkinter import ttk
 
-import sqlite3
-import os
-
-from isp_treeviews import renderPromptInvoices, renderPromptTransactions, renderPromptMulitTransactions
-from isp_db_helpers import fetchUnpaidInvoicesByCustomerBeforeDate
-from isp_data_handlers import genInvoiceDCobj
-from isp_trans_verify import verifyTransactionAmount
+from isp_treeviews import renderPromptInvoices, renderPromptMulitTransactions
 
 
 def openMultiInvoicePrompt(root, transaction, invoiceList, checkedBool, verifyBool):
@@ -207,12 +200,6 @@ def openSelectBetweenInvoices(root, transaction, candInvoices, invoiceIDVar):
     invoiceTable.insert(parent='', index=i, values=(invoiceList[i].invoice_num, invoiceList[i].issued_to, invoiceList[i].amount, formattedDate, invoiceList[i].error_notes))
 
   invoiceTable.pack(padx=10)
-
-  # style = ttk.Style(invoiceTable)
-  # style.theme_use('alt')
-  # style.configure("Treeview",
-  #   rowheight=30
-  # )
 
   verification_frame = tkb.Frame(main_frame)
   verification_frame.pack(pady=10)

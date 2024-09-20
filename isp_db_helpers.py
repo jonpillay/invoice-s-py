@@ -4,7 +4,7 @@ from datetime import datetime, timedelta, date
 
 from isp_popup_window import openNewCustomerPrompt
 from isp_data_comparers import compareCustomerToAliasesDict, findCustomerIDInTup
-# from isp_data_handlers import genCashTransactionTup
+
 
 def getInvoiceNumsIDs(cur):
 
@@ -95,16 +95,6 @@ def fetchUnpaidInvoicesByCustomer(customerID, cur):
   invoices = cur.fetchall()
 
   return invoices
-
-# def fetchUnpaidInvoicesByCustomer(customerID, cur):
-
-#   sql = "SELECT INVOICES.id, INVOICES.invoice_num, INVOICES.amount, INVOICES.date_issued, INVOICES.issued_to, INVOICES.customer_id FROM INVOICES LEFT JOIN TRANSACTIONS ON INVOICES.customer_id = TRANSACTIONS.customer_id WHERE INVOICES.customer_id=? AND TRANSACTIONS.invoice_id IS NULL ORDER BY INVOICES.invoice_num"
-
-#   cur.execute(sql, (customerID, ))
-
-#   invoices = cur.fetchall()
-
-#   return invoices
 
 
 def fetchUnpaidInvoicesByCustomerBeforeDate(beforeDate, customerID, cur):

@@ -5,7 +5,7 @@ from datetime import datetime
 
 from output_test import readOutputDictRaw
 
-from isp_db_helpers import getCustomerNamesIDs, getCustomerIDs, genIDsCustomerNamesDict
+from isp_db_helpers import genIDsCustomerNamesDict
 from isp_output_prep import populateCustomerOutputDict
 
 from isp_PDF_class import TransactionUploadPDF

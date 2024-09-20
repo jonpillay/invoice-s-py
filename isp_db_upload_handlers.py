@@ -109,7 +109,6 @@ def handleTransactionUpload(root, filename):
         unsortedMultiRec.append(transactionDC)
 
   # Sort lists by date_paid
-  print(count)
 
   # comprec is transactions with a single invoice number
   compRec = sorted(unsortedCompRec, key=lambda transaction:transaction.paid_on)
@@ -173,16 +172,11 @@ def handleTransactionUpload(root, filename):
     else:
       print("cannot match")
 
-  # print(len(matchPaymentError)+len(matchNameError)+len(matchedSingles)+len(noMatchFromNum)+len(incompRec)+len(multiRec))
-  # records are complete at this point
 
   # resolve name mismatches
   nameResolved, namesUnresolved, resolvedNamePaymentErrors = resolveNameMismatches(root, cur, con, matchNameError)
 
   incompRec.extend(namesUnresolved)
-  
-  # print(len(matchPaymentError)+len(nameResolved)+len(matchedSingles)+len(noMatchFromNum)+len(incompRec)+len(multiRec))
-  # records are complete at this point
 
   matchPaymentError.extend(resolvedNamePaymentErrors)
 
@@ -197,9 +191,6 @@ def handleTransactionUpload(root, filename):
   con.commit()
 
   upLoadedPairs.extend(matchedSingles)
-
-  # print("Transaction count @line 192")
-  # print(len(matchPaymentError)+len(incompRec)+len(multiRec)+len(upLoadedPairs))
 
   # Start of multi-invoice transaction verification.
  
@@ -232,12 +223,6 @@ def handleTransactionUpload(root, filename):
   multiErrorFlagged = ['multiErrorFlagged', multiErrorFlaggedList]
   multiInvoiceErrors = ['multiInvoiceErrors', multiInvoiceErrorsList]
 
-  # print("Transaction count @line 207")
-  # print(len(matchPaymentError)+len(noMatchFromNum)+len(incompRec)+len(multiVerified)+len(multiErrorFlagged)+len(multiInvoiceErrors)+len(upLoadedPairs))
-
-
-  # print(len(matchPaymentError)+len(nameResolved)+len(upLoadedPairs)+len(noMatchFromNum)+len(incompRec)+len(multiVerified)+len(multiErrorFlagged)+len(multiInvoiceErrors))
-
 
   # Resolve Payment Errors
 
@@ -248,13 +233,7 @@ def handleTransactionUpload(root, filename):
   # rematch payment errors against updated DB
   reMatched, noMatch = reMatchPaymentErrors(stillMatchPaymentError, cur)
 
-
-  # print("Transaction count @line 220")
-  # print(len(reMatched)+len(noMatch)+len(noMatchFromNum)+len(incompRec)+len(multiVerified)+len(multiErrorFlagged)+len(multiInvoiceErrors)+len(upLoadedPairs))
-
   incompRec.extend(noMatch)
-
-  # print(len(reMatched))
 
   """
     *** seems counter intuative to run this here as the system should possibly check if the errors are corrections first? ***
@@ -262,20 +241,7 @@ def handleTransactionUpload(root, filename):
 
   correctedErrors, incorrectInvoiceNums = resolvePaymentErrors(root, reMatched, cur, con)
 
-
-  # need a function here to check if any of the payment errors are corrections of previous payments.
-  # starting with those in the current list and then going backwards through the DB invoices.
-
-  # print("Transaction count @line 229")
-  # print(len(correctedErrors)+len(incorrectInvoiceNums)+len(incompRec)+len(multiVerified)+len(multiErrorFlagged)+len(multiInvoiceErrors)+len(upLoadedPairs))
-
   incompRec.extend(incorrectInvoiceNums)
-
-  # print("This is corrected errors")
-
-  # print(correctedErrors)
-
-  correctedTransactions = [(correctedPair[0][0], correctedPair[1]) for correctedPair in correctedErrors]
 
   updatedCorrectedErrors = addCorrectedTransactionPairsDB(correctedErrors, con, cur)
 
@@ -301,20 +267,11 @@ def handleTransactionUpload(root, filename):
 
   incompRec.sort(key=lambda Transaction: Transaction.paid_by)
 
-
-  # print("InComp rec len check")
-  # print(len(incompRec))
-  # print("")
-
   inCompMatchedList, inCompMultiMatchList, noMatches, newCustomersTransactionsList = resolveNoMatchTransactions(root, incompRec, cur, con)
 
   inCompMatched = ['inCompMatched', inCompMatchedList]
   inCompMultiMatch = ['inCompMultiMatch', inCompMultiMatchList]
   newCustomerTransactions = ['newCustomerTransactions', newCustomersTransactionsList]
-
-  # print("Ouput len check line 267")
-  # print(len(inCompMatched)+len(noMatches)+len(newCustomersTransactionsList))
-  # print("")
 
   con.commit()
 
@@ -347,19 +304,6 @@ def handleTransactionUpload(root, filename):
 
   print(len(matchedSingles[1]) + len(correctedErrorsReport[1]) + len(invoiceNumRematchedReport[1]) + len(correctionTransactionErrorsReport[1]) + len(inCompMatched[1]) + len(inCompErrorCorrectionMatched[1]) + len(uploadedMultiTransactionPairs[1]) + len(inCompMultiMatch[1]) + len(finalNoMatch[1]) + len(multiErrorFlagged[1]) + len(multiInvoiceErrors[1]) + len(newCustomerTransactions[1]))
 
-  print(len(matchedSingles[1])) #255
-  print(len(correctedErrorsReport[1])) #0
-  print(len(invoiceNumRematchedReport[1])) #2
-  print(len(correctionTransactionErrorsReport[1])) #0
-  print(len(inCompMatched[1])) #21
-  print(len(inCompErrorCorrectionMatched[1])) #0
-  print(len(uploadedMultiTransactionPairs[1])) #7
-  print(len(multiErrorFlagged[1])) #0
-  print(len(multiInvoiceErrors[1])) #0
-  print(len(inCompMultiMatch[1])) #0
-  print(len(finalNoMatch[1])) #28
-  print(len(newCustomerTransactions[1])) #2
-
   finalListOfLists = [matchedSingles, correctedErrorsReport, invoiceNumRematchedReport, correctionTransactionErrorsReport, inCompMatched, inCompErrorCorrectionMatched, uploadedMultiTransactionPairs, multiErrorFlagged, multiInvoiceErrors, inCompMultiMatch, finalNoMatch, newCustomerTransactions]
 
 
@@ -370,167 +314,7 @@ def handleTransactionUpload(root, filename):
   f.write(str(outputPrintDict))
 
   print_transaction_upload_results(outputPrintDict)
-
-  # print(type(outputPrintDict))
-
-
   f.close()
-  
 
-  """
-  
-  - numbers from desanned data
-
-    This is the final count of all final transaction lists
-    320
-    255
-    5
-    0
-    23
-    0
-    7
-    0
-    0
-    0
-    28
-    2
-
-  - numbers from sensitive data
-  
-    This is the final count of all final transaction lists
-    320
-    255
-    5
-    0
-    23
-    0
-    7
-    0
-    0
-    0
-    28
-    2
-
-
-  """
-
-  
-
-
-
-
-
-
-
-
-
-
-
-  # print("Transaction count @line 260")
-  # print(len(noMatches)+len(namesUnresolved)+len(newCustomersTransactions)+len(multiVerified)+len(multiErrorFlagged)+len(multiInvoiceErrors)+len(upLoadedPairs))
-
-
-
-
-  # print("Start of matched")
-  # print("")
-
-  # for match in matched:
-  #   print(match)
-
-  #   print("Start of noMatches")
-  #   print("")
-
-  # for noMatch in noMatches:
-  #   print(match)
-  #   print("")
-
-
-  """
-
-  What we have left at this point and where they're going.
-
-  """
-
-  #List of all the uploaded Transaction/Single Invoice pairs that have been uploaded - To be sent to printer (274)
-  # print(len(upLoadedPairs))
-
-  # List of transactions that have not found a match. (36)
-  # print(len(noMatches))
-  # for i in noMatches:
-  #   print(i)
-  #   print(" ")
-
-  # List of new customer transactions that have no matching invoices or records on the DB - to be sent for printing (3)
-  # print(len(newCustomersTransactions))
-
-  # Transactions that have the wrong name on them (0)
-  # print(len(namesUnresolved))
-
-  # List of pairs of lists containing transaction/invoices. The first Transaction in the list is the original multi transaction,
-  # the following ones are dummy transaction (a split of the main one) to pay each invoice. (7)
-  # print(len(uploadedMultiTransactionPairs))
-
-  # Any multi invoice errors where the listed invoices do not total to the transaction amount. Should be possibly tried to match earlier. (0)
-  # print(len(multiInvoiceErrors)) 
-
-  # Multi-invoice errors that even though they do add up to the correct amount, were flaggeed as errors by the user
-  # I expect this to be none, as if the invoices already add up, then I would assume it errorless.
-  # print(len(multiErrorFlagged))
-
-  # for e in upLoadedPairs:
-  #   print(e)
-  #   print("")
-
-  # print("No Matches")
-  # print("")
-  # for i in noMatches:
-  #   print(i)
-  #   print("")
-
-  # print("")
-  # print("Match Pairs")
-  # print("")
-  # for i in finalPaymentMatches:
-  #   print(i)
-  #   print("")
-
-  """
-    We have left -
-
-    upLoadedPairs = all the Transaction and Invoice pairs that have been matched and uploaded
-
-    uploadedMultiTransactionPairs - two lists containing original multi transaction
-    with dummy transactions and all invoices paired
-
-    newCustomersTransactions - Transactions that have come in without a matching invoice
-    and new customers added to DB so assumed no invoice exists on DB
-
-  """
-
-
-  
   cur.close()
   con.close()
-
-  # print("This is the uploaded pairs")
-
-  # for uploaded in upLoadedPairs:
-
-  #   print(uploaded[0])
-  #   print(uploaded[1])
-  #   print("")
-  #   print("")
-
-  # print("upLoadedPairs len is ")
-  # print(len(upLoadedPairs))
-
-  # for multipair in uploadedMultiTransactionPairs:
-
-  #   print(multipair[0])
-  #   print("")
-  #   print(multipair[1])
-  #   print("")
-
-  # print("multipair len is ")
-  # print(len(multipair))

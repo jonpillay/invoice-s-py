@@ -40,5 +40,3 @@ class Invoice:
 class Customer:
   customer_name: str
   customer_aliases: list[str] = field(default_factory=list)
-
-# Transaction = NamedTuple('Transaction', 'invoice_num, amount, paid_on, company_name, payment_method, og_string, invoice_id')

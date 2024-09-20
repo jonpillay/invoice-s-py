@@ -94,16 +94,6 @@ def final_resolver(root, matchlessList, cur, con):
 
           """
 
-
-            # for candTransaction in candTransactions:
-
-            #   candTransaction = genDBTransactionDCobj(candTransaction)
-
-            #   if candTransaction.error_flagged == 1:
-            #     pass
-            #   else:
-            #     print("NOTHING")
-
       # if the function reaches this evaluation it means that an exact match has not been found. This best match is the closest match
       # that the function could find.
 
@@ -196,14 +186,3 @@ def final_resolver(root, matchlessList, cur, con):
         nonMatchable.append(transaction)
 
   return matched, nonMatchable
-
-  
-
-
-# dummyConn = sqlite3.connect(os.getenv("DB_NAME"))
-
-# dummyConn.execute('PRAGMA foreign_keys = ON')
-
-# dummyCur = dummyConn.cursor()
-
-# final_resolver(noMatchList, dummyCur, dummyConn)

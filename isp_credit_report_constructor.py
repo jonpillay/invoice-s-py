@@ -129,14 +129,8 @@ def constructInvTransMatchedPairsReport(customer_id, afterDate, con, cur):
   return paid, unpaid, roundedCorrectionTotal
 
 
-# constructInvTransMatchedPairsReport(9, '2020-10-01')
-
-
-
 def constructUnmatchedTransactionReport(customerID, afterDate, con, cur):
   
-  # formattedDate = datetime.strptime(afterDate, '%Y-%m-%d').strftime('%d-%m-%Y')
-
   # fetch all transactions that have no invoice_id attached (do not pay a single transaction) and also have no high_invoice number attached (is not a multi invoice transaction).
 
   sql = f"SELECT * FROM TRANSACTIONS WHERE customer_id = ? AND paid_on >= ? AND invoice_id IS NULL AND high_invoice IS NULL"
@@ -149,30 +143,6 @@ def constructUnmatchedTransactionReport(customerID, afterDate, con, cur):
 
   return unMatchedTransactionDCs
 
-
-# constructUnmatchedTransactionReport(10, '2020-10-01')
-
-"""
-
-Now need to construct a dictionary for printing for the report. The dictionary has three different types 
-of payments/non payments to report on.
-
-The paid list returned from constructInvTransMatchedPairsReport contains both paid single invoice transactions and multi one.
-
-- Single paid invoices are in a list, with the invoice at the start followed by the transaction. Multi invoice transactions
-  have the parent transaction at the start, followed by pairs on invoicces and the dummy transaction that pays for them.
-
-- There is then a list of unpaid invoices and also unmatched transactions from the period to be reported on.
-
-- The dictionary return from the function should also have the running totals of the period...
-
-- What need to be reported on?
-
-- Balance for the period. For this all that needs to be worked out is the total of leftover invoices minus the total of leftover transactions.
-- This should be reported on as the ballance. There should also be a tally of how many error corrections were made and also the overall correction amount.
-  
-
-"""
 
 def constructCreditReportDictionary(customer_id, afterDate, con, cur):
   

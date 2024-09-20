@@ -8,12 +8,10 @@ from isp_credit_report_constructor import constructCreditReportDictionary
 from isp_credit_report_printer import creditReportPrinter
 
 from tkinter import messagebox
-from datetime import date, datetime, timedelta
+from datetime import datetime, timedelta
 
 import os
 import sqlite3
-
-
 
 
 def renderMain(root):
@@ -258,16 +256,3 @@ def renderMain(root):
 
   report_gen_balance_label = tkb.Label(report_gen_preview_frame, text="")
   report_gen_balance_label.grid(row=2, column=0, padx=20, columnspan=2)
-
-  # report_gen_invoice_paid_frame = tkb.Frame(report_gen_controls, bootstyle="dark")
-  # report_gen_invoice_paid_frame.grid(row=2, column=1, sticky='nesw')
-
-  # # Tabs for switching between different portions of results (paid, outstanding, possible errors)
-  # results_dummy_tabs = tkb.Label(credit_controls_top_frame, text='Results Dummy Tabs', background='#8B8000')
-
-  # # Query Result Printed to console. Each invoice is printed with related payment details- 
-  # # except in the case of payments without invoice, which are displayed alone (and marked)
-  # results_dummy_text = tkb.Label(credit_controls_top_frame, text='Results Dummy Text', background='orange')
-
-  # results_dummy_tabs.grid(row=0, column=0, sticky='nesw')
-  # results_dummy_text.grid(row=1, column=0, sticky='nesw')

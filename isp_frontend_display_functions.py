@@ -13,16 +13,3 @@ def fetchCreditPreviewNumbers(fromDate, customer_id, cur, con):
   unpaidInvoiceCount = countUnpaidInvoicesByCustomerAfterDate(fromDateObj, customer_id, cur)
 
   return invoiceCount, unpaidInvoiceCount
-
-conn = sqlite3.connect(os.getenv("DB_NAME"))
-
-conn.execute('PRAGMA foreign_keys = ON')
-
-cur = conn.cursor()
-
-startDate = "21/09/2020"
-
-fetchCreditPreviewNumbers(startDate, 9, cur, conn)
-
-cur.close()
-conn.close()

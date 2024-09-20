@@ -1,7 +1,7 @@
 from isp_dataframes import Transaction, Invoice
-from isp_db_helpers import getCustomerID, fetchRangeInvoicesByCustomer, getCustomerNamesIDs, addAliasToDB, addNewCustomerToDB, addTransactionToDB, findCustomerIDInTup, fetchUnpaidInvoicesByCustomerDateRange, fetchUnpaidInvoicesByCustomerBeforeDate, updateInvoiceRec, addDummyTransactionsToDB, addDummyNoteTransactionsToDB, addErrorTransactionToDB, addErrorNoteTransactionToDB, addNewCustomerTransactionsToDB
+from isp_db_helpers import getCustomerID, fetchRangeInvoicesByCustomer, getCustomerNamesIDs, addAliasToDB, addNewCustomerToDB, addTransactionToDB, findCustomerIDInTup, fetchUnpaidInvoicesByCustomerBeforeDate, updateInvoiceRec, addDummyTransactionsToDB, addDummyNoteTransactionsToDB, addErrorTransactionToDB, addErrorNoteTransactionToDB, addNewCustomerTransactionsToDB
 from isp_popup_window import openTransactionAliasPrompt, openTransactionPaymentErrorPrompt, openNewCustomerPrompt
-from isp_data_handlers import constructCustomerAliasesDict, genInvoiceDCobj, genNoNumTransactionDCobj, prepMatchedTransforDB, constructCustomerIDict, getCustomerIDForTrans, prepNewlyMatchedTransactionForDB, prepNewlyMatchedErrorTransactionForDB, genMultiTransactions
+from isp_data_handlers import constructCustomerAliasesDict, genInvoiceDCobj, prepMatchedTransforDB, getCustomerIDForTrans, prepNewlyMatchedTransactionForDB, prepNewlyMatchedErrorTransactionForDB, genMultiTransactions
 from isp_data_comparers import compareCustomerToAliasesDict, getCustomerDBName
 from isp_multi_invoice_prompt import openMultiInvoicePrompt, openMatchedMultiInvoicePrompt, openSelectBetweenInvoices
 from isp_trans_verify import verifyTransactionAmount
@@ -57,12 +57,6 @@ def resolveNameMismatches(root, cur, conn, matchNameErrors):
       openTransactionAliasPrompt(root, invoice, transaction, aliasBool, rejectedBool)
 
       if aliasBool.get() == True:
-
-        # for customer in alisesDict:
-        #   if invoice.issued_to in alisesDict[customer]:
-        #     searchName = customer
-        #   else:
-        #     searchName = invoice.issued_to
 
         addAliasToDB(transaction.paid_by, invoice.customer_id, cur)
 
@@ -568,24 +562,7 @@ def resolveNoMatchTransactions(root, incompTransactions, cur, con):
 
             break
 
-
-  # [print(i) for i in matched]
-  # [print(i) for i in noMatches]
-
-  # print("Start of the noMatch transactions as they are recieved by resolveNoMatchTransactions")
-  # print("")
-
-  # for noMatch in noMatches:
-  #   print(noMatch)
-  #   print("")
-
-  # quit()
-
   return matched, multiMatched, noMatches, newCustomersTransactions
-
-
-
-
 
 
 
@@ -598,8 +575,6 @@ def resolveNoMatchTransactions2(root, incompTransactions, cur, con):
 
   matched = []
   noMatches = []
-
-  transactionCount = len(existingCustomerTransactions)
 
   paidInvoiceMemo = []
 
@@ -725,14 +700,5 @@ def resolveNoMatchTransactions2(root, incompTransactions, cur, con):
         noMatches.append(transaction)
         existingCustomerTransactions.pop(0)
         break
-
-
-
-  # [print(i) for i in matched]
-  # [print(i) for i in noMatches] 
-  # print(len(matched))
-  # print(len(noMatches)) 
-  # print(transactionCount)
-
 
   return matched, noMatches, newCustomersTransactions

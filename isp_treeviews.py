@@ -28,12 +28,6 @@ def renderSimplePromptInvoices(parentWindow, invoiceList):
 
   invoiceTable.pack()
 
-  # style = tkb.Style(invoiceTable)
-  # style.theme_use('alt')
-  # style.configure("Treeview",
-  #   rowheight=30
-  # )
-
 def renderPromptInvoices(parentWindow, invoiceList):
 
   invoiceTable = tkb.Treeview(parentWindow, style='success', show='headings', height=len(invoiceList))
@@ -64,12 +58,6 @@ def renderPromptInvoices(parentWindow, invoiceList):
 
   invoiceTable.pack(padx=10)
 
-  # style = tkb.Style(invoiceTable)
-  # style.theme_use('alt')
-  # style.configure("Treeview",
-  #   rowheight=30
-  # )
-
 def renderPromptTransactions(parentWindow, transactionList):
 
   transactionTable = tkb.Treeview(parentWindow, style='success', columns=('invoice_num', 'paid_by', 'amount', 'paid_on', 'payment_method'), show='headings', height=len(transactionList))
@@ -88,12 +76,6 @@ def renderPromptTransactions(parentWindow, transactionList):
 
   transactionTable.column('payment_method', width=90, anchor='center')
   transactionTable.heading('payment_method', text='Method')
-
-  # style = tkb.Style(transactionTable)
-  # style.theme_use('alt')
-  # style.configure("Treeview",
-  #   rowheight=30
-  # )
 
   transactionTable.pack(pady=10)
 
@@ -126,12 +108,6 @@ def renderPromptMulitTransactions(parentWindow, transactionList):
 
   multiTransactionTable.column('payment_method', width=90, anchor='center')
   multiTransactionTable.heading('payment_method', text='Method')
-
-  # style = tkb.Style(multiTransactionTable)
-  # style.theme_use('alt')
-  # style.configure("Treeview",
-  #   rowheight=30
-  # )
 
   multiTransactionTable.pack(pady=20)
 

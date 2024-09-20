@@ -138,18 +138,6 @@ class TransactionUploadPDF(FPDF):
       self.printCorrectionNumber(f"£{abs(amount)}")
       self.set_text_color(0, 0, 0)
 
-
-  # write print inline normal
-
-  # write print inline amount
-
-  # write print error notes
-
-  # write print normal inline
-
-  # write a resolution message print
-
-
   def printMatchedSingles(self, matchedSinglePair):
     
     if type(matchedSinglePair[0]) == Transaction:

@@ -158,22 +158,3 @@ def creditReportPrinter(creditReportDict, con, cur):
   results.output(outputFile)
 
   subprocess.Popen([outputFile], shell=True)
-
-
-
-
-
-if __name__ == "__main__":
-  con = sqlite3.connect(os.getenv("DB_NAME"))
-
-  con.execute('PRAGMA foreign_keys = ON')
-
-  cur = con.cursor()
-
-  reportDict = constructCreditReportDictionary(3, '2023-03-04', con, cur)
-
-  creditReportPrinter(reportDict, con, cur)
-
-  cur.close()
-
-  con.close()

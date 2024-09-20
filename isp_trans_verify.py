@@ -174,14 +174,6 @@ def checkIfNoNumTransactionErrorIsCorrection(transaction, errorTransaction, dumm
       if bestMatch == None or dif < bestMatch[0]:
 
         bestMatch = [dif, candInvoice]
-
-      # matchVerifiedBool = tk.BooleanVar()
-
-      # openVerifyCloseEnoughtMatch(root, transaction, candInvoice, matchVerifiedBool)
-
-      # if matchVerifiedBool.get() == True:
-
-      #   return candInvoice.invoice_id
   
   return bestMatch
 
@@ -375,13 +367,3 @@ def checkIfTransactionListContainsErrorCorrections(root, correctedErrors, con, c
       break
 
   return stillErrors, reMatched
-
-  # will be passed the output from resolvePaymentErrors for transactions that have been corrected.
-  # A list of Tuples, the first element being a list of the original Transaction and the invoice
-  # it now matches to. The second element in the tuple is the dummy correction Transaction created by
-  # resolvePaymentErrors.
-
-  # The function not only has to check database for invoice/transaction pair errors, but also first
-  # itself.
-
-  # It should perform corrections in loop to avoid candidate transactions being pulled twice

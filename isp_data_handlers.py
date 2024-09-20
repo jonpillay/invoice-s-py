@@ -51,8 +51,6 @@ def prepInvoiceUploadList(invoiceList, customerAliasIDict):
       for id in customerAliasIDict:
         if "CASH" in customerAliasIDict[id]:
 
-          # Transaction data obj - information that is local at the moment from Invoice obj - passed, completed after invoice upload
-
           invoice.customer_id = id
 
           # cashInvoiceTup =  (
@@ -214,8 +212,6 @@ def genMultiTransactions(multiTransInvPairs, cur, con):
 
   transactionUploadList - list of the newly created dummy transactions for upload.
 
-
-
   """  
 
   dummyTransactionUploadList = []
@@ -329,14 +325,6 @@ def getCustomerIDForTrans(root, transList, cur, con):
         transList.pop(0)
         break
 
-      # for id in customerIDMemo:
-      #   if transaction.paid_by in customerIDMemo[id]:
-
-      #     transaction.customer_id = id
-      #     matched.append(transaction)
-      #     transList.pop(0)
-      #     break
-
 
       if transaction.customer_id is None:
         
@@ -355,15 +343,6 @@ def getCustomerIDForTrans(root, transList, cur, con):
           matched.append(transaction)
           transList.pop(0)
           break
-
-        # for id in customerIDict:
-        #   if transaction.paid_by in customerIDict[id]:
-
-        #     transaction.customer_id = id
-        #     matched.append(transaction)
-        #     transList.pop(0)
-        #     break
-
 
       if transaction.customer_id is None:
 
