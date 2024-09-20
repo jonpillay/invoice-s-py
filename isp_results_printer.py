@@ -3,8 +3,6 @@ import os
 import subprocess
 from datetime import datetime
 
-from output_test import readOutputDictRaw
-
 from isp_db_helpers import genIDsCustomerNamesDict
 from isp_output_prep import populateCustomerOutputDict
 
