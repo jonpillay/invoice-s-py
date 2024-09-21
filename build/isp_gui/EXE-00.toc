@@ -73,7 +73,7 @@
  [],
  False,
  False,
- 1726833510,
+ 1726898713,
  [('run.exe',
    'C:\\Users\\jonpi\\Desktop\\projects\\invoice-s-py\\.venv\\Lib\\site-packages\\PyInstaller\\bootloader\\Windows-64bit-intel\\run.exe',
    'EXECUTABLE')],

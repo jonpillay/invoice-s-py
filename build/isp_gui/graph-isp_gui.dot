@@ -7,7 +7,6 @@ charset="UTF-8";
 	"zlib" [label="<f0> BuiltinModule| <f1> zlib",shape="record"];
 	"importlib.readers" [label="<f0> SourceModule| <f1> importlib.readers",shape="record"];
 	"importlib" [label="<f0> Package| <f1> importlib",shape="record"];
-	"importlib.machinery" [label="<f0> SourceModule| <f1> importlib.machinery",shape="record"];
 	"importlib._bootstrap_external" [label="<f0> SourceModule| <f1> importlib._bootstrap_external",shape="record"];
 	"importlib.metadata" [label="<f0> Package| <f1> importlib.metadata",shape="record"];
 	"typing" [label="<f0> SourceModule| <f1> typing",shape="record"];
@@ -81,6 +80,7 @@ charset="UTF-8";
 	"_bz2" [label="<f0> Extension| <f1> _bz2",shape="record"];
 	"fnmatch" [label="<f0> SourceModule| <f1> fnmatch",shape="record"];
 	"importlib._abc" [label="<f0> SourceModule| <f1> importlib._abc",shape="record"];
+	"importlib.machinery" [label="<f0> SourceModule| <f1> importlib.machinery",shape="record"];
 	"contextlib" [label="<f0> SourceModule| <f1> contextlib",shape="record"];
 	"importlib.metadata._itertools" [label="<f0> SourceModule| <f1> importlib.metadata._itertools",shape="record"];
 	"importlib.metadata._functools" [label="<f0> SourceModule| <f1> importlib.metadata._functools",shape="record"];
@@ -834,33 +834,41 @@ charset="UTF-8";
 	"ttkbootstrap.constants" [label="<f0> SourceModule| <f1> ttkbootstrap.constants",shape="record"];
 	"tkinter" [label="<f0> Package| <f1> tkinter",shape="record"];
 	"_tkinter" [label="<f0> Extension| <f1> _tkinter",shape="record"];
+	"genericpath" [label="<f0> SourceModule| <f1> genericpath",shape="record"];
 	"_collections_abc" [label="<f0> SourceModule| <f1> _collections_abc",shape="record"];
-	"enum" [label="<f0> SourceModule| <f1> enum",shape="record"];
-	"traceback" [label="<f0> SourceModule| <f1> traceback",shape="record"];
-	"operator" [label="<f0> SourceModule| <f1> operator",shape="record"];
-	"warnings" [label="<f0> SourceModule| <f1> warnings",shape="record"];
-	"heapq" [label="<f0> SourceModule| <f1> heapq",shape="record"];
-	"_heapq" [label="<f0> BuiltinModule| <f1> _heapq",shape="record"];
-	"_weakrefset" [label="<f0> SourceModule| <f1> _weakrefset",shape="record"];
 	"io" [label="<f0> SourceModule| <f1> io",shape="record"];
-	"locale" [label="<f0> SourceModule| <f1> locale",shape="record"];
-	"_locale" [label="<f0> BuiltinModule| <f1> _locale",shape="record"];
-	"keyword" [label="<f0> SourceModule| <f1> keyword",shape="record"];
-	"linecache" [label="<f0> SourceModule| <f1> linecache",shape="record"];
 	"abc" [label="<f0> SourceModule| <f1> abc",shape="record"];
 	"_py_abc" [label="<f0> SourceModule| <f1> _py_abc",shape="record"];
 	"_abc" [label="<f0> BuiltinModule| <f1> _abc",shape="record"];
-	"os" [label="<f0> SourceModule| <f1> os",shape="record"];
-	"copyreg" [label="<f0> SourceModule| <f1> copyreg",shape="record"];
-	"reprlib" [label="<f0> SourceModule| <f1> reprlib",shape="record"];
-	"weakref" [label="<f0> SourceModule| <f1> weakref",shape="record"];
-	"sre_compile" [label="<f0> SourceModule| <f1> sre_compile",shape="record"];
 	"stat" [label="<f0> SourceModule| <f1> stat",shape="record"];
 	"_stat" [label="<f0> BuiltinModule| <f1> _stat",shape="record"];
+	"weakref" [label="<f0> SourceModule| <f1> weakref",shape="record"];
 	"collections.abc" [label="<f0> SourceModule| <f1> collections.abc",shape="record"];
 	"collections" [label="<f0> Package| <f1> collections",shape="record"];
-	"genericpath" [label="<f0> SourceModule| <f1> genericpath",shape="record"];
 	"sre_constants" [label="<f0> SourceModule| <f1> sre_constants",shape="record"];
+	"copyreg" [label="<f0> SourceModule| <f1> copyreg",shape="record"];
+	"operator" [label="<f0> SourceModule| <f1> operator",shape="record"];
+	"types" [label="<f0> SourceModule| <f1> types",shape="record"];
+	"sre_compile" [label="<f0> SourceModule| <f1> sre_compile",shape="record"];
+	"enum" [label="<f0> SourceModule| <f1> enum",shape="record"];
+	"heapq" [label="<f0> SourceModule| <f1> heapq",shape="record"];
+	"_heapq" [label="<f0> BuiltinModule| <f1> _heapq",shape="record"];
+	"posixpath" [label="<f0> SourceModule| <f1> posixpath",shape="record"];
+	"keyword" [label="<f0> SourceModule| <f1> keyword",shape="record"];
+	"functools" [label="<f0> SourceModule| <f1> functools",shape="record"];
+	"_functools" [label="<f0> BuiltinModule| <f1> _functools",shape="record"];
+	"traceback" [label="<f0> SourceModule| <f1> traceback",shape="record"];
+	"re._parser" [label="<f0> SourceModule| <f1> re._parser",shape="record"];
+	"re._constants" [label="<f0> SourceModule| <f1> re._constants",shape="record"];
+	"re._compiler" [label="<f0> SourceModule| <f1> re._compiler",shape="record"];
+	"re._casefix" [label="<f0> SourceModule| <f1> re._casefix",shape="record"];
+	"re" [label="<f0> Package| <f1> re",shape="record"];
+	"warnings" [label="<f0> SourceModule| <f1> warnings",shape="record"];
+	"_weakrefset" [label="<f0> SourceModule| <f1> _weakrefset",shape="record"];
+	"sre_parse" [label="<f0> SourceModule| <f1> sre_parse",shape="record"];
+	"linecache" [label="<f0> SourceModule| <f1> linecache",shape="record"];
+	"os" [label="<f0> SourceModule| <f1> os",shape="record"];
+	"reprlib" [label="<f0> SourceModule| <f1> reprlib",shape="record"];
 	"encodings.zlib_codec" [label="<f0> SourceModule| <f1> encodings.zlib_codec",shape="record"];
 	"encodings.uu_codec" [label="<f0> SourceModule| <f1> encodings.uu_codec",shape="record"];
 	"encodings.utf_8_sig" [label="<f0> SourceModule| <f1> encodings.utf_8_sig",shape="record"];
@@ -990,33 +998,26 @@ charset="UTF-8";
 	"encodings.ascii" [label="<f0> SourceModule| <f1> encodings.ascii",shape="record"];
 	"encodings.aliases" [label="<f0> SourceModule| <f1> encodings.aliases",shape="record"];
 	"encodings" [label="<f0> Package| <f1> encodings",shape="record"];
-	"sre_parse" [label="<f0> SourceModule| <f1> sre_parse",shape="record"];
-	"functools" [label="<f0> SourceModule| <f1> functools",shape="record"];
-	"_functools" [label="<f0> BuiltinModule| <f1> _functools",shape="record"];
-	"re._parser" [label="<f0> SourceModule| <f1> re._parser",shape="record"];
-	"re._constants" [label="<f0> SourceModule| <f1> re._constants",shape="record"];
-	"re._compiler" [label="<f0> SourceModule| <f1> re._compiler",shape="record"];
-	"re._casefix" [label="<f0> SourceModule| <f1> re._casefix",shape="record"];
-	"re" [label="<f0> Package| <f1> re",shape="record"];
-	"posixpath" [label="<f0> SourceModule| <f1> posixpath",shape="record"];
-	"types" [label="<f0> SourceModule| <f1> types",shape="record"];
+	"locale" [label="<f0> SourceModule| <f1> locale",shape="record"];
+	"_locale" [label="<f0> BuiltinModule| <f1> _locale",shape="record"];
 	"_sre" [label="<f0> BuiltinModule| <f1> _sre",shape="record"];
 	"_posixsubprocess" [label="<f0> MissingModule| <f1> _posixsubprocess",shape="record"];
-	"datetime" [label="<f0> SourceModule| <f1> datetime",shape="record"];
-	"_strptime" [label="<f0> SourceModule| <f1> _strptime",shape="record"];
-	"_datetime" [label="<f0> BuiltinModule| <f1> _datetime",shape="record"];
 	"_pickle" [label="<f0> BuiltinModule| <f1> _pickle",shape="record"];
 	"ntpath" [label="<f0> SourceModule| <f1> ntpath",shape="record"];
 	"posix" [label="<f0> MissingModule| <f1> posix",shape="record"];
 	"resource" [label="<f0> MissingModule| <f1> resource",shape="record"];
-	"codecs" [label="<f0> SourceModule| <f1> codecs",shape="record"];
-	"_codecs" [label="<f0> BuiltinModule| <f1> _codecs",shape="record"];
+	"datetime" [label="<f0> SourceModule| <f1> datetime",shape="record"];
+	"_strptime" [label="<f0> SourceModule| <f1> _strptime",shape="record"];
+	"_datetime" [label="<f0> BuiltinModule| <f1> _datetime",shape="record"];
 	"time" [label="<f0> BuiltinModule| <f1> time",shape="record"];
 	"gc" [label="<f0> BuiltinModule| <f1> gc",shape="record"];
-	subgraph "cluster_pkg_resources.extern" {
-		label="pkg_resources.extern";
-		"pkg_resources.extern" -> "pkg_resources.extern.appdirs" [style="dotted"];
-		"pkg_resources.extern" -> "pkg_resources.extern.packaging" [style="dotted"];
+	"codecs" [label="<f0> SourceModule| <f1> codecs",shape="record"];
+	"_codecs" [label="<f0> BuiltinModule| <f1> _codecs",shape="record"];
+	subgraph "cluster_pkg_resources._vendor.jaraco" {
+		label="pkg_resources._vendor.jaraco";
+		"pkg_resources._vendor.jaraco" -> "pkg_resources._vendor.jaraco.context" [style="dotted"];
+		"pkg_resources._vendor.jaraco" -> "pkg_resources._vendor.jaraco.functools" [style="dotted"];
+		"pkg_resources._vendor.jaraco" -> "pkg_resources._vendor.jaraco.text" [style="dotted"];
 	}
 	subgraph "cluster_importlib.metadata" {
 		label="importlib.metadata";
@@ -1026,488 +1027,6 @@ charset="UTF-8";
 		"importlib.metadata" -> "importlib.metadata._functools" [style="dotted"];
 		"importlib.metadata" -> "importlib.metadata._itertools" [style="dotted"];
 		"importlib.metadata" -> "importlib.metadata._text" [style="dotted"];
-	}
-	subgraph "cluster_fontTools.misc.plistlib" {
-		label="fontTools.misc.plistlib";
-	}
-	subgraph "cluster_concurrent" {
-		label="concurrent";
-		"concurrent" -> "concurrent.futures" [style="dotted"];
-	}
-	subgraph "cluster_xmlrpc" {
-		label="xmlrpc";
-		"xmlrpc" -> "xmlrpc.server" [style="dotted"];
-		"xmlrpc" -> "xmlrpc.client" [style="dotted"];
-	}
-	subgraph "cluster_urllib" {
-		label="urllib";
-		"urllib" -> "urllib.parse" [style="dotted"];
-		"urllib" -> "urllib.request" [style="dotted"];
-		"urllib" -> "urllib.error" [style="dotted"];
-		"urllib" -> "urllib.response" [style="dotted"];
-	}
-	subgraph "cluster_pydoc_data" {
-		label="pydoc_data";
-		"pydoc_data" -> "pydoc_data.topics" [style="dotted"];
-	}
-	subgraph "cluster_ctypes" {
-		label="ctypes";
-		"ctypes" -> "ctypes._endian" [style="dotted"];
-	}
-	subgraph "cluster_importlib" {
-		label="importlib";
-		"importlib" -> "importlib._bootstrap" [style="dotted"];
-		"importlib" -> "importlib._bootstrap_external" [style="dotted"];
-		"importlib" -> "importlib.machinery" [style="dotted"];
-		"importlib" -> "importlib.readers" [style="dotted"];
-		"importlib" -> "importlib.metadata" [style="dotted"];
-		"importlib" -> "importlib.abc" [style="dotted"];
-		"importlib" -> "importlib._abc" [style="dotted"];
-		"importlib" -> "importlib.resources" [style="dotted"];
-		"importlib" -> "importlib.util" [style="dotted"];
-	}
-	subgraph "cluster_collections" {
-		label="collections";
-		"collections" -> "collections.abc" [style="dotted"];
-	}
-	subgraph "cluster_PIL" {
-		label="PIL";
-		"PIL" -> "PIL._version" [style="dotted"];
-		"PIL" -> "PIL.ExifTags" [style="dotted"];
-		"PIL" -> "PIL.ImageMode" [style="dotted"];
-		"PIL" -> "PIL.TiffTags" [style="dotted"];
-		"PIL" -> "PIL._imaging" [style="dotted"];
-		"PIL" -> "PIL.Image" [style="dotted"];
-		"PIL" -> "PIL.ImageFile" [style="dotted"];
-		"PIL" -> "PIL.GimpGradientFile" [style="dotted"];
-		"PIL" -> "PIL.GimpPaletteFile" [style="dotted"];
-		"PIL" -> "PIL.ImageColor" [style="dotted"];
-		"PIL" -> "PIL.PaletteFile" [style="dotted"];
-		"PIL" -> "PIL.ImagePalette" [style="dotted"];
-		"PIL" -> "PIL.BmpImagePlugin" [style="dotted"];
-		"PIL" -> "PIL.ImageChops" [style="dotted"];
-		"PIL" -> "PIL._imagingmath" [style="dotted"];
-		"PIL" -> "PIL.ImageMath" [style="dotted"];
-		"PIL" -> "PIL.ImageOps" [style="dotted"];
-		"PIL" -> "PIL.ImageSequence" [style="dotted"];
-		"PIL" -> "PIL.GifImagePlugin" [style="dotted"];
-		"PIL" -> "PIL.TiffImagePlugin" [style="dotted"];
-		"PIL" -> "PIL.JpegImagePlugin" [style="dotted"];
-		"PIL" -> "PIL.PpmImagePlugin" [style="dotted"];
-		"PIL" -> "PIL.PngImagePlugin" [style="dotted"];
-		"PIL" -> "PIL.PyAccess" [style="dotted"];
-		"PIL" -> "PIL._imagingcms" [style="dotted"];
-		"PIL" -> "PIL.ImageWin" [style="dotted"];
-		"PIL" -> "PIL.ImageCms" [style="dotted"];
-		"PIL" -> "PIL.ImageFilter" [style="dotted"];
-		"PIL" -> "PIL.ImageQt" [style="dotted"];
-		"PIL" -> "PIL.ImageShow" [style="dotted"];
-		"PIL" -> "PIL._imagingtk" [style="dotted"];
-		"PIL" -> "PIL.ImageTk" [style="dotted"];
-		"PIL" -> "PIL._imagingft" [style="dotted"];
-		"PIL" -> "PIL.ImageFont" [style="dotted"];
-		"PIL" -> "PIL._imagingagg" [style="dotted"];
-		"PIL" -> "PIL.ImageDraw" [style="dotted"];
-		"PIL" -> "PIL.ImagePath" [style="dotted"];
-		"PIL" -> "PIL.ImageDraw2" [style="dotted"];
-		"PIL" -> "PIL.ImageGrab" [style="dotted"];
-		"PIL" -> "PIL.features" [style="dotted"];
-		"PIL" -> "PIL.Jpeg2KImagePlugin" [style="dotted"];
-		"PIL" -> "PIL.PdfParser" [style="dotted"];
-		"PIL" -> "PIL._webp" [style="dotted"];
-		"PIL" -> "PIL._typing" [style="dotted"];
-		"PIL" -> "PIL._util" [style="dotted"];
-		"PIL" -> "PIL._binary" [style="dotted"];
-		"PIL" -> "PIL.BlpImagePlugin" [style="dotted"];
-		"PIL" -> "PIL.BufrStubImagePlugin" [style="dotted"];
-		"PIL" -> "PIL.CurImagePlugin" [style="dotted"];
-		"PIL" -> "PIL.DcxImagePlugin" [style="dotted"];
-		"PIL" -> "PIL.DdsImagePlugin" [style="dotted"];
-		"PIL" -> "PIL.EpsImagePlugin" [style="dotted"];
-		"PIL" -> "PIL.FitsImagePlugin" [style="dotted"];
-		"PIL" -> "PIL.FliImagePlugin" [style="dotted"];
-		"PIL" -> "PIL.FpxImagePlugin" [style="dotted"];
-		"PIL" -> "PIL.FtexImagePlugin" [style="dotted"];
-		"PIL" -> "PIL.GbrImagePlugin" [style="dotted"];
-		"PIL" -> "PIL.GribStubImagePlugin" [style="dotted"];
-		"PIL" -> "PIL.Hdf5StubImagePlugin" [style="dotted"];
-		"PIL" -> "PIL.IcnsImagePlugin" [style="dotted"];
-		"PIL" -> "PIL.IcoImagePlugin" [style="dotted"];
-		"PIL" -> "PIL.ImImagePlugin" [style="dotted"];
-		"PIL" -> "PIL.ImtImagePlugin" [style="dotted"];
-		"PIL" -> "PIL.IptcImagePlugin" [style="dotted"];
-		"PIL" -> "PIL.McIdasImagePlugin" [style="dotted"];
-		"PIL" -> "PIL.MicImagePlugin" [style="dotted"];
-		"PIL" -> "PIL.MpegImagePlugin" [style="dotted"];
-		"PIL" -> "PIL.MpoImagePlugin" [style="dotted"];
-		"PIL" -> "PIL.MspImagePlugin" [style="dotted"];
-		"PIL" -> "PIL.PalmImagePlugin" [style="dotted"];
-		"PIL" -> "PIL.PcdImagePlugin" [style="dotted"];
-		"PIL" -> "PIL.PcxImagePlugin" [style="dotted"];
-		"PIL" -> "PIL.PdfImagePlugin" [style="dotted"];
-		"PIL" -> "PIL.PixarImagePlugin" [style="dotted"];
-		"PIL" -> "PIL.PsdImagePlugin" [style="dotted"];
-		"PIL" -> "PIL.QoiImagePlugin" [style="dotted"];
-		"PIL" -> "PIL.SgiImagePlugin" [style="dotted"];
-		"PIL" -> "PIL.SpiderImagePlugin" [style="dotted"];
-		"PIL" -> "PIL.SunImagePlugin" [style="dotted"];
-		"PIL" -> "PIL.TgaImagePlugin" [style="dotted"];
-		"PIL" -> "PIL.WebPImagePlugin" [style="dotted"];
-		"PIL" -> "PIL.WmfImagePlugin" [style="dotted"];
-		"PIL" -> "PIL.XVThumbImagePlugin" [style="dotted"];
-		"PIL" -> "PIL.XbmImagePlugin" [style="dotted"];
-		"PIL" -> "PIL.XpmImagePlugin" [style="dotted"];
-		"PIL" -> "PIL._deprecate" [style="dotted"];
-		"PIL" -> "PIL.JpegPresets" [style="dotted"];
-	}
-	subgraph "cluster_logging" {
-		label="logging";
-	}
-	subgraph "cluster_pkg_resources._vendor.more_itertools" {
-		label="pkg_resources._vendor.more_itertools";
-		"pkg_resources._vendor.more_itertools" -> "pkg_resources._vendor.more_itertools.more" [style="dotted"];
-		"pkg_resources._vendor.more_itertools" -> "pkg_resources._vendor.more_itertools.recipes" [style="dotted"];
-	}
-	subgraph "cluster_fontTools.encodings" {
-		label="fontTools.encodings";
-		"fontTools.encodings" -> "fontTools.encodings.codecs" [style="dotted"];
-		"fontTools.encodings" -> "fontTools.encodings.StandardEncoding" [style="dotted"];
-	}
-	subgraph "cluster_pkg_resources._vendor" {
-		label="pkg_resources._vendor";
-		"pkg_resources._vendor" -> "pkg_resources._vendor.appdirs" [style="dotted"];
-		"pkg_resources._vendor" -> "pkg_resources._vendor.zipp" [style="dotted"];
-		"pkg_resources._vendor" -> "pkg_resources._vendor.pyparsing" [style="dotted"];
-		"pkg_resources._vendor" -> "pkg_resources._vendor.packaging" [style="dotted"];
-		"pkg_resources._vendor" -> "pkg_resources._vendor.more_itertools" [style="dotted"];
-		"pkg_resources._vendor" -> "pkg_resources._vendor.jaraco" [style="dotted"];
-		"pkg_resources._vendor" -> "pkg_resources._vendor.importlib_resources" [style="dotted"];
-	}
-	subgraph "cluster_pkg_resources._vendor.jaraco" {
-		label="pkg_resources._vendor.jaraco";
-		"pkg_resources._vendor.jaraco" -> "pkg_resources._vendor.jaraco.context" [style="dotted"];
-		"pkg_resources._vendor.jaraco" -> "pkg_resources._vendor.jaraco.functools" [style="dotted"];
-		"pkg_resources._vendor.jaraco" -> "pkg_resources._vendor.jaraco.text" [style="dotted"];
-	}
-	subgraph "cluster_fontTools.colorLib" {
-		label="fontTools.colorLib";
-		"fontTools.colorLib" -> "fontTools.colorLib.builder" [style="dotted"];
-		"fontTools.colorLib" -> "fontTools.colorLib.unbuilder" [style="dotted"];
-		"fontTools.colorLib" -> "fontTools.colorLib.table_builder" [style="dotted"];
-		"fontTools.colorLib" -> "fontTools.colorLib.errors" [style="dotted"];
-		"fontTools.colorLib" -> "fontTools.colorLib.geometry" [style="dotted"];
-	}
-	subgraph "cluster_pkg_resources._vendor.jaraco.text" {
-		label="pkg_resources._vendor.jaraco.text";
-	}
-	subgraph "cluster_xml.sax" {
-		label="xml.sax";
-		"xml.sax" -> "xml.sax.handler" [style="dotted"];
-		"xml.sax" -> "xml.sax.xmlreader" [style="dotted"];
-		"xml.sax" -> "xml.sax.saxutils" [style="dotted"];
-		"xml.sax" -> "xml.sax._exceptions" [style="dotted"];
-		"xml.sax" -> "xml.sax.expatreader" [style="dotted"];
-	}
-	subgraph "cluster_fontTools.ttLib" {
-		label="fontTools.ttLib";
-		"fontTools.ttLib" -> "fontTools.ttLib.TTFont" [style="dotted"];
-		"fontTools.ttLib" -> "fontTools.ttLib.newTable" [style="dotted"];
-		"fontTools.ttLib" -> "fontTools.ttLib.getClassTag" [style="dotted"];
-		"fontTools.ttLib" -> "fontTools.ttLib.getSearchRange" [style="dotted"];
-		"fontTools.ttLib" -> "fontTools.ttLib.getTableModule" [style="dotted"];
-		"fontTools.ttLib" -> "fontTools.ttLib.getTableClass" [style="dotted"];
-		"fontTools.ttLib" -> "fontTools.ttLib.macUtils" [style="dotted"];
-		"fontTools.ttLib" -> "fontTools.ttLib.ttFont" [style="dotted"];
-		"fontTools.ttLib" -> "fontTools.ttLib.ttCollection" [style="dotted"];
-		"fontTools.ttLib" -> "fontTools.ttLib.sfnt" [style="dotted"];
-		"fontTools.ttLib" -> "fontTools.ttLib.tables" [style="dotted"];
-		"fontTools.ttLib" -> "fontTools.ttLib.standardGlyphOrder" [style="dotted"];
-		"fontTools.ttLib" -> "fontTools.ttLib.ttVisitor" [style="dotted"];
-		"fontTools.ttLib" -> "fontTools.ttLib.ttGlyphSet" [style="dotted"];
-		"fontTools.ttLib" -> "fontTools.ttLib.woff2" [style="dotted"];
-		"fontTools.ttLib" -> "fontTools.ttLib.reorderGlyphs" [style="dotted"];
-	}
-	subgraph "cluster_fontTools.config" {
-		label="fontTools.config";
-	}
-	subgraph "cluster_fontTools.varLib" {
-		label="fontTools.varLib";
-		"fontTools.varLib" -> "fontTools.varLib.builder" [style="dotted"];
-		"fontTools.varLib" -> "fontTools.varLib.models" [style="dotted"];
-		"fontTools.varLib" -> "fontTools.varLib.varStore" [style="dotted"];
-		"fontTools.varLib" -> "fontTools.varLib.merger" [style="dotted"];
-		"fontTools.varLib" -> "fontTools.varLib.mvar" [style="dotted"];
-		"fontTools.varLib" -> "fontTools.varLib.iup" [style="dotted"];
-		"fontTools.varLib" -> "fontTools.varLib.featureVars" [style="dotted"];
-		"fontTools.varLib" -> "fontTools.varLib.stat" [style="dotted"];
-		"fontTools.varLib" -> "fontTools.varLib.errors" [style="dotted"];
-		"fontTools.varLib" -> "fontTools.varLib.cff" [style="dotted"];
-		"fontTools.varLib" -> "fontTools.varLib.multiVarStore" [style="dotted"];
-	}
-	subgraph "cluster_xml.etree" {
-		label="xml.etree";
-		"xml.etree" -> "xml.etree.ElementPath" [style="dotted"];
-		"xml.etree" -> "xml.etree.ElementTree" [style="dotted"];
-		"xml.etree" -> "xml.etree.ElementInclude" [style="dotted"];
-		"xml.etree" -> "xml.etree.cElementTree" [style="dotted"];
-	}
-	subgraph "cluster_fontTools.misc" {
-		label="fontTools.misc";
-		"fontTools.misc" -> "fontTools.misc.xmlWriter" [style="dotted"];
-		"fontTools.misc" -> "fontTools.misc.sstruct" [style="dotted"];
-		"fontTools.misc" -> "fontTools.misc.psCharStrings" [style="dotted"];
-		"fontTools.misc" -> "fontTools.misc.etree" [style="dotted"];
-		"fontTools.misc" -> "fontTools.misc.plistlib" [style="dotted"];
-		"fontTools.misc" -> "fontTools.misc.classifyTools" [style="dotted"];
-		"fontTools.misc" -> "fontTools.misc.xmlReader" [style="dotted"];
-		"fontTools.misc" -> "fontTools.misc.loggingTools" [style="dotted"];
-		"fontTools.misc" -> "fontTools.misc.textTools" [style="dotted"];
-		"fontTools.misc" -> "fontTools.misc.fixedTools" [style="dotted"];
-		"fontTools.misc" -> "fontTools.misc.roundTools" [style="dotted"];
-		"fontTools.misc" -> "fontTools.misc.configTools" [style="dotted"];
-		"fontTools.misc" -> "fontTools.misc.timeTools" [style="dotted"];
-		"fontTools.misc" -> "fontTools.misc.arrayTools" [style="dotted"];
-		"fontTools.misc" -> "fontTools.misc.vector" [style="dotted"];
-		"fontTools.misc" -> "fontTools.misc.lazyTools" [style="dotted"];
-		"fontTools.misc" -> "fontTools.misc.macCreatorType" [style="dotted"];
-		"fontTools.misc" -> "fontTools.misc.cliTools" [style="dotted"];
-		"fontTools.misc" -> "fontTools.misc.transform" [style="dotted"];
-		"fontTools.misc" -> "fontTools.misc.intTools" [style="dotted"];
-		"fontTools.misc" -> "fontTools.misc.encodingTools" [style="dotted"];
-		"fontTools.misc" -> "fontTools.misc.treeTools" [style="dotted"];
-		"fontTools.misc" -> "fontTools.misc.dictTools" [style="dotted"];
-		"fontTools.misc" -> "fontTools.misc.visitor" [style="dotted"];
-		"fontTools.misc" -> "fontTools.misc.bezierTools" [style="dotted"];
-		"fontTools.misc" -> "fontTools.misc.filenames" [style="dotted"];
-		"fontTools.misc" -> "fontTools.misc.iterTools" [style="dotted"];
-		"fontTools.misc" -> "fontTools.misc.macRes" [style="dotted"];
-	}
-	subgraph "cluster_fontTools.otlLib" {
-		label="fontTools.otlLib";
-		"fontTools.otlLib" -> "fontTools.otlLib.builder" [style="dotted"];
-		"fontTools.otlLib" -> "fontTools.otlLib.error" [style="dotted"];
-		"fontTools.otlLib" -> "fontTools.otlLib.optimize" [style="dotted"];
-		"fontTools.otlLib" -> "fontTools.otlLib.maxContextCalc" [style="dotted"];
-	}
-	subgraph "cluster_dotenv" {
-		label="dotenv";
-		"dotenv" -> "dotenv.main" [style="dotted"];
-		"dotenv" -> "dotenv.ipython" [style="dotted"];
-		"dotenv" -> "dotenv.parser" [style="dotted"];
-		"dotenv" -> "dotenv.variables" [style="dotted"];
-	}
-	subgraph "cluster_concurrent.futures" {
-		label="concurrent.futures";
-		"concurrent.futures" -> "concurrent.futures._base" [style="dotted"];
-		"concurrent.futures" -> "concurrent.futures.process" [style="dotted"];
-		"concurrent.futures" -> "concurrent.futures.thread" [style="dotted"];
-	}
-	subgraph "cluster_ttkbootstrap.localization" {
-		label="ttkbootstrap.localization";
-		"ttkbootstrap.localization" -> "ttkbootstrap.localization.msgs" [style="dotted"];
-		"ttkbootstrap.localization" -> "ttkbootstrap.localization.msgcat" [style="dotted"];
-	}
-	subgraph "cluster_fontTools.svgLib.path" {
-		label="fontTools.svgLib.path";
-		"fontTools.svgLib.path" -> "fontTools.svgLib.path.parser" [style="dotted"];
-		"fontTools.svgLib.path" -> "fontTools.svgLib.path.shapes" [style="dotted"];
-		"fontTools.svgLib.path" -> "fontTools.svgLib.path.arc" [style="dotted"];
-	}
-	subgraph "cluster_defusedxml" {
-		label="defusedxml";
-		"defusedxml" -> "defusedxml.common" [style="dotted"];
-		"defusedxml" -> "defusedxml.cElementTree" [style="dotted"];
-		"defusedxml" -> "defusedxml.ElementTree" [style="dotted"];
-		"defusedxml" -> "defusedxml.expatbuilder" [style="dotted"];
-		"defusedxml" -> "defusedxml.expatreader" [style="dotted"];
-		"defusedxml" -> "defusedxml.pulldom" [style="dotted"];
-		"defusedxml" -> "defusedxml.minidom" [style="dotted"];
-		"defusedxml" -> "defusedxml.sax" [style="dotted"];
-		"defusedxml" -> "defusedxml.xmlrpc" [style="dotted"];
-	}
-	subgraph "cluster_fontTools.pens" {
-		label="fontTools.pens";
-		"fontTools.pens" -> "fontTools.pens.t2CharStringPen" [style="dotted"];
-		"fontTools.pens" -> "fontTools.pens.basePen" [style="dotted"];
-		"fontTools.pens" -> "fontTools.pens.transformPen" [style="dotted"];
-		"fontTools.pens" -> "fontTools.pens.reverseContourPen" [style="dotted"];
-		"fontTools.pens" -> "fontTools.pens.filterPen" [style="dotted"];
-		"fontTools.pens" -> "fontTools.pens.pointPen" [style="dotted"];
-		"fontTools.pens" -> "fontTools.pens.recordingPen" [style="dotted"];
-		"fontTools.pens" -> "fontTools.pens.boundsPen" [style="dotted"];
-	}
-	subgraph "cluster_pkg_resources" {
-		label="pkg_resources";
-		"pkg_resources" -> "pkg_resources.extern" [style="dotted"];
-		"pkg_resources" -> "pkg_resources._vendor" [style="dotted"];
-	}
-	subgraph "cluster_email" {
-		label="email";
-		"email" -> "email.errors" [style="dotted"];
-		"email" -> "email.charset" [style="dotted"];
-		"email" -> "email.header" [style="dotted"];
-		"email" -> "email._header_value_parser" [style="dotted"];
-		"email" -> "email.parser" [style="dotted"];
-		"email" -> "email.message" [style="dotted"];
-		"email" -> "email.utils" [style="dotted"];
-		"email" -> "email._policybase" [style="dotted"];
-		"email" -> "email._encoded_words" [style="dotted"];
-		"email" -> "email.generator" [style="dotted"];
-		"email" -> "email.iterators" [style="dotted"];
-		"email" -> "email.policy" [style="dotted"];
-		"email" -> "email.headerregistry" [style="dotted"];
-		"email" -> "email.contentmanager" [style="dotted"];
-		"email" -> "email.quoprimime" [style="dotted"];
-		"email" -> "email.base64mime" [style="dotted"];
-		"email" -> "email.encoders" [style="dotted"];
-		"email" -> "email._parseaddr" [style="dotted"];
-		"email" -> "email.feedparser" [style="dotted"];
-	}
-	subgraph "cluster_fontTools.cffLib" {
-		label="fontTools.cffLib";
-		"fontTools.cffLib" -> "fontTools.cffLib.CFFToCFF2" [style="dotted"];
-		"fontTools.cffLib" -> "fontTools.cffLib.CFF2ToCFF" [style="dotted"];
-		"fontTools.cffLib" -> "fontTools.cffLib.transforms" [style="dotted"];
-		"fontTools.cffLib" -> "fontTools.cffLib.width" [style="dotted"];
-		"fontTools.cffLib" -> "fontTools.cffLib.specializer" [style="dotted"];
-	}
-	subgraph "cluster_pkg_resources._vendor.importlib_resources" {
-		label="pkg_resources._vendor.importlib_resources";
-		"pkg_resources._vendor.importlib_resources" -> "pkg_resources._vendor.importlib_resources.abc" [style="dotted"];
-		"pkg_resources._vendor.importlib_resources" -> "pkg_resources._vendor.importlib_resources.readers" [style="dotted"];
-		"pkg_resources._vendor.importlib_resources" -> "pkg_resources._vendor.importlib_resources._adapters" [style="dotted"];
-		"pkg_resources._vendor.importlib_resources" -> "pkg_resources._vendor.importlib_resources._common" [style="dotted"];
-		"pkg_resources._vendor.importlib_resources" -> "pkg_resources._vendor.importlib_resources._legacy" [style="dotted"];
-		"pkg_resources._vendor.importlib_resources" -> "pkg_resources._vendor.importlib_resources._compat" [style="dotted"];
-		"pkg_resources._vendor.importlib_resources" -> "pkg_resources._vendor.importlib_resources._itertools" [style="dotted"];
-		"pkg_resources._vendor.importlib_resources" -> "pkg_resources._vendor.importlib_resources.simple" [style="dotted"];
-	}
-	subgraph "cluster_ttkbootstrap" {
-		label="ttkbootstrap";
-		"ttkbootstrap" -> "ttkbootstrap.utility" [style="dotted"];
-		"ttkbootstrap" -> "ttkbootstrap.colorutils" [style="dotted"];
-		"ttkbootstrap" -> "ttkbootstrap.localization" [style="dotted"];
-		"ttkbootstrap" -> "ttkbootstrap.style" [style="dotted"];
-		"ttkbootstrap" -> "ttkbootstrap.widgets" [style="dotted"];
-		"ttkbootstrap" -> "ttkbootstrap.window" [style="dotted"];
-		"ttkbootstrap" -> "ttkbootstrap.constants" [style="dotted"];
-		"ttkbootstrap" -> "ttkbootstrap.publisher" [style="dotted"];
-		"ttkbootstrap" -> "ttkbootstrap.icons" [style="dotted"];
-		"ttkbootstrap" -> "ttkbootstrap.dialogs" [style="dotted"];
-		"ttkbootstrap" -> "ttkbootstrap.validation" [style="dotted"];
-		"ttkbootstrap" -> "ttkbootstrap.tooltip" [style="dotted"];
-		"ttkbootstrap" -> "ttkbootstrap.themes" [style="dotted"];
-	}
-	subgraph "cluster_xml.parsers" {
-		label="xml.parsers";
-		"xml.parsers" -> "xml.parsers.expat" [style="dotted"];
-	}
-	subgraph "cluster_pkg_resources._vendor.pyparsing" {
-		label="pkg_resources._vendor.pyparsing";
-		"pkg_resources._vendor.pyparsing" -> "pkg_resources._vendor.pyparsing.util" [style="dotted"];
-		"pkg_resources._vendor.pyparsing" -> "pkg_resources._vendor.pyparsing.exceptions" [style="dotted"];
-		"pkg_resources._vendor.pyparsing" -> "pkg_resources._vendor.pyparsing.actions" [style="dotted"];
-		"pkg_resources._vendor.pyparsing" -> "pkg_resources._vendor.pyparsing.core" [style="dotted"];
-		"pkg_resources._vendor.pyparsing" -> "pkg_resources._vendor.pyparsing.results" [style="dotted"];
-		"pkg_resources._vendor.pyparsing" -> "pkg_resources._vendor.pyparsing.helpers" [style="dotted"];
-		"pkg_resources._vendor.pyparsing" -> "pkg_resources._vendor.pyparsing.unicode" [style="dotted"];
-		"pkg_resources._vendor.pyparsing" -> "pkg_resources._vendor.pyparsing.testing" [style="dotted"];
-		"pkg_resources._vendor.pyparsing" -> "pkg_resources._vendor.pyparsing.common" [style="dotted"];
-		"pkg_resources._vendor.pyparsing" -> "pkg_resources._vendor.pyparsing.diagram" [style="dotted"];
-	}
-	subgraph "cluster_importlib.resources" {
-		label="importlib.resources";
-		"importlib.resources" -> "importlib.resources._common" [style="dotted"];
-		"importlib.resources" -> "importlib.resources._legacy" [style="dotted"];
-		"importlib.resources" -> "importlib.resources.abc" [style="dotted"];
-		"importlib.resources" -> "importlib.resources.readers" [style="dotted"];
-		"importlib.resources" -> "importlib.resources._adapters" [style="dotted"];
-		"importlib.resources" -> "importlib.resources._itertools" [style="dotted"];
-	}
-	subgraph "cluster_packaging" {
-		label="packaging";
-		"packaging" -> "packaging.requirements" [style="dotted"];
-		"packaging" -> "packaging._elffile" [style="dotted"];
-		"packaging" -> "packaging._manylinux" [style="dotted"];
-		"packaging" -> "packaging._musllinux" [style="dotted"];
-		"packaging" -> "packaging._parser" [style="dotted"];
-		"packaging" -> "packaging._structures" [style="dotted"];
-		"packaging" -> "packaging._tokenizer" [style="dotted"];
-		"packaging" -> "packaging.markers" [style="dotted"];
-		"packaging" -> "packaging.metadata" [style="dotted"];
-		"packaging" -> "packaging.specifiers" [style="dotted"];
-		"packaging" -> "packaging.tags" [style="dotted"];
-		"packaging" -> "packaging.utils" [style="dotted"];
-		"packaging" -> "packaging.version" [style="dotted"];
-	}
-	subgraph "cluster_pkg_resources._vendor.packaging" {
-		label="pkg_resources._vendor.packaging";
-		"pkg_resources._vendor.packaging" -> "pkg_resources._vendor.packaging.__about__" [style="dotted"];
-		"pkg_resources._vendor.packaging" -> "pkg_resources._vendor.packaging._manylinux" [style="dotted"];
-		"pkg_resources._vendor.packaging" -> "pkg_resources._vendor.packaging._musllinux" [style="dotted"];
-		"pkg_resources._vendor.packaging" -> "pkg_resources._vendor.packaging._structures" [style="dotted"];
-		"pkg_resources._vendor.packaging" -> "pkg_resources._vendor.packaging.markers" [style="dotted"];
-		"pkg_resources._vendor.packaging" -> "pkg_resources._vendor.packaging.requirements" [style="dotted"];
-		"pkg_resources._vendor.packaging" -> "pkg_resources._vendor.packaging.specifiers" [style="dotted"];
-		"pkg_resources._vendor.packaging" -> "pkg_resources._vendor.packaging.tags" [style="dotted"];
-		"pkg_resources._vendor.packaging" -> "pkg_resources._vendor.packaging.utils" [style="dotted"];
-		"pkg_resources._vendor.packaging" -> "pkg_resources._vendor.packaging.version" [style="dotted"];
-	}
-	subgraph "cluster_fontTools.subset" {
-		label="fontTools.subset";
-		"fontTools.subset" -> "fontTools.subset.util" [style="dotted"];
-		"fontTools.subset" -> "fontTools.subset.cff" [style="dotted"];
-		"fontTools.subset" -> "fontTools.subset.svg" [style="dotted"];
-	}
-	subgraph "cluster_fpdf" {
-		label="fpdf";
-		"fpdf" -> "fpdf.enums" [style="dotted"];
-		"fpdf" -> "fpdf.errors" [style="dotted"];
-		"fpdf" -> "fpdf.fpdf" [style="dotted"];
-		"fpdf" -> "fpdf.fonts" [style="dotted"];
-		"fpdf" -> "fpdf.html" [style="dotted"];
-		"fpdf" -> "fpdf.prefs" [style="dotted"];
-		"fpdf" -> "fpdf.template" [style="dotted"];
-		"fpdf" -> "fpdf.deprecation" [style="dotted"];
-		"fpdf" -> "fpdf.syntax" [style="dotted"];
-		"fpdf" -> "fpdf.drawing" [style="dotted"];
-		"fpdf" -> "fpdf.table" [style="dotted"];
-		"fpdf" -> "fpdf.util" [style="dotted"];
-		"fpdf" -> "fpdf.actions" [style="dotted"];
-		"fpdf" -> "fpdf.annotations" [style="dotted"];
-		"fpdf" -> "fpdf.bidi" [style="dotted"];
-		"fpdf" -> "fpdf.encryption" [style="dotted"];
-		"fpdf" -> "fpdf.graphics_state" [style="dotted"];
-		"fpdf" -> "fpdf.image_datastructures" [style="dotted"];
-		"fpdf" -> "fpdf.image_parsing" [style="dotted"];
-		"fpdf" -> "fpdf.linearization" [style="dotted"];
-		"fpdf" -> "fpdf.line_break" [style="dotted"];
-		"fpdf" -> "fpdf.outline" [style="dotted"];
-		"fpdf" -> "fpdf.output" [style="dotted"];
-		"fpdf" -> "fpdf.recorder" [style="dotted"];
-		"fpdf" -> "fpdf.sign" [style="dotted"];
-		"fpdf" -> "fpdf.structure_tree" [style="dotted"];
-		"fpdf" -> "fpdf.svg" [style="dotted"];
-		"fpdf" -> "fpdf.text_region" [style="dotted"];
-	}
-	subgraph "cluster_fontTools" {
-		label="fontTools";
-		"fontTools" -> "fontTools.cffLib" [style="dotted"];
-		"fontTools" -> "fontTools.agl" [style="dotted"];
-		"fontTools" -> "fontTools.ttLib" [style="dotted"];
-		"fontTools" -> "fontTools.subset" [style="dotted"];
-		"fontTools" -> "fontTools.misc" [style="dotted"];
-		"fontTools" -> "fontTools.config" [style="dotted"];
-		"fontTools" -> "fontTools.varLib" [style="dotted"];
-		"fontTools" -> "fontTools.designspaceLib" [style="dotted"];
-		"fontTools" -> "fontTools.ttx" [style="dotted"];
-		"fontTools" -> "fontTools.unicode" [style="dotted"];
-		"fontTools" -> "fontTools.pens" [style="dotted"];
-		"fontTools" -> "fontTools.otlLib" [style="dotted"];
-		"fontTools" -> "fontTools.feaLib" [style="dotted"];
-		"fontTools" -> "fontTools.encodings" [style="dotted"];
-		"fontTools" -> "fontTools.colorLib" [style="dotted"];
-		"fontTools" -> "fontTools.svgLib" [style="dotted"];
 	}
 	subgraph "cluster_encodings" {
 		label="encodings";
@@ -1633,53 +1152,25 @@ charset="UTF-8";
 		"encodings" -> "encodings.uu_codec" [style="dotted"];
 		"encodings" -> "encodings.zlib_codec" [style="dotted"];
 	}
-	subgraph "cluster_fontTools.designspaceLib" {
-		label="fontTools.designspaceLib";
-		"fontTools.designspaceLib" -> "fontTools.designspaceLib.split" [style="dotted"];
-		"fontTools.designspaceLib" -> "fontTools.designspaceLib.types" [style="dotted"];
-		"fontTools.designspaceLib" -> "fontTools.designspaceLib.statNames" [style="dotted"];
+	subgraph "cluster_packaging" {
+		label="packaging";
+		"packaging" -> "packaging.requirements" [style="dotted"];
+		"packaging" -> "packaging._elffile" [style="dotted"];
+		"packaging" -> "packaging._manylinux" [style="dotted"];
+		"packaging" -> "packaging._musllinux" [style="dotted"];
+		"packaging" -> "packaging._parser" [style="dotted"];
+		"packaging" -> "packaging._structures" [style="dotted"];
+		"packaging" -> "packaging._tokenizer" [style="dotted"];
+		"packaging" -> "packaging.markers" [style="dotted"];
+		"packaging" -> "packaging.metadata" [style="dotted"];
+		"packaging" -> "packaging.specifiers" [style="dotted"];
+		"packaging" -> "packaging.tags" [style="dotted"];
+		"packaging" -> "packaging.utils" [style="dotted"];
+		"packaging" -> "packaging.version" [style="dotted"];
 	}
-	subgraph "cluster_re" {
-		label="re";
-		"re" -> "re._parser" [style="dotted"];
-		"re" -> "re._compiler" [style="dotted"];
-		"re" -> "re._constants" [style="dotted"];
-		"re" -> "re._casefix" [style="dotted"];
-	}
-	subgraph "cluster_tkinter" {
-		label="tkinter";
-		"tkinter" -> "tkinter.constants" [style="dotted"];
-		"tkinter" -> "tkinter.font" [style="dotted"];
-		"tkinter" -> "tkinter.ttk" [style="dotted"];
-		"tkinter" -> "tkinter.commondialog" [style="dotted"];
-		"tkinter" -> "tkinter.messagebox" [style="dotted"];
-		"tkinter" -> "tkinter.filedialog" [style="dotted"];
-		"tkinter" -> "tkinter.dialog" [style="dotted"];
-		"tkinter" -> "tkinter.simpledialog" [style="dotted"];
-		"tkinter" -> "tkinter.scrolledtext" [style="dotted"];
-	}
-	subgraph "cluster_fontTools.otlLib.optimize" {
-		label="fontTools.otlLib.optimize";
-		"fontTools.otlLib.optimize" -> "fontTools.otlLib.optimize.gpos" [style="dotted"];
-	}
-	subgraph "cluster_xml" {
-		label="xml";
-		"xml" -> "xml.etree" [style="dotted"];
-		"xml" -> "xml.sax" [style="dotted"];
-		"xml" -> "xml.parsers" [style="dotted"];
-		"xml" -> "xml.dom" [style="dotted"];
-	}
-	subgraph "cluster_http" {
-		label="http";
-		"http" -> "http.client" [style="dotted"];
-		"http" -> "http.cookiejar" [style="dotted"];
-		"http" -> "http.server" [style="dotted"];
-	}
-	subgraph "cluster_json" {
-		label="json";
-		"json" -> "json.scanner" [style="dotted"];
-		"json" -> "json.decoder" [style="dotted"];
-		"json" -> "json.encoder" [style="dotted"];
+	subgraph "cluster_ctypes" {
+		label="ctypes";
+		"ctypes" -> "ctypes._endian" [style="dotted"];
 	}
 	subgraph "cluster_fontTools.feaLib" {
 		label="fontTools.feaLib";
@@ -1688,33 +1179,98 @@ charset="UTF-8";
 		"fontTools.feaLib" -> "fontTools.feaLib.location" [style="dotted"];
 		"fontTools.feaLib" -> "fontTools.feaLib.lookupDebugInfo" [style="dotted"];
 	}
-	subgraph "cluster_unittest" {
-		label="unittest";
-		"unittest" -> "unittest.util" [style="dotted"];
-		"unittest" -> "unittest.result" [style="dotted"];
-		"unittest" -> "unittest.case" [style="dotted"];
-		"unittest" -> "unittest.suite" [style="dotted"];
-		"unittest" -> "unittest.loader" [style="dotted"];
-		"unittest" -> "unittest.runner" [style="dotted"];
-		"unittest" -> "unittest.main" [style="dotted"];
-		"unittest" -> "unittest.signals" [style="dotted"];
-		"unittest" -> "unittest.async_case" [style="dotted"];
-		"unittest" -> "unittest._log" [style="dotted"];
-		"unittest" -> "unittest.mock" [style="dotted"];
-	}
-	subgraph "cluster_xml.dom" {
-		label="xml.dom";
-		"xml.dom" -> "xml.dom.domreg" [style="dotted"];
-		"xml.dom" -> "xml.dom.xmlbuilder" [style="dotted"];
-		"xml.dom" -> "xml.dom.minidom" [style="dotted"];
-		"xml.dom" -> "xml.dom.pulldom" [style="dotted"];
-		"xml.dom" -> "xml.dom.minicompat" [style="dotted"];
-		"xml.dom" -> "xml.dom.expatbuilder" [style="dotted"];
-		"xml.dom" -> "xml.dom.NodeFilter" [style="dotted"];
+	subgraph "cluster_fontTools.designspaceLib" {
+		label="fontTools.designspaceLib";
+		"fontTools.designspaceLib" -> "fontTools.designspaceLib.split" [style="dotted"];
+		"fontTools.designspaceLib" -> "fontTools.designspaceLib.types" [style="dotted"];
+		"fontTools.designspaceLib" -> "fontTools.designspaceLib.statNames" [style="dotted"];
 	}
 	subgraph "cluster_multiprocessing.dummy" {
 		label="multiprocessing.dummy";
 		"multiprocessing.dummy" -> "multiprocessing.dummy.connection" [style="dotted"];
+	}
+	subgraph "cluster_html" {
+		label="html";
+		"html" -> "html.entities" [style="dotted"];
+		"html" -> "html.parser" [style="dotted"];
+	}
+	subgraph "cluster_ttkbootstrap.themes" {
+		label="ttkbootstrap.themes";
+		"ttkbootstrap.themes" -> "ttkbootstrap.themes.standard" [style="dotted"];
+		"ttkbootstrap.themes" -> "ttkbootstrap.themes.user" [style="dotted"];
+	}
+	subgraph "cluster_fontTools.pens" {
+		label="fontTools.pens";
+		"fontTools.pens" -> "fontTools.pens.t2CharStringPen" [style="dotted"];
+		"fontTools.pens" -> "fontTools.pens.basePen" [style="dotted"];
+		"fontTools.pens" -> "fontTools.pens.transformPen" [style="dotted"];
+		"fontTools.pens" -> "fontTools.pens.reverseContourPen" [style="dotted"];
+		"fontTools.pens" -> "fontTools.pens.filterPen" [style="dotted"];
+		"fontTools.pens" -> "fontTools.pens.pointPen" [style="dotted"];
+		"fontTools.pens" -> "fontTools.pens.recordingPen" [style="dotted"];
+		"fontTools.pens" -> "fontTools.pens.boundsPen" [style="dotted"];
+	}
+	subgraph "cluster_logging" {
+		label="logging";
+	}
+	subgraph "cluster_fontTools.svgLib.path" {
+		label="fontTools.svgLib.path";
+		"fontTools.svgLib.path" -> "fontTools.svgLib.path.parser" [style="dotted"];
+		"fontTools.svgLib.path" -> "fontTools.svgLib.path.shapes" [style="dotted"];
+		"fontTools.svgLib.path" -> "fontTools.svgLib.path.arc" [style="dotted"];
+	}
+	subgraph "cluster_pkg_resources" {
+		label="pkg_resources";
+		"pkg_resources" -> "pkg_resources.extern" [style="dotted"];
+		"pkg_resources" -> "pkg_resources._vendor" [style="dotted"];
+	}
+	subgraph "cluster_pkg_resources._vendor.pyparsing" {
+		label="pkg_resources._vendor.pyparsing";
+		"pkg_resources._vendor.pyparsing" -> "pkg_resources._vendor.pyparsing.util" [style="dotted"];
+		"pkg_resources._vendor.pyparsing" -> "pkg_resources._vendor.pyparsing.exceptions" [style="dotted"];
+		"pkg_resources._vendor.pyparsing" -> "pkg_resources._vendor.pyparsing.actions" [style="dotted"];
+		"pkg_resources._vendor.pyparsing" -> "pkg_resources._vendor.pyparsing.core" [style="dotted"];
+		"pkg_resources._vendor.pyparsing" -> "pkg_resources._vendor.pyparsing.results" [style="dotted"];
+		"pkg_resources._vendor.pyparsing" -> "pkg_resources._vendor.pyparsing.helpers" [style="dotted"];
+		"pkg_resources._vendor.pyparsing" -> "pkg_resources._vendor.pyparsing.unicode" [style="dotted"];
+		"pkg_resources._vendor.pyparsing" -> "pkg_resources._vendor.pyparsing.testing" [style="dotted"];
+		"pkg_resources._vendor.pyparsing" -> "pkg_resources._vendor.pyparsing.common" [style="dotted"];
+		"pkg_resources._vendor.pyparsing" -> "pkg_resources._vendor.pyparsing.diagram" [style="dotted"];
+	}
+	subgraph "cluster_pkg_resources._vendor.more_itertools" {
+		label="pkg_resources._vendor.more_itertools";
+		"pkg_resources._vendor.more_itertools" -> "pkg_resources._vendor.more_itertools.more" [style="dotted"];
+		"pkg_resources._vendor.more_itertools" -> "pkg_resources._vendor.more_itertools.recipes" [style="dotted"];
+	}
+	subgraph "cluster_pkg_resources._vendor.jaraco.text" {
+		label="pkg_resources._vendor.jaraco.text";
+	}
+	subgraph "cluster_xml.etree" {
+		label="xml.etree";
+		"xml.etree" -> "xml.etree.ElementPath" [style="dotted"];
+		"xml.etree" -> "xml.etree.ElementTree" [style="dotted"];
+		"xml.etree" -> "xml.etree.ElementInclude" [style="dotted"];
+		"xml.etree" -> "xml.etree.cElementTree" [style="dotted"];
+	}
+	subgraph "cluster_importlib" {
+		label="importlib";
+		"importlib" -> "importlib._bootstrap" [style="dotted"];
+		"importlib" -> "importlib._bootstrap_external" [style="dotted"];
+		"importlib" -> "importlib.readers" [style="dotted"];
+		"importlib" -> "importlib.metadata" [style="dotted"];
+		"importlib" -> "importlib.abc" [style="dotted"];
+		"importlib" -> "importlib.machinery" [style="dotted"];
+		"importlib" -> "importlib._abc" [style="dotted"];
+		"importlib" -> "importlib.resources" [style="dotted"];
+		"importlib" -> "importlib.util" [style="dotted"];
+	}
+	subgraph "cluster_xml.sax" {
+		label="xml.sax";
+		"xml.sax" -> "xml.sax.handler" [style="dotted"];
+		"xml.sax" -> "xml.sax.xmlreader" [style="dotted"];
+		"xml.sax" -> "xml.sax.saxutils" [style="dotted"];
+		"xml.sax" -> "xml.sax._exceptions" [style="dotted"];
+		"xml.sax" -> "xml.sax.expatreader" [style="dotted"];
 	}
 	subgraph "cluster_multiprocessing" {
 		label="multiprocessing";
@@ -1746,62 +1302,30 @@ charset="UTF-8";
 		"multiprocessing" -> "multiprocessing.heap" [style="dotted"];
 		"multiprocessing" -> "multiprocessing.dummy" [style="dotted"];
 	}
-	subgraph "cluster_sqlite3" {
-		label="sqlite3";
-		"sqlite3" -> "sqlite3.dbapi2" [style="dotted"];
-		"sqlite3" -> "sqlite3.dump" [style="dotted"];
+	subgraph "cluster_concurrent" {
+		label="concurrent";
+		"concurrent" -> "concurrent.futures" [style="dotted"];
 	}
-	subgraph "cluster_asyncio" {
-		label="asyncio";
-		"asyncio" -> "asyncio.constants" [style="dotted"];
-		"asyncio" -> "asyncio.coroutines" [style="dotted"];
-		"asyncio" -> "asyncio.format_helpers" [style="dotted"];
-		"asyncio" -> "asyncio.DefaultEventLoopPolicy" [style="dotted"];
-		"asyncio" -> "asyncio.events" [style="dotted"];
-		"asyncio" -> "asyncio.exceptions" [style="dotted"];
-		"asyncio" -> "asyncio.base_futures" [style="dotted"];
-		"asyncio" -> "asyncio.futures" [style="dotted"];
-		"asyncio" -> "asyncio.protocols" [style="dotted"];
-		"asyncio" -> "asyncio.transports" [style="dotted"];
-		"asyncio" -> "asyncio.sslproto" [style="dotted"];
-		"asyncio" -> "asyncio.mixins" [style="dotted"];
-		"asyncio" -> "asyncio.base_tasks" [style="dotted"];
-		"asyncio" -> "asyncio.locks" [style="dotted"];
-		"asyncio" -> "asyncio.tasks" [style="dotted"];
-		"asyncio" -> "asyncio.staggered" [style="dotted"];
-		"asyncio" -> "asyncio.trsock" [style="dotted"];
-		"asyncio" -> "asyncio.base_events" [style="dotted"];
-		"asyncio" -> "asyncio.runners" [style="dotted"];
-		"asyncio" -> "asyncio.queues" [style="dotted"];
-		"asyncio" -> "asyncio.streams" [style="dotted"];
-		"asyncio" -> "asyncio.subprocess" [style="dotted"];
-		"asyncio" -> "asyncio.taskgroups" [style="dotted"];
-		"asyncio" -> "asyncio.timeouts" [style="dotted"];
-		"asyncio" -> "asyncio.threads" [style="dotted"];
-		"asyncio" -> "asyncio.base_subprocess" [style="dotted"];
-		"asyncio" -> "asyncio.proactor_events" [style="dotted"];
-		"asyncio" -> "asyncio.selector_events" [style="dotted"];
-		"asyncio" -> "asyncio.windows_utils" [style="dotted"];
-		"asyncio" -> "asyncio.windows_events" [style="dotted"];
-		"asyncio" -> "asyncio.unix_events" [style="dotted"];
-		"asyncio" -> "asyncio.log" [style="dotted"];
+	subgraph "cluster_xml.parsers" {
+		label="xml.parsers";
+		"xml.parsers" -> "xml.parsers.expat" [style="dotted"];
 	}
-	subgraph "cluster_ttkbootstrap.dialogs" {
-		label="ttkbootstrap.dialogs";
-		"ttkbootstrap.dialogs" -> "ttkbootstrap.dialogs.Dialog" [style="dotted"];
-		"ttkbootstrap.dialogs" -> "ttkbootstrap.dialogs.dialogs" [style="dotted"];
-		"ttkbootstrap.dialogs" -> "ttkbootstrap.dialogs.colorchooser" [style="dotted"];
-		"ttkbootstrap.dialogs" -> "ttkbootstrap.dialogs.colordropper" [style="dotted"];
+	subgraph "cluster_json" {
+		label="json";
+		"json" -> "json.scanner" [style="dotted"];
+		"json" -> "json.decoder" [style="dotted"];
+		"json" -> "json.encoder" [style="dotted"];
 	}
-	subgraph "cluster_html" {
-		label="html";
-		"html" -> "html.entities" [style="dotted"];
-		"html" -> "html.parser" [style="dotted"];
-	}
-	subgraph "cluster_ttkbootstrap.themes" {
-		label="ttkbootstrap.themes";
-		"ttkbootstrap.themes" -> "ttkbootstrap.themes.standard" [style="dotted"];
-		"ttkbootstrap.themes" -> "ttkbootstrap.themes.user" [style="dotted"];
+	subgraph "cluster_pkg_resources._vendor.importlib_resources" {
+		label="pkg_resources._vendor.importlib_resources";
+		"pkg_resources._vendor.importlib_resources" -> "pkg_resources._vendor.importlib_resources.abc" [style="dotted"];
+		"pkg_resources._vendor.importlib_resources" -> "pkg_resources._vendor.importlib_resources.readers" [style="dotted"];
+		"pkg_resources._vendor.importlib_resources" -> "pkg_resources._vendor.importlib_resources._adapters" [style="dotted"];
+		"pkg_resources._vendor.importlib_resources" -> "pkg_resources._vendor.importlib_resources._common" [style="dotted"];
+		"pkg_resources._vendor.importlib_resources" -> "pkg_resources._vendor.importlib_resources._legacy" [style="dotted"];
+		"pkg_resources._vendor.importlib_resources" -> "pkg_resources._vendor.importlib_resources._compat" [style="dotted"];
+		"pkg_resources._vendor.importlib_resources" -> "pkg_resources._vendor.importlib_resources._itertools" [style="dotted"];
+		"pkg_resources._vendor.importlib_resources" -> "pkg_resources._vendor.importlib_resources.simple" [style="dotted"];
 	}
 	subgraph "cluster_fontTools.ttLib.tables" {
 		label="fontTools.ttLib.tables";
@@ -1903,50 +1427,526 @@ charset="UTF-8";
 		"fontTools.ttLib.tables" -> "fontTools.ttLib.tables.BitmapGlyphMetrics" [style="dotted"];
 		"fontTools.ttLib.tables" -> "fontTools.ttLib.tables.otData" [style="dotted"];
 	}
-	subgraph "cluster_pkg_resources._vendor.pyparsing.diagram" {
-		label="pkg_resources._vendor.pyparsing.diagram";
+	subgraph "cluster_email" {
+		label="email";
+		"email" -> "email.errors" [style="dotted"];
+		"email" -> "email.charset" [style="dotted"];
+		"email" -> "email.header" [style="dotted"];
+		"email" -> "email._header_value_parser" [style="dotted"];
+		"email" -> "email.parser" [style="dotted"];
+		"email" -> "email.message" [style="dotted"];
+		"email" -> "email.utils" [style="dotted"];
+		"email" -> "email._policybase" [style="dotted"];
+		"email" -> "email._encoded_words" [style="dotted"];
+		"email" -> "email.generator" [style="dotted"];
+		"email" -> "email.iterators" [style="dotted"];
+		"email" -> "email.policy" [style="dotted"];
+		"email" -> "email.headerregistry" [style="dotted"];
+		"email" -> "email.contentmanager" [style="dotted"];
+		"email" -> "email.quoprimime" [style="dotted"];
+		"email" -> "email.base64mime" [style="dotted"];
+		"email" -> "email.encoders" [style="dotted"];
+		"email" -> "email._parseaddr" [style="dotted"];
+		"email" -> "email.feedparser" [style="dotted"];
+	}
+	subgraph "cluster_fpdf" {
+		label="fpdf";
+		"fpdf" -> "fpdf.enums" [style="dotted"];
+		"fpdf" -> "fpdf.errors" [style="dotted"];
+		"fpdf" -> "fpdf.fpdf" [style="dotted"];
+		"fpdf" -> "fpdf.fonts" [style="dotted"];
+		"fpdf" -> "fpdf.html" [style="dotted"];
+		"fpdf" -> "fpdf.prefs" [style="dotted"];
+		"fpdf" -> "fpdf.template" [style="dotted"];
+		"fpdf" -> "fpdf.deprecation" [style="dotted"];
+		"fpdf" -> "fpdf.syntax" [style="dotted"];
+		"fpdf" -> "fpdf.drawing" [style="dotted"];
+		"fpdf" -> "fpdf.table" [style="dotted"];
+		"fpdf" -> "fpdf.util" [style="dotted"];
+		"fpdf" -> "fpdf.actions" [style="dotted"];
+		"fpdf" -> "fpdf.annotations" [style="dotted"];
+		"fpdf" -> "fpdf.bidi" [style="dotted"];
+		"fpdf" -> "fpdf.encryption" [style="dotted"];
+		"fpdf" -> "fpdf.graphics_state" [style="dotted"];
+		"fpdf" -> "fpdf.image_datastructures" [style="dotted"];
+		"fpdf" -> "fpdf.image_parsing" [style="dotted"];
+		"fpdf" -> "fpdf.linearization" [style="dotted"];
+		"fpdf" -> "fpdf.line_break" [style="dotted"];
+		"fpdf" -> "fpdf.outline" [style="dotted"];
+		"fpdf" -> "fpdf.output" [style="dotted"];
+		"fpdf" -> "fpdf.recorder" [style="dotted"];
+		"fpdf" -> "fpdf.sign" [style="dotted"];
+		"fpdf" -> "fpdf.structure_tree" [style="dotted"];
+		"fpdf" -> "fpdf.svg" [style="dotted"];
+		"fpdf" -> "fpdf.text_region" [style="dotted"];
+	}
+	subgraph "cluster_xml" {
+		label="xml";
+		"xml" -> "xml.etree" [style="dotted"];
+		"xml" -> "xml.sax" [style="dotted"];
+		"xml" -> "xml.parsers" [style="dotted"];
+		"xml" -> "xml.dom" [style="dotted"];
+	}
+	subgraph "cluster_PIL" {
+		label="PIL";
+		"PIL" -> "PIL._version" [style="dotted"];
+		"PIL" -> "PIL.ExifTags" [style="dotted"];
+		"PIL" -> "PIL.ImageMode" [style="dotted"];
+		"PIL" -> "PIL.TiffTags" [style="dotted"];
+		"PIL" -> "PIL._imaging" [style="dotted"];
+		"PIL" -> "PIL.Image" [style="dotted"];
+		"PIL" -> "PIL.ImageFile" [style="dotted"];
+		"PIL" -> "PIL.GimpGradientFile" [style="dotted"];
+		"PIL" -> "PIL.GimpPaletteFile" [style="dotted"];
+		"PIL" -> "PIL.ImageColor" [style="dotted"];
+		"PIL" -> "PIL.PaletteFile" [style="dotted"];
+		"PIL" -> "PIL.ImagePalette" [style="dotted"];
+		"PIL" -> "PIL.BmpImagePlugin" [style="dotted"];
+		"PIL" -> "PIL.ImageChops" [style="dotted"];
+		"PIL" -> "PIL._imagingmath" [style="dotted"];
+		"PIL" -> "PIL.ImageMath" [style="dotted"];
+		"PIL" -> "PIL.ImageOps" [style="dotted"];
+		"PIL" -> "PIL.ImageSequence" [style="dotted"];
+		"PIL" -> "PIL.GifImagePlugin" [style="dotted"];
+		"PIL" -> "PIL.TiffImagePlugin" [style="dotted"];
+		"PIL" -> "PIL.JpegImagePlugin" [style="dotted"];
+		"PIL" -> "PIL.PpmImagePlugin" [style="dotted"];
+		"PIL" -> "PIL.PngImagePlugin" [style="dotted"];
+		"PIL" -> "PIL.PyAccess" [style="dotted"];
+		"PIL" -> "PIL._imagingcms" [style="dotted"];
+		"PIL" -> "PIL.ImageWin" [style="dotted"];
+		"PIL" -> "PIL.ImageCms" [style="dotted"];
+		"PIL" -> "PIL.ImageFilter" [style="dotted"];
+		"PIL" -> "PIL.ImageQt" [style="dotted"];
+		"PIL" -> "PIL.ImageShow" [style="dotted"];
+		"PIL" -> "PIL._imagingtk" [style="dotted"];
+		"PIL" -> "PIL.ImageTk" [style="dotted"];
+		"PIL" -> "PIL._imagingft" [style="dotted"];
+		"PIL" -> "PIL.ImageFont" [style="dotted"];
+		"PIL" -> "PIL._imagingagg" [style="dotted"];
+		"PIL" -> "PIL.ImageDraw" [style="dotted"];
+		"PIL" -> "PIL.ImagePath" [style="dotted"];
+		"PIL" -> "PIL.ImageDraw2" [style="dotted"];
+		"PIL" -> "PIL.ImageGrab" [style="dotted"];
+		"PIL" -> "PIL.features" [style="dotted"];
+		"PIL" -> "PIL.Jpeg2KImagePlugin" [style="dotted"];
+		"PIL" -> "PIL.PdfParser" [style="dotted"];
+		"PIL" -> "PIL._webp" [style="dotted"];
+		"PIL" -> "PIL._typing" [style="dotted"];
+		"PIL" -> "PIL._util" [style="dotted"];
+		"PIL" -> "PIL._binary" [style="dotted"];
+		"PIL" -> "PIL.BlpImagePlugin" [style="dotted"];
+		"PIL" -> "PIL.BufrStubImagePlugin" [style="dotted"];
+		"PIL" -> "PIL.CurImagePlugin" [style="dotted"];
+		"PIL" -> "PIL.DcxImagePlugin" [style="dotted"];
+		"PIL" -> "PIL.DdsImagePlugin" [style="dotted"];
+		"PIL" -> "PIL.EpsImagePlugin" [style="dotted"];
+		"PIL" -> "PIL.FitsImagePlugin" [style="dotted"];
+		"PIL" -> "PIL.FliImagePlugin" [style="dotted"];
+		"PIL" -> "PIL.FpxImagePlugin" [style="dotted"];
+		"PIL" -> "PIL.FtexImagePlugin" [style="dotted"];
+		"PIL" -> "PIL.GbrImagePlugin" [style="dotted"];
+		"PIL" -> "PIL.GribStubImagePlugin" [style="dotted"];
+		"PIL" -> "PIL.Hdf5StubImagePlugin" [style="dotted"];
+		"PIL" -> "PIL.IcnsImagePlugin" [style="dotted"];
+		"PIL" -> "PIL.IcoImagePlugin" [style="dotted"];
+		"PIL" -> "PIL.ImImagePlugin" [style="dotted"];
+		"PIL" -> "PIL.ImtImagePlugin" [style="dotted"];
+		"PIL" -> "PIL.IptcImagePlugin" [style="dotted"];
+		"PIL" -> "PIL.McIdasImagePlugin" [style="dotted"];
+		"PIL" -> "PIL.MicImagePlugin" [style="dotted"];
+		"PIL" -> "PIL.MpegImagePlugin" [style="dotted"];
+		"PIL" -> "PIL.MpoImagePlugin" [style="dotted"];
+		"PIL" -> "PIL.MspImagePlugin" [style="dotted"];
+		"PIL" -> "PIL.PalmImagePlugin" [style="dotted"];
+		"PIL" -> "PIL.PcdImagePlugin" [style="dotted"];
+		"PIL" -> "PIL.PcxImagePlugin" [style="dotted"];
+		"PIL" -> "PIL.PdfImagePlugin" [style="dotted"];
+		"PIL" -> "PIL.PixarImagePlugin" [style="dotted"];
+		"PIL" -> "PIL.PsdImagePlugin" [style="dotted"];
+		"PIL" -> "PIL.QoiImagePlugin" [style="dotted"];
+		"PIL" -> "PIL.SgiImagePlugin" [style="dotted"];
+		"PIL" -> "PIL.SpiderImagePlugin" [style="dotted"];
+		"PIL" -> "PIL.SunImagePlugin" [style="dotted"];
+		"PIL" -> "PIL.TgaImagePlugin" [style="dotted"];
+		"PIL" -> "PIL.WebPImagePlugin" [style="dotted"];
+		"PIL" -> "PIL.WmfImagePlugin" [style="dotted"];
+		"PIL" -> "PIL.XVThumbImagePlugin" [style="dotted"];
+		"PIL" -> "PIL.XbmImagePlugin" [style="dotted"];
+		"PIL" -> "PIL.XpmImagePlugin" [style="dotted"];
+		"PIL" -> "PIL._deprecate" [style="dotted"];
+		"PIL" -> "PIL.JpegPresets" [style="dotted"];
+	}
+	subgraph "cluster_concurrent.futures" {
+		label="concurrent.futures";
+		"concurrent.futures" -> "concurrent.futures._base" [style="dotted"];
+		"concurrent.futures" -> "concurrent.futures.process" [style="dotted"];
+		"concurrent.futures" -> "concurrent.futures.thread" [style="dotted"];
+	}
+	subgraph "cluster_tkinter" {
+		label="tkinter";
+		"tkinter" -> "tkinter.constants" [style="dotted"];
+		"tkinter" -> "tkinter.font" [style="dotted"];
+		"tkinter" -> "tkinter.ttk" [style="dotted"];
+		"tkinter" -> "tkinter.commondialog" [style="dotted"];
+		"tkinter" -> "tkinter.messagebox" [style="dotted"];
+		"tkinter" -> "tkinter.filedialog" [style="dotted"];
+		"tkinter" -> "tkinter.dialog" [style="dotted"];
+		"tkinter" -> "tkinter.simpledialog" [style="dotted"];
+		"tkinter" -> "tkinter.scrolledtext" [style="dotted"];
+	}
+	subgraph "cluster_ttkbootstrap.dialogs" {
+		label="ttkbootstrap.dialogs";
+		"ttkbootstrap.dialogs" -> "ttkbootstrap.dialogs.Dialog" [style="dotted"];
+		"ttkbootstrap.dialogs" -> "ttkbootstrap.dialogs.dialogs" [style="dotted"];
+		"ttkbootstrap.dialogs" -> "ttkbootstrap.dialogs.colorchooser" [style="dotted"];
+		"ttkbootstrap.dialogs" -> "ttkbootstrap.dialogs.colordropper" [style="dotted"];
 	}
 	subgraph "cluster_fontTools.svgLib" {
 		label="fontTools.svgLib";
 		"fontTools.svgLib" -> "fontTools.svgLib.path" [style="dotted"];
 	}
+	subgraph "cluster_dotenv" {
+		label="dotenv";
+		"dotenv" -> "dotenv.main" [style="dotted"];
+		"dotenv" -> "dotenv.ipython" [style="dotted"];
+		"dotenv" -> "dotenv.parser" [style="dotted"];
+		"dotenv" -> "dotenv.variables" [style="dotted"];
+	}
+	subgraph "cluster_xml.dom" {
+		label="xml.dom";
+		"xml.dom" -> "xml.dom.domreg" [style="dotted"];
+		"xml.dom" -> "xml.dom.xmlbuilder" [style="dotted"];
+		"xml.dom" -> "xml.dom.minidom" [style="dotted"];
+		"xml.dom" -> "xml.dom.pulldom" [style="dotted"];
+		"xml.dom" -> "xml.dom.minicompat" [style="dotted"];
+		"xml.dom" -> "xml.dom.expatbuilder" [style="dotted"];
+		"xml.dom" -> "xml.dom.NodeFilter" [style="dotted"];
+	}
+	subgraph "cluster_urllib" {
+		label="urllib";
+		"urllib" -> "urllib.parse" [style="dotted"];
+		"urllib" -> "urllib.request" [style="dotted"];
+		"urllib" -> "urllib.error" [style="dotted"];
+		"urllib" -> "urllib.response" [style="dotted"];
+	}
+	subgraph "cluster_fontTools.cffLib" {
+		label="fontTools.cffLib";
+		"fontTools.cffLib" -> "fontTools.cffLib.CFFToCFF2" [style="dotted"];
+		"fontTools.cffLib" -> "fontTools.cffLib.CFF2ToCFF" [style="dotted"];
+		"fontTools.cffLib" -> "fontTools.cffLib.transforms" [style="dotted"];
+		"fontTools.cffLib" -> "fontTools.cffLib.width" [style="dotted"];
+		"fontTools.cffLib" -> "fontTools.cffLib.specializer" [style="dotted"];
+	}
+	subgraph "cluster_fontTools.colorLib" {
+		label="fontTools.colorLib";
+		"fontTools.colorLib" -> "fontTools.colorLib.builder" [style="dotted"];
+		"fontTools.colorLib" -> "fontTools.colorLib.unbuilder" [style="dotted"];
+		"fontTools.colorLib" -> "fontTools.colorLib.table_builder" [style="dotted"];
+		"fontTools.colorLib" -> "fontTools.colorLib.errors" [style="dotted"];
+		"fontTools.colorLib" -> "fontTools.colorLib.geometry" [style="dotted"];
+	}
+	subgraph "cluster_ttkbootstrap" {
+		label="ttkbootstrap";
+		"ttkbootstrap" -> "ttkbootstrap.utility" [style="dotted"];
+		"ttkbootstrap" -> "ttkbootstrap.colorutils" [style="dotted"];
+		"ttkbootstrap" -> "ttkbootstrap.localization" [style="dotted"];
+		"ttkbootstrap" -> "ttkbootstrap.style" [style="dotted"];
+		"ttkbootstrap" -> "ttkbootstrap.widgets" [style="dotted"];
+		"ttkbootstrap" -> "ttkbootstrap.window" [style="dotted"];
+		"ttkbootstrap" -> "ttkbootstrap.constants" [style="dotted"];
+		"ttkbootstrap" -> "ttkbootstrap.publisher" [style="dotted"];
+		"ttkbootstrap" -> "ttkbootstrap.icons" [style="dotted"];
+		"ttkbootstrap" -> "ttkbootstrap.dialogs" [style="dotted"];
+		"ttkbootstrap" -> "ttkbootstrap.validation" [style="dotted"];
+		"ttkbootstrap" -> "ttkbootstrap.tooltip" [style="dotted"];
+		"ttkbootstrap" -> "ttkbootstrap.themes" [style="dotted"];
+	}
+	subgraph "cluster_fontTools.otlLib" {
+		label="fontTools.otlLib";
+		"fontTools.otlLib" -> "fontTools.otlLib.builder" [style="dotted"];
+		"fontTools.otlLib" -> "fontTools.otlLib.error" [style="dotted"];
+		"fontTools.otlLib" -> "fontTools.otlLib.optimize" [style="dotted"];
+		"fontTools.otlLib" -> "fontTools.otlLib.maxContextCalc" [style="dotted"];
+	}
+	subgraph "cluster_fontTools.misc.plistlib" {
+		label="fontTools.misc.plistlib";
+	}
+	subgraph "cluster_fontTools" {
+		label="fontTools";
+		"fontTools" -> "fontTools.cffLib" [style="dotted"];
+		"fontTools" -> "fontTools.agl" [style="dotted"];
+		"fontTools" -> "fontTools.ttLib" [style="dotted"];
+		"fontTools" -> "fontTools.subset" [style="dotted"];
+		"fontTools" -> "fontTools.misc" [style="dotted"];
+		"fontTools" -> "fontTools.config" [style="dotted"];
+		"fontTools" -> "fontTools.varLib" [style="dotted"];
+		"fontTools" -> "fontTools.designspaceLib" [style="dotted"];
+		"fontTools" -> "fontTools.ttx" [style="dotted"];
+		"fontTools" -> "fontTools.unicode" [style="dotted"];
+		"fontTools" -> "fontTools.pens" [style="dotted"];
+		"fontTools" -> "fontTools.otlLib" [style="dotted"];
+		"fontTools" -> "fontTools.feaLib" [style="dotted"];
+		"fontTools" -> "fontTools.encodings" [style="dotted"];
+		"fontTools" -> "fontTools.colorLib" [style="dotted"];
+		"fontTools" -> "fontTools.svgLib" [style="dotted"];
+	}
+	subgraph "cluster_pkg_resources._vendor.pyparsing.diagram" {
+		label="pkg_resources._vendor.pyparsing.diagram";
+	}
+	subgraph "cluster_sqlite3" {
+		label="sqlite3";
+		"sqlite3" -> "sqlite3.dbapi2" [style="dotted"];
+		"sqlite3" -> "sqlite3.dump" [style="dotted"];
+	}
+	subgraph "cluster_fontTools.ttLib" {
+		label="fontTools.ttLib";
+		"fontTools.ttLib" -> "fontTools.ttLib.TTFont" [style="dotted"];
+		"fontTools.ttLib" -> "fontTools.ttLib.newTable" [style="dotted"];
+		"fontTools.ttLib" -> "fontTools.ttLib.getClassTag" [style="dotted"];
+		"fontTools.ttLib" -> "fontTools.ttLib.getSearchRange" [style="dotted"];
+		"fontTools.ttLib" -> "fontTools.ttLib.getTableModule" [style="dotted"];
+		"fontTools.ttLib" -> "fontTools.ttLib.getTableClass" [style="dotted"];
+		"fontTools.ttLib" -> "fontTools.ttLib.macUtils" [style="dotted"];
+		"fontTools.ttLib" -> "fontTools.ttLib.ttFont" [style="dotted"];
+		"fontTools.ttLib" -> "fontTools.ttLib.ttCollection" [style="dotted"];
+		"fontTools.ttLib" -> "fontTools.ttLib.sfnt" [style="dotted"];
+		"fontTools.ttLib" -> "fontTools.ttLib.tables" [style="dotted"];
+		"fontTools.ttLib" -> "fontTools.ttLib.standardGlyphOrder" [style="dotted"];
+		"fontTools.ttLib" -> "fontTools.ttLib.ttVisitor" [style="dotted"];
+		"fontTools.ttLib" -> "fontTools.ttLib.ttGlyphSet" [style="dotted"];
+		"fontTools.ttLib" -> "fontTools.ttLib.woff2" [style="dotted"];
+		"fontTools.ttLib" -> "fontTools.ttLib.reorderGlyphs" [style="dotted"];
+	}
+	subgraph "cluster_pkg_resources._vendor.packaging" {
+		label="pkg_resources._vendor.packaging";
+		"pkg_resources._vendor.packaging" -> "pkg_resources._vendor.packaging.__about__" [style="dotted"];
+		"pkg_resources._vendor.packaging" -> "pkg_resources._vendor.packaging._manylinux" [style="dotted"];
+		"pkg_resources._vendor.packaging" -> "pkg_resources._vendor.packaging._musllinux" [style="dotted"];
+		"pkg_resources._vendor.packaging" -> "pkg_resources._vendor.packaging._structures" [style="dotted"];
+		"pkg_resources._vendor.packaging" -> "pkg_resources._vendor.packaging.markers" [style="dotted"];
+		"pkg_resources._vendor.packaging" -> "pkg_resources._vendor.packaging.requirements" [style="dotted"];
+		"pkg_resources._vendor.packaging" -> "pkg_resources._vendor.packaging.specifiers" [style="dotted"];
+		"pkg_resources._vendor.packaging" -> "pkg_resources._vendor.packaging.tags" [style="dotted"];
+		"pkg_resources._vendor.packaging" -> "pkg_resources._vendor.packaging.utils" [style="dotted"];
+		"pkg_resources._vendor.packaging" -> "pkg_resources._vendor.packaging.version" [style="dotted"];
+	}
+	subgraph "cluster_unittest" {
+		label="unittest";
+		"unittest" -> "unittest.util" [style="dotted"];
+		"unittest" -> "unittest.result" [style="dotted"];
+		"unittest" -> "unittest.case" [style="dotted"];
+		"unittest" -> "unittest.suite" [style="dotted"];
+		"unittest" -> "unittest.loader" [style="dotted"];
+		"unittest" -> "unittest.runner" [style="dotted"];
+		"unittest" -> "unittest.main" [style="dotted"];
+		"unittest" -> "unittest.signals" [style="dotted"];
+		"unittest" -> "unittest.async_case" [style="dotted"];
+		"unittest" -> "unittest._log" [style="dotted"];
+		"unittest" -> "unittest.mock" [style="dotted"];
+	}
+	subgraph "cluster_re" {
+		label="re";
+		"re" -> "re._parser" [style="dotted"];
+		"re" -> "re._compiler" [style="dotted"];
+		"re" -> "re._constants" [style="dotted"];
+		"re" -> "re._casefix" [style="dotted"];
+	}
+	subgraph "cluster_pydoc_data" {
+		label="pydoc_data";
+		"pydoc_data" -> "pydoc_data.topics" [style="dotted"];
+	}
+	subgraph "cluster_asyncio" {
+		label="asyncio";
+		"asyncio" -> "asyncio.constants" [style="dotted"];
+		"asyncio" -> "asyncio.coroutines" [style="dotted"];
+		"asyncio" -> "asyncio.format_helpers" [style="dotted"];
+		"asyncio" -> "asyncio.DefaultEventLoopPolicy" [style="dotted"];
+		"asyncio" -> "asyncio.events" [style="dotted"];
+		"asyncio" -> "asyncio.exceptions" [style="dotted"];
+		"asyncio" -> "asyncio.base_futures" [style="dotted"];
+		"asyncio" -> "asyncio.futures" [style="dotted"];
+		"asyncio" -> "asyncio.protocols" [style="dotted"];
+		"asyncio" -> "asyncio.transports" [style="dotted"];
+		"asyncio" -> "asyncio.sslproto" [style="dotted"];
+		"asyncio" -> "asyncio.mixins" [style="dotted"];
+		"asyncio" -> "asyncio.base_tasks" [style="dotted"];
+		"asyncio" -> "asyncio.locks" [style="dotted"];
+		"asyncio" -> "asyncio.tasks" [style="dotted"];
+		"asyncio" -> "asyncio.staggered" [style="dotted"];
+		"asyncio" -> "asyncio.trsock" [style="dotted"];
+		"asyncio" -> "asyncio.base_events" [style="dotted"];
+		"asyncio" -> "asyncio.runners" [style="dotted"];
+		"asyncio" -> "asyncio.queues" [style="dotted"];
+		"asyncio" -> "asyncio.streams" [style="dotted"];
+		"asyncio" -> "asyncio.subprocess" [style="dotted"];
+		"asyncio" -> "asyncio.taskgroups" [style="dotted"];
+		"asyncio" -> "asyncio.timeouts" [style="dotted"];
+		"asyncio" -> "asyncio.threads" [style="dotted"];
+		"asyncio" -> "asyncio.base_subprocess" [style="dotted"];
+		"asyncio" -> "asyncio.proactor_events" [style="dotted"];
+		"asyncio" -> "asyncio.selector_events" [style="dotted"];
+		"asyncio" -> "asyncio.windows_utils" [style="dotted"];
+		"asyncio" -> "asyncio.windows_events" [style="dotted"];
+		"asyncio" -> "asyncio.unix_events" [style="dotted"];
+		"asyncio" -> "asyncio.log" [style="dotted"];
+	}
+	subgraph "cluster_fontTools.otlLib.optimize" {
+		label="fontTools.otlLib.optimize";
+		"fontTools.otlLib.optimize" -> "fontTools.otlLib.optimize.gpos" [style="dotted"];
+	}
+	subgraph "cluster_xmlrpc" {
+		label="xmlrpc";
+		"xmlrpc" -> "xmlrpc.server" [style="dotted"];
+		"xmlrpc" -> "xmlrpc.client" [style="dotted"];
+	}
+	subgraph "cluster_fontTools.subset" {
+		label="fontTools.subset";
+		"fontTools.subset" -> "fontTools.subset.util" [style="dotted"];
+		"fontTools.subset" -> "fontTools.subset.cff" [style="dotted"];
+		"fontTools.subset" -> "fontTools.subset.svg" [style="dotted"];
+	}
+	subgraph "cluster_fontTools.varLib" {
+		label="fontTools.varLib";
+		"fontTools.varLib" -> "fontTools.varLib.builder" [style="dotted"];
+		"fontTools.varLib" -> "fontTools.varLib.models" [style="dotted"];
+		"fontTools.varLib" -> "fontTools.varLib.varStore" [style="dotted"];
+		"fontTools.varLib" -> "fontTools.varLib.merger" [style="dotted"];
+		"fontTools.varLib" -> "fontTools.varLib.mvar" [style="dotted"];
+		"fontTools.varLib" -> "fontTools.varLib.iup" [style="dotted"];
+		"fontTools.varLib" -> "fontTools.varLib.featureVars" [style="dotted"];
+		"fontTools.varLib" -> "fontTools.varLib.stat" [style="dotted"];
+		"fontTools.varLib" -> "fontTools.varLib.errors" [style="dotted"];
+		"fontTools.varLib" -> "fontTools.varLib.cff" [style="dotted"];
+		"fontTools.varLib" -> "fontTools.varLib.multiVarStore" [style="dotted"];
+	}
+	subgraph "cluster_http" {
+		label="http";
+		"http" -> "http.client" [style="dotted"];
+		"http" -> "http.cookiejar" [style="dotted"];
+		"http" -> "http.server" [style="dotted"];
+	}
+	subgraph "cluster_defusedxml" {
+		label="defusedxml";
+		"defusedxml" -> "defusedxml.common" [style="dotted"];
+		"defusedxml" -> "defusedxml.cElementTree" [style="dotted"];
+		"defusedxml" -> "defusedxml.ElementTree" [style="dotted"];
+		"defusedxml" -> "defusedxml.expatbuilder" [style="dotted"];
+		"defusedxml" -> "defusedxml.expatreader" [style="dotted"];
+		"defusedxml" -> "defusedxml.pulldom" [style="dotted"];
+		"defusedxml" -> "defusedxml.minidom" [style="dotted"];
+		"defusedxml" -> "defusedxml.sax" [style="dotted"];
+		"defusedxml" -> "defusedxml.xmlrpc" [style="dotted"];
+	}
+	subgraph "cluster_fontTools.misc" {
+		label="fontTools.misc";
+		"fontTools.misc" -> "fontTools.misc.xmlWriter" [style="dotted"];
+		"fontTools.misc" -> "fontTools.misc.sstruct" [style="dotted"];
+		"fontTools.misc" -> "fontTools.misc.psCharStrings" [style="dotted"];
+		"fontTools.misc" -> "fontTools.misc.etree" [style="dotted"];
+		"fontTools.misc" -> "fontTools.misc.plistlib" [style="dotted"];
+		"fontTools.misc" -> "fontTools.misc.classifyTools" [style="dotted"];
+		"fontTools.misc" -> "fontTools.misc.xmlReader" [style="dotted"];
+		"fontTools.misc" -> "fontTools.misc.loggingTools" [style="dotted"];
+		"fontTools.misc" -> "fontTools.misc.textTools" [style="dotted"];
+		"fontTools.misc" -> "fontTools.misc.fixedTools" [style="dotted"];
+		"fontTools.misc" -> "fontTools.misc.roundTools" [style="dotted"];
+		"fontTools.misc" -> "fontTools.misc.configTools" [style="dotted"];
+		"fontTools.misc" -> "fontTools.misc.timeTools" [style="dotted"];
+		"fontTools.misc" -> "fontTools.misc.arrayTools" [style="dotted"];
+		"fontTools.misc" -> "fontTools.misc.vector" [style="dotted"];
+		"fontTools.misc" -> "fontTools.misc.lazyTools" [style="dotted"];
+		"fontTools.misc" -> "fontTools.misc.macCreatorType" [style="dotted"];
+		"fontTools.misc" -> "fontTools.misc.cliTools" [style="dotted"];
+		"fontTools.misc" -> "fontTools.misc.transform" [style="dotted"];
+		"fontTools.misc" -> "fontTools.misc.intTools" [style="dotted"];
+		"fontTools.misc" -> "fontTools.misc.encodingTools" [style="dotted"];
+		"fontTools.misc" -> "fontTools.misc.treeTools" [style="dotted"];
+		"fontTools.misc" -> "fontTools.misc.dictTools" [style="dotted"];
+		"fontTools.misc" -> "fontTools.misc.visitor" [style="dotted"];
+		"fontTools.misc" -> "fontTools.misc.bezierTools" [style="dotted"];
+		"fontTools.misc" -> "fontTools.misc.filenames" [style="dotted"];
+		"fontTools.misc" -> "fontTools.misc.iterTools" [style="dotted"];
+		"fontTools.misc" -> "fontTools.misc.macRes" [style="dotted"];
+	}
+	subgraph "cluster_fontTools.encodings" {
+		label="fontTools.encodings";
+		"fontTools.encodings" -> "fontTools.encodings.codecs" [style="dotted"];
+		"fontTools.encodings" -> "fontTools.encodings.StandardEncoding" [style="dotted"];
+	}
+	subgraph "cluster_importlib.resources" {
+		label="importlib.resources";
+		"importlib.resources" -> "importlib.resources._common" [style="dotted"];
+		"importlib.resources" -> "importlib.resources._legacy" [style="dotted"];
+		"importlib.resources" -> "importlib.resources.abc" [style="dotted"];
+		"importlib.resources" -> "importlib.resources.readers" [style="dotted"];
+		"importlib.resources" -> "importlib.resources._adapters" [style="dotted"];
+		"importlib.resources" -> "importlib.resources._itertools" [style="dotted"];
+	}
+	subgraph "cluster_collections" {
+		label="collections";
+		"collections" -> "collections.abc" [style="dotted"];
+	}
+	subgraph "cluster_pkg_resources._vendor" {
+		label="pkg_resources._vendor";
+		"pkg_resources._vendor" -> "pkg_resources._vendor.appdirs" [style="dotted"];
+		"pkg_resources._vendor" -> "pkg_resources._vendor.zipp" [style="dotted"];
+		"pkg_resources._vendor" -> "pkg_resources._vendor.pyparsing" [style="dotted"];
+		"pkg_resources._vendor" -> "pkg_resources._vendor.packaging" [style="dotted"];
+		"pkg_resources._vendor" -> "pkg_resources._vendor.more_itertools" [style="dotted"];
+		"pkg_resources._vendor" -> "pkg_resources._vendor.jaraco" [style="dotted"];
+		"pkg_resources._vendor" -> "pkg_resources._vendor.importlib_resources" [style="dotted"];
+	}
+	subgraph "cluster_pkg_resources.extern" {
+		label="pkg_resources.extern";
+		"pkg_resources.extern" -> "pkg_resources.extern.appdirs" [style="dotted"];
+		"pkg_resources.extern" -> "pkg_resources.extern.packaging" [style="dotted"];
+	}
+	subgraph "cluster_fontTools.config" {
+		label="fontTools.config";
+	}
+	subgraph "cluster_ttkbootstrap.localization" {
+		label="ttkbootstrap.localization";
+		"ttkbootstrap.localization" -> "ttkbootstrap.localization.msgs" [style="dotted"];
+		"ttkbootstrap.localization" -> "ttkbootstrap.localization.msgcat" [style="dotted"];
+	}
+	"<PyiModuleGraph>" -> "codecs" [];
 	"<PyiModuleGraph>" -> "gc" [];
 	"<PyiModuleGraph>" -> "time" [];
-	"<PyiModuleGraph>" -> "codecs" [];
+	"<PyiModuleGraph>" -> "_datetime" [];
+	"<PyiModuleGraph>" -> "datetime" [];
 	"<PyiModuleGraph>" -> "posix" [];
 	"<PyiModuleGraph>" -> "ntpath" [];
 	"<PyiModuleGraph>" -> "_pickle" [];
-	"<PyiModuleGraph>" -> "_datetime" [];
-	"<PyiModuleGraph>" -> "datetime" [];
 	"<PyiModuleGraph>" -> "_posixsubprocess" [];
 	"<PyiModuleGraph>" -> "_sre" [];
-	"<PyiModuleGraph>" -> "types" [];
-	"<PyiModuleGraph>" -> "posixpath" [];
-	"<PyiModuleGraph>" -> "re" [];
-	"<PyiModuleGraph>" -> "functools" [];
-	"<PyiModuleGraph>" -> "sre_parse" [];
-	"<PyiModuleGraph>" -> "encodings" [];
-	"<PyiModuleGraph>" -> "sre_constants" [];
-	"<PyiModuleGraph>" -> "genericpath" [];
-	"<PyiModuleGraph>" -> "collections" [];
-	"<PyiModuleGraph>" -> "stat" [];
-	"<PyiModuleGraph>" -> "sre_compile" [];
-	"<PyiModuleGraph>" -> "weakref" [];
-	"<PyiModuleGraph>" -> "reprlib" [];
-	"<PyiModuleGraph>" -> "copyreg" [];
-	"<PyiModuleGraph>" -> "os" [];
-	"<PyiModuleGraph>" -> "abc" [];
-	"<PyiModuleGraph>" -> "linecache" [];
-	"<PyiModuleGraph>" -> "keyword" [];
 	"<PyiModuleGraph>" -> "locale" [];
-	"<PyiModuleGraph>" -> "io" [];
+	"<PyiModuleGraph>" -> "encodings" [];
+	"<PyiModuleGraph>" -> "reprlib" [];
+	"<PyiModuleGraph>" -> "os" [];
+	"<PyiModuleGraph>" -> "linecache" [];
+	"<PyiModuleGraph>" -> "sre_parse" [];
 	"<PyiModuleGraph>" -> "_weakrefset" [];
-	"<PyiModuleGraph>" -> "heapq" [];
 	"<PyiModuleGraph>" -> "warnings" [];
-	"<PyiModuleGraph>" -> "operator" [];
+	"<PyiModuleGraph>" -> "re" [];
 	"<PyiModuleGraph>" -> "traceback" [];
+	"<PyiModuleGraph>" -> "functools" [];
+	"<PyiModuleGraph>" -> "keyword" [];
+	"<PyiModuleGraph>" -> "posixpath" [];
+	"<PyiModuleGraph>" -> "heapq" [];
 	"<PyiModuleGraph>" -> "enum" [];
+	"<PyiModuleGraph>" -> "sre_compile" [];
+	"<PyiModuleGraph>" -> "types" [];
+	"<PyiModuleGraph>" -> "operator" [];
+	"<PyiModuleGraph>" -> "copyreg" [];
+	"<PyiModuleGraph>" -> "sre_constants" [];
+	"<PyiModuleGraph>" -> "collections" [];
+	"<PyiModuleGraph>" -> "weakref" [];
+	"<PyiModuleGraph>" -> "stat" [];
+	"<PyiModuleGraph>" -> "abc" [];
+	"<PyiModuleGraph>" -> "io" [];
 	"<PyiModuleGraph>" -> "_collections_abc" [];
+	"<PyiModuleGraph>" -> "genericpath" [];
 	"<PyiModuleGraph>" -> "C:\Users\jonpi\Desktop\projects\invoice-s-py\isp_gui.py" [];
 	"<PyiModuleGraph>" -> "_json" [];
 	"<PyiModuleGraph>" -> "_elementtree" [];
@@ -2574,34 +2574,34 @@ charset="UTF-8";
 	"C:\Users\jonpi\Desktop\projects\invoice-s-py\isp_gui.py" -> "sqlite3" [];
 	"C:\Users\jonpi\Desktop\projects\invoice-s-py\isp_gui.py" -> "os" [];
 	"C:\Users\jonpi\Desktop\projects\invoice-s-py\isp_gui.py" -> "ctypes" [];
-	"C:\Users\jonpi\Desktop\projects\invoice-s-py\isp_gui.py" -> "types" [];
-	"C:\Users\jonpi\Desktop\projects\invoice-s-py\isp_gui.py" -> "posixpath" [];
-	"C:\Users\jonpi\Desktop\projects\invoice-s-py\isp_gui.py" -> "re" [];
-	"C:\Users\jonpi\Desktop\projects\invoice-s-py\isp_gui.py" -> "functools" [];
-	"C:\Users\jonpi\Desktop\projects\invoice-s-py\isp_gui.py" -> "sre_parse" [];
-	"C:\Users\jonpi\Desktop\projects\invoice-s-py\isp_gui.py" -> "encodings" [];
-	"C:\Users\jonpi\Desktop\projects\invoice-s-py\isp_gui.py" -> "sre_constants" [];
-	"C:\Users\jonpi\Desktop\projects\invoice-s-py\isp_gui.py" -> "genericpath" [];
-	"C:\Users\jonpi\Desktop\projects\invoice-s-py\isp_gui.py" -> "collections" [];
-	"C:\Users\jonpi\Desktop\projects\invoice-s-py\isp_gui.py" -> "stat" [];
-	"C:\Users\jonpi\Desktop\projects\invoice-s-py\isp_gui.py" -> "sre_compile" [];
-	"C:\Users\jonpi\Desktop\projects\invoice-s-py\isp_gui.py" -> "weakref" [];
-	"C:\Users\jonpi\Desktop\projects\invoice-s-py\isp_gui.py" -> "reprlib" [];
-	"C:\Users\jonpi\Desktop\projects\invoice-s-py\isp_gui.py" -> "codecs" [];
-	"C:\Users\jonpi\Desktop\projects\invoice-s-py\isp_gui.py" -> "copyreg" [];
-	"C:\Users\jonpi\Desktop\projects\invoice-s-py\isp_gui.py" -> "abc" [];
-	"C:\Users\jonpi\Desktop\projects\invoice-s-py\isp_gui.py" -> "linecache" [];
-	"C:\Users\jonpi\Desktop\projects\invoice-s-py\isp_gui.py" -> "keyword" [];
 	"C:\Users\jonpi\Desktop\projects\invoice-s-py\isp_gui.py" -> "locale" [];
-	"C:\Users\jonpi\Desktop\projects\invoice-s-py\isp_gui.py" -> "io" [];
+	"C:\Users\jonpi\Desktop\projects\invoice-s-py\isp_gui.py" -> "encodings" [];
+	"C:\Users\jonpi\Desktop\projects\invoice-s-py\isp_gui.py" -> "reprlib" [];
+	"C:\Users\jonpi\Desktop\projects\invoice-s-py\isp_gui.py" -> "linecache" [];
+	"C:\Users\jonpi\Desktop\projects\invoice-s-py\isp_gui.py" -> "sre_parse" [];
+	"C:\Users\jonpi\Desktop\projects\invoice-s-py\isp_gui.py" -> "codecs" [];
 	"C:\Users\jonpi\Desktop\projects\invoice-s-py\isp_gui.py" -> "_weakrefset" [];
-	"C:\Users\jonpi\Desktop\projects\invoice-s-py\isp_gui.py" -> "heapq" [];
 	"C:\Users\jonpi\Desktop\projects\invoice-s-py\isp_gui.py" -> "warnings" [];
-	"C:\Users\jonpi\Desktop\projects\invoice-s-py\isp_gui.py" -> "operator" [];
-	"C:\Users\jonpi\Desktop\projects\invoice-s-py\isp_gui.py" -> "traceback" [];
-	"C:\Users\jonpi\Desktop\projects\invoice-s-py\isp_gui.py" -> "enum" [];
-	"C:\Users\jonpi\Desktop\projects\invoice-s-py\isp_gui.py" -> "_collections_abc" [];
 	"C:\Users\jonpi\Desktop\projects\invoice-s-py\isp_gui.py" -> "ntpath" [];
+	"C:\Users\jonpi\Desktop\projects\invoice-s-py\isp_gui.py" -> "re" [];
+	"C:\Users\jonpi\Desktop\projects\invoice-s-py\isp_gui.py" -> "traceback" [];
+	"C:\Users\jonpi\Desktop\projects\invoice-s-py\isp_gui.py" -> "functools" [];
+	"C:\Users\jonpi\Desktop\projects\invoice-s-py\isp_gui.py" -> "keyword" [];
+	"C:\Users\jonpi\Desktop\projects\invoice-s-py\isp_gui.py" -> "posixpath" [];
+	"C:\Users\jonpi\Desktop\projects\invoice-s-py\isp_gui.py" -> "heapq" [];
+	"C:\Users\jonpi\Desktop\projects\invoice-s-py\isp_gui.py" -> "enum" [];
+	"C:\Users\jonpi\Desktop\projects\invoice-s-py\isp_gui.py" -> "sre_compile" [];
+	"C:\Users\jonpi\Desktop\projects\invoice-s-py\isp_gui.py" -> "types" [];
+	"C:\Users\jonpi\Desktop\projects\invoice-s-py\isp_gui.py" -> "operator" [];
+	"C:\Users\jonpi\Desktop\projects\invoice-s-py\isp_gui.py" -> "copyreg" [];
+	"C:\Users\jonpi\Desktop\projects\invoice-s-py\isp_gui.py" -> "sre_constants" [];
+	"C:\Users\jonpi\Desktop\projects\invoice-s-py\isp_gui.py" -> "collections" [];
+	"C:\Users\jonpi\Desktop\projects\invoice-s-py\isp_gui.py" -> "weakref" [];
+	"C:\Users\jonpi\Desktop\projects\invoice-s-py\isp_gui.py" -> "stat" [];
+	"C:\Users\jonpi\Desktop\projects\invoice-s-py\isp_gui.py" -> "abc" [];
+	"C:\Users\jonpi\Desktop\projects\invoice-s-py\isp_gui.py" -> "io" [];
+	"C:\Users\jonpi\Desktop\projects\invoice-s-py\isp_gui.py" -> "_collections_abc" [];
+	"C:\Users\jonpi\Desktop\projects\invoice-s-py\isp_gui.py" -> "genericpath" [];
 	"C:\Users\jonpi\Desktop\projects\invoice-s-py\isp_gui.py" -> "C:\Users\jonpi\Desktop\projects\invoice-s-py\.venv\Lib\site-packages\PyInstaller\hooks\rthooks\pyi_rth_inspect.py" [];
 	"C:\Users\jonpi\Desktop\projects\invoice-s-py\isp_gui.py" -> "C:\Users\jonpi\Desktop\projects\invoice-s-py\.venv\Lib\site-packages\PyInstaller\hooks\rthooks\pyi_rth_pkgres.py" [];
 	"C:\Users\jonpi\Desktop\projects\invoice-s-py\isp_gui.py" -> "C:\Users\jonpi\Desktop\projects\invoice-s-py\.venv\Lib\site-packages\PyInstaller\hooks\rthooks\pyi_rth_pkgutil.py" [];
@@ -4634,14 +4634,70 @@ charset="UTF-8";
 	"tkinter" -> "re" [];
 	"tkinter" -> "os" [];
 	"tkinter" -> "traceback" [];
+	"genericpath" -> "os" [];
+	"genericpath" -> "stat" [];
 	"_collections_abc" -> "abc" [];
 	"_collections_abc" -> "sys" [];
+	"io" -> "_io" [];
+	"io" -> "abc" [];
+	"io" -> "warnings" [];
+	"abc" -> "_abc" [];
+	"abc" -> "_py_abc" [];
+	"_py_abc" -> "_weakrefset" [];
+	"stat" -> "_stat" [];
+	"weakref" -> "_weakref" [];
+	"weakref" -> "_weakrefset" [];
+	"weakref" -> "_collections_abc" [];
+	"weakref" -> "sys" [];
+	"weakref" -> "itertools" [];
+	"weakref" -> "copy" [];
+	"weakref" -> "atexit" [];
+	"weakref" -> "gc" [];
+	"collections.abc" -> "_collections_abc" [];
+	"collections" -> "_collections_abc" [];
+	"collections" -> "sys" [];
+	"collections" -> "itertools" [];
+	"collections" -> "keyword" [];
+	"collections" -> "operator" [];
+	"collections" -> "reprlib" [];
+	"collections" -> "_weakref" [];
+	"collections" -> "_collections" [];
+	"collections" -> "heapq" [];
+	"collections" -> "copy" [];
+	"sre_constants" -> "warnings" [];
+	"sre_constants" -> "re" [];
+	"copyreg" -> "functools" [];
+	"copyreg" -> "operator" [];
+	"operator" -> "builtins" [];
+	"operator" -> "functools" [];
+	"operator" -> "_operator" [];
+	"types" -> "sys" [];
+	"types" -> "functools" [];
+	"types" -> "_collections_abc" [];
+	"sre_compile" -> "warnings" [];
+	"sre_compile" -> "re" [];
 	"enum" -> "sys" [];
 	"enum" -> "builtins" [];
 	"enum" -> "types" [];
 	"enum" -> "operator" [];
 	"enum" -> "functools" [];
 	"enum" -> "warnings" [];
+	"heapq" -> "_heapq" [];
+	"posixpath" -> "os" [];
+	"posixpath" -> "sys" [];
+	"posixpath" -> "stat" [];
+	"posixpath" -> "genericpath" [];
+	"posixpath" -> "pwd" [];
+	"posixpath" -> "re" [];
+	"posixpath" -> "posix" [];
+	"functools" -> "abc" [];
+	"functools" -> "collections" [];
+	"functools" -> "reprlib" [];
+	"functools" -> "_thread" [];
+	"functools" -> "types" [];
+	"functools" -> "_functools" [];
+	"functools" -> "weakref" [];
+	"functools" -> "typing" [];
 	"traceback" -> "itertools" [];
 	"traceback" -> "linecache" [];
 	"traceback" -> "sys" [];
@@ -4649,9 +4705,15 @@ charset="UTF-8";
 	"traceback" -> "contextlib" [];
 	"traceback" -> "ast" [];
 	"traceback" -> "unicodedata" [];
-	"operator" -> "builtins" [];
-	"operator" -> "functools" [];
-	"operator" -> "_operator" [];
+	"re._parser" -> "warnings" [];
+	"re._parser" -> "unicodedata" [];
+	"re._constants" -> "_sre" [];
+	"re._compiler" -> "_sre" [];
+	"re._compiler" -> "sys" [];
+	"re" -> "enum" [];
+	"re" -> "functools" [];
+	"re" -> "warnings" [];
+	"re" -> "copyreg" [];
 	"warnings" -> "sys" [];
 	"warnings" -> "linecache" [];
 	"warnings" -> "tracemalloc" [];
@@ -4659,28 +4721,14 @@ charset="UTF-8";
 	"warnings" -> "builtins" [];
 	"warnings" -> "traceback" [];
 	"warnings" -> "_warnings" [];
-	"heapq" -> "_heapq" [];
 	"_weakrefset" -> "_weakref" [];
 	"_weakrefset" -> "types" [];
-	"io" -> "_io" [];
-	"io" -> "abc" [];
-	"io" -> "warnings" [];
-	"locale" -> "sys" [];
-	"locale" -> "encodings" [];
-	"locale" -> "re" [];
-	"locale" -> "_collections_abc" [];
-	"locale" -> "builtins" [];
-	"locale" -> "functools" [];
-	"locale" -> "_locale" [];
-	"locale" -> "warnings" [];
-	"locale" -> "os" [];
+	"sre_parse" -> "warnings" [];
+	"sre_parse" -> "re" [];
 	"linecache" -> "functools" [];
 	"linecache" -> "sys" [];
 	"linecache" -> "os" [];
 	"linecache" -> "tokenize" [];
-	"abc" -> "_abc" [];
-	"abc" -> "_py_abc" [];
-	"_py_abc" -> "_weakrefset" [];
 	"os" -> "abc" [];
 	"os" -> "sys" [];
 	"os" -> "stat" [];
@@ -4693,37 +4741,9 @@ charset="UTF-8";
 	"os" -> "warnings" [];
 	"os" -> "subprocess" [];
 	"os" -> "io" [];
-	"copyreg" -> "functools" [];
-	"copyreg" -> "operator" [];
 	"reprlib" -> "builtins" [];
 	"reprlib" -> "itertools" [];
 	"reprlib" -> "_thread" [];
-	"weakref" -> "_weakref" [];
-	"weakref" -> "_weakrefset" [];
-	"weakref" -> "_collections_abc" [];
-	"weakref" -> "sys" [];
-	"weakref" -> "itertools" [];
-	"weakref" -> "copy" [];
-	"weakref" -> "atexit" [];
-	"weakref" -> "gc" [];
-	"sre_compile" -> "warnings" [];
-	"sre_compile" -> "re" [];
-	"stat" -> "_stat" [];
-	"collections.abc" -> "_collections_abc" [];
-	"collections" -> "_collections_abc" [];
-	"collections" -> "sys" [];
-	"collections" -> "itertools" [];
-	"collections" -> "keyword" [];
-	"collections" -> "operator" [];
-	"collections" -> "reprlib" [];
-	"collections" -> "_weakref" [];
-	"collections" -> "_collections" [];
-	"collections" -> "heapq" [];
-	"collections" -> "copy" [];
-	"genericpath" -> "os" [];
-	"genericpath" -> "stat" [];
-	"sre_constants" -> "warnings" [];
-	"sre_constants" -> "re" [];
 	"encodings.zlib_codec" -> "codecs" [];
 	"encodings.zlib_codec" -> "zlib" [];
 	"encodings.uu_codec" -> "codecs" [];
@@ -4909,38 +4929,29 @@ charset="UTF-8";
 	"encodings" -> "codecs" [];
 	"encodings" -> "sys" [];
 	"encodings" -> "_winapi" [];
-	"sre_parse" -> "warnings" [];
-	"sre_parse" -> "re" [];
-	"functools" -> "abc" [];
-	"functools" -> "collections" [];
-	"functools" -> "reprlib" [];
-	"functools" -> "_thread" [];
-	"functools" -> "types" [];
-	"functools" -> "_functools" [];
-	"functools" -> "weakref" [];
-	"functools" -> "typing" [];
-	"re._parser" -> "warnings" [];
-	"re._parser" -> "unicodedata" [];
-	"re._constants" -> "_sre" [];
-	"re._compiler" -> "_sre" [];
-	"re._compiler" -> "sys" [];
-	"re" -> "enum" [];
-	"re" -> "functools" [];
-	"re" -> "warnings" [];
-	"re" -> "copyreg" [];
-	"posixpath" -> "os" [];
-	"posixpath" -> "sys" [];
-	"posixpath" -> "stat" [];
-	"posixpath" -> "genericpath" [];
-	"posixpath" -> "pwd" [];
-	"posixpath" -> "re" [];
-	"posixpath" -> "posix" [];
-	"types" -> "sys" [];
-	"types" -> "functools" [];
-	"types" -> "_collections_abc" [];
+	"locale" -> "sys" [];
+	"locale" -> "encodings" [];
+	"locale" -> "re" [];
+	"locale" -> "_collections_abc" [];
+	"locale" -> "builtins" [];
+	"locale" -> "functools" [];
+	"locale" -> "_locale" [];
+	"locale" -> "warnings" [];
+	"locale" -> "os" [];
 	"_sre" -> "copy" [];
 	"_sre" -> "re" [];
 	"_posixsubprocess" -> "gc" [];
+	"_pickle" -> "codecs" [];
+	"_pickle" -> "copyreg" [];
+	"_pickle" -> "_compat_pickle" [];
+	"ntpath" -> "os" [];
+	"ntpath" -> "sys" [];
+	"ntpath" -> "stat" [];
+	"ntpath" -> "genericpath" [];
+	"ntpath" -> "_winapi" [];
+	"ntpath" -> "nt" [];
+	"ntpath" -> "string" [];
+	"posix" -> "resource" [];
 	"datetime" -> "time" [];
 	"datetime" -> "math" [];
 	"datetime" -> "sys" [];
@@ -4955,23 +4966,12 @@ charset="UTF-8";
 	"_strptime" -> "_thread" [];
 	"_datetime" -> "time" [];
 	"_datetime" -> "_strptime" [];
-	"_pickle" -> "codecs" [];
-	"_pickle" -> "copyreg" [];
-	"_pickle" -> "_compat_pickle" [];
-	"ntpath" -> "os" [];
-	"ntpath" -> "sys" [];
-	"ntpath" -> "stat" [];
-	"ntpath" -> "genericpath" [];
-	"ntpath" -> "_winapi" [];
-	"ntpath" -> "nt" [];
-	"ntpath" -> "string" [];
-	"posix" -> "resource" [];
+	"time" -> "_strptime" [];
+	"gc" -> "time" [];
 	"codecs" -> "builtins" [];
 	"codecs" -> "sys" [];
 	"codecs" -> "_codecs" [];
 	"codecs" -> "encodings" [];
-	"time" -> "_strptime" [];
-	"gc" -> "time" [];
 	"zipimport" -> "importlib" [];
 	"logging" -> "collections" [];
 	"importlib.metadata._adapters" -> "email" [];

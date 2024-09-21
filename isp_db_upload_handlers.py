@@ -32,7 +32,7 @@ def handleInvoiceUpload(root, filename):
 
   cur = conn.cursor()
 
-  with open(filename) as csv_file:
+  with open(filename, encoding='utf-8') as csv_file:
     CSVreader = csv.reader(csv_file)
 
     entriesList = []
@@ -80,16 +80,13 @@ def handleTransactionUpload(root, filename):
   unsortedIncompRec = []
   unsortedMultiRec = []
 
-  with open(filename) as csv_file:
+  with open(filename, encoding='utf-8', newline='') as csv_file:
     CSVreader = csv.reader(csv_file)
-
-    count = 0
 
     for entry in CSVreader:
       
       try:
         datetime.strptime(entry[0].strip(), '%d %b %Y')
-        count += 1
       except:
         continue
 

@@ -10,7 +10,8 @@ from isp_regex import CSV_TRANSACTION_REGEX
 load_dotenv()
 
 from tkinter import filedialog
-import csv
+
+
 
 def getFilename ():
 
@@ -22,11 +23,12 @@ def getFilename ():
   
   return filename
 
+
 def cleanTransactionRaw(entry):
 
-  invMatches = re.findall(CSV_TRANSACTION_REGEX, entry[2])
+  os.environ['PYTHONIOENCODING'] = 'UTF-8'
 
-  print(invMatches)
+  invMatches = re.findall(CSV_TRANSACTION_REGEX, entry[2])
 
   customer = entry[2].split(',')[0].strip()
 
