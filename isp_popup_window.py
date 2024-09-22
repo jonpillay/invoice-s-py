@@ -15,7 +15,7 @@ def openNewCustomerPrompt(root, customer, dbCustomers, newCustomerReturn, newAli
   promptWindow.rowconfigure(1, weight=20)
   promptWindow.columnconfigure(0, weight=1)
 
-  title_label = tkb.Label(promptWindow, text=f"Add new customer '{customer}'?", background='red')
+  title_label = tkb.Label(promptWindow, text=f"Add new customer '{customer}'?")
   title_label.grid(row=0, column=0, sticky='nesw')
 
   main_frame = tkb.Frame(promptWindow)
@@ -47,6 +47,8 @@ def openNewCustomerPrompt(root, customer, dbCustomers, newCustomerReturn, newAli
 
   for id, name in dbCustomers:
     customerNames.append(name)
+
+    # sort customer names
 
   add_alias_dropdown = tkb.Combobox(add_alias_frame, values=customerNames)
   add_alias_dropdown.grid(row=1, column=0)

@@ -474,13 +474,13 @@ def resolveNewCustomersDB(root, invoiceCustomers, aliasesDict, cur, conn):
 
   for customer in invoiceCustomers:
 
-    dbCustomers = getCustomerNamesIDs(cur)
-
     existsBool = compareCustomerToAliasesDict(customer, aliasesDict)
 
     if existsBool == True:
       continue
     else:
+
+      dbCustomers = getCustomerNamesIDs(cur)
 
       newCustomerReturn = tk.StringVar()
 

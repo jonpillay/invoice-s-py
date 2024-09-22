@@ -30,7 +30,7 @@ def cleanTransactionRaw(entry):
 
   invMatches = re.findall(CSV_TRANSACTION_REGEX, entry[2])
 
-  customer = entry[2].split(',')[0].strip()
+  customer = entry[2].split(',')[0].upper().strip()
 
   formattedDate = datetime.strptime(entry[0], '%d %b %Y').strftime('%Y-%m-%d')
 
@@ -39,6 +39,8 @@ def cleanTransactionRaw(entry):
   paidBy = entry[1]
 
   return [invMatches, payment, formattedDate, customer, paidBy, ' '.join(entry)]
+
+
 
 def cleanInvoiceListRawGenCustomerList(entries):
   

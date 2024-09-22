@@ -6,3 +6,6 @@ __pycache__/
 isp_noMatch_list.py
 test.pdf
 isp_regex.py
+dist/
+build/
+ISPCreditReports/

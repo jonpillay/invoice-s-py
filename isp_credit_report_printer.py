@@ -148,13 +148,15 @@ def creditReportPrinter(creditReportDict, con, cur):
   dateToday = datetime.today().strftime("%d_%m_%Y")
   formattedCustomerName = customerName.replace(" ", "_")
   
-  outputDir = os.path.join("..", "ISPCreditReports", formattedCustomerName)
+  outputDir = os.path.join("ISPCreditReports", formattedCustomerName)
   outputFile = os.path.join(outputDir, f"{formattedCustomerName}-{dateFrom}-{dateToday}.pdf")
 
-  if not os.path.exists(os.path.join("..", "ISPCreditReports", formattedCustomerName)):
+  if not os.path.exists(os.path.join("ISPCreditReports", formattedCustomerName)):
 
     os.makedirs(outputDir, exist_ok=True)
 
   results.output(outputFile)
 
-  subprocess.Popen([outputFile], shell=True)
+  # subprocess.Popen([outputFile], shell=True)
+
+  os.startfile(outputFile)

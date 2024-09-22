@@ -11,7 +11,7 @@ from isp_csv_helpers import cleanTransactionRaw, cleanInvoiceListRawGenCustomerL
 from isp_trans_verify import verifyTransactionDetails, verifyAlias, verifyTransactionAmount, checkIfTransactionListContainsErrorCorrections
 from isp_db_helpers import getInvoiceNumsIDs, fetchInvoiceByNum, fetchUnpaidInvoiceByNum, addTransactionsToDB, addNewCustomersToDB, getDBInvoiceNums, getCustomerNamesIDs, resolveNewCustomersDB, addCashInvoicesAndTransactions, addInvoicesToDB, addDummyTransactionsToDB, addCorrectedTransactionPairsDB, addParentErrorTransactionsToDB, addNoMatchTransactionsToDB
 from isp_data_handlers import constructCustomerAliasesDict, constructCustomerIDict, prepInvoiceUploadList, genInvoiceDCobj, genTransactionDCobj, genMultiTransactionDCobj, prepMatchedTransforDB, genMultiTransactions, reMatchPaymentErrors, genNoNumTransactionDCobj
-from isp_resolvers import resolveNameMismatches, resolvePaymentErrors, resolveMultiInvoiceTransactions, resolveNoMatchTransactions
+from isp_resolvers import resolveNameMismatches, resolvePaymentErrors, resolveMultiInvoiceTransactions, resolveNoMatchTransactions, resolveNamesIntoDB
 from isp_multi_invoice_prompt import openSelectBetweenInvoices
 from isp_error_payment_check import checkPaymentErrorAgainstUnpaidInvoices
 
@@ -25,8 +25,6 @@ from isp_dataframes import Transaction
 def handleInvoiceUpload(root, filename):
 
   conn = sqlite3.connect(os.getenv("DB_NAME"))
-
-  print(os.getenv("DB_NAME"))
 
   conn.execute('PRAGMA foreign_keys = ON')
 
@@ -83,6 +81,8 @@ def handleTransactionUpload(root, filename):
   with open(filename, encoding='utf-8', newline='') as csv_file:
     CSVreader = csv.reader(csv_file)
 
+    uniqueIncomingCustomerList = []
+
     for entry in CSVreader:
       
       try:
@@ -91,6 +91,13 @@ def handleTransactionUpload(root, filename):
         continue
 
       cleanedEntry = cleanTransactionRaw(entry)
+
+      inComingCustomer = cleanedEntry[3]
+
+      print(inComingCustomer)
+
+      if inComingCustomer not in uniqueIncomingCustomerList and not re.search("CASH", inComingCustomer):
+        uniqueIncomingCustomerList.append(inComingCustomer)
 
       """ Check to see if the Transaction entry has one, numerous, or no invoice number matches """
       
@@ -107,6 +114,18 @@ def handleTransactionUpload(root, filename):
       else:
         transactionDC = genMultiTransactionDCobj(cleanedEntry)
         unsortedMultiRec.append(transactionDC)
+
+    conn = sqlite3.connect(os.getenv("DB_NAME"))
+
+    conn.execute('PRAGMA foreign_keys = ON')
+
+    cur = conn.cursor()
+
+    resolveNamesIntoDB(root, cur, conn, uniqueIncomingCustomerList)
+
+    cur.close()
+
+    conn.close()
 
   # Sort lists by date_paid
 

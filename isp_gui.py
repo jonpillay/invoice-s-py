@@ -20,7 +20,7 @@ def startApp():
   except ImportError:
       pass
 
-  conn = sqlite3.connect(os.getenv("DB_NAME"))
+  conn = sqlite3.connect("isp.db")
   cur = conn.cursor()
 
   checkDBStatus(cur, conn)
