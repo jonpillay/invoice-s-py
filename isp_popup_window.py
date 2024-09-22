@@ -3,9 +3,59 @@ import ttkbootstrap as tkb
 
 from isp_treeviews import renderPromptTransactions, renderSimplePromptInvoices, renderPromptInvoices
 
-def openNewCustomerPrompt(root, customer, dbCustomers, newCustomerReturn, newAliasReturn):
+from tkinter import font as tkfont
+
+def openNewCustomerPrompt(root, customer, dbCustomers, newCustomerReturn, newAliasReturn, aliasesDict=None):
     
   customerNames = []
+
+  for id, name in dbCustomers:
+    customerNames.append(name)
+
+  # sort customer names
+  customerNames.sort()
+
+  if aliasesDict != None:
+
+    customerSplit = customer.split()
+
+    if 'LIMITED' in customerSplit:
+      customerSplit.remove('LIMITED')
+
+    if 'LTD' in customerSplit:
+      customerSplit.remove('LTD')
+
+    if 'THE' in customerSplit:
+      customerSplit.remove('THE')
+
+    possibleMatches = []
+
+    for customerName in customerNames:
+
+      for nameFrag in customerSplit:
+        
+        if nameFrag in customerName.split():
+
+          if customerName in possibleMatches:
+
+            possibleMatches.insert(0, customerName)
+            break
+
+          else:
+            possibleMatches.append(customerName)
+
+        for customerKey in aliasesDict:
+
+          aliases = aliasesDict[customerKey]
+
+          for candAlias in aliases:
+
+            if nameFrag in candAlias.split():
+
+              possibleMatches.append(customerKey)
+              break
+
+    possibleMatches = list(set(possibleMatches))
 
   promptWindow = tkb.Toplevel(root)
   promptWindow.title('New Customer?')
@@ -15,46 +65,31 @@ def openNewCustomerPrompt(root, customer, dbCustomers, newCustomerReturn, newAli
   promptWindow.rowconfigure(1, weight=20)
   promptWindow.columnconfigure(0, weight=1)
 
-  title_label = tkb.Label(promptWindow, text=f"Add new customer '{customer}'?")
+  title_label = tkb.Label(promptWindow, text=f"Add new customer '{customer}'?", background='green')
   title_label.grid(row=0, column=0, sticky='nesw')
 
   main_frame = tkb.Frame(promptWindow)
   main_frame.grid(row=1, column=0, sticky='nesw')
 
-  main_frame.rowconfigure(0, weight=1)
+  main_frame.rowconfigure(0, weight=2)
   main_frame.rowconfigure(1, weight=1)
+  main_frame.rowconfigure(2, weight=4)
 
-  main_frame.columnconfigure(1, weight=1)
+  main_frame.columnconfigure(0, weight=1)
 
   add_customer_frame = tkb.Frame(main_frame)
-  add_customer_frame.grid(row=0, column=0, sticky='nesw')
+  add_customer_frame.rowconfigure(0, weight=1)
+  add_customer_frame.rowconfigure(1, weight=1)
+  add_customer_frame.rowconfigure(2, weight=1)
+  add_customer_frame.columnconfigure(0, weight=1)
+  add_customer_frame.grid(row=0, column=0, pady=30, sticky='nesw')
 
-  add_customer_frame_label = tkb.Label(add_customer_frame, text="Add Customer", background='red')
-  add_customer_frame_label.grid(row=1, column=1, sticky='ew')
+  add_customer_frame_label = tkb.Label(add_customer_frame, text="Add As New Customer", font=("Arial", 13))
+  add_customer_frame_label.grid(row=0, column=0)
 
-  add_customer_entry = tkb.Entry(add_customer_frame, textvariable=newCustomerReturn)
+  add_customer_entry = tkb.Entry(add_customer_frame, textvariable=newCustomerReturn, font=("Arial", 15))
   newCustomerReturn.set(customer)
-  add_customer_entry.grid(row=1, column=0)
-
-  add_customer_button = tkb.Button(add_customer_frame, text='Submit', command= lambda: updateNewCustomerVar())
-  add_customer_button.grid(row=2, column=0)
-
-  add_alias_frame = tkb.Frame(main_frame)
-  add_alias_frame.grid(row=1, column=0, sticky='nesw')
-
-  add_alias_frame_label = tkb.Label(add_alias_frame, text="Add Alias", background='blue')
-  add_alias_frame_label.grid(row=0, column=0)
-
-  for id, name in dbCustomers:
-    customerNames.append(name)
-
-    # sort customer names
-
-  add_alias_dropdown = tkb.Combobox(add_alias_frame, values=customerNames)
-  add_alias_dropdown.grid(row=1, column=0)
-
-  add_alias_button = tkb.Button(add_alias_frame, text='Submit', command= lambda: updateNewAliasVar())
-  add_alias_button.grid(row=2, column=0)
+  add_customer_entry.grid(row=1, column=0, sticky='n', pady=5)
 
   def updateNewCustomerVar():
     newAliasReturn.set("")
@@ -62,11 +97,63 @@ def openNewCustomerPrompt(root, customer, dbCustomers, newCustomerReturn, newAli
     newCustomerReturn.set(add_customer_entry.get())
     promptWindow.destroy()
 
+
+  add_customer_button = tkb.Button(add_customer_frame, text='Submit', command= lambda: updateNewCustomerVar())
+  add_customer_button.grid(row=2, column=0, sticky='ew', padx=150)
+
+  or_frame = tkb.Frame(main_frame)
+  or_frame.rowconfigure(0, weight=1)
+  or_frame.columnconfigure(0, weight=1)
+  or_frame.grid(row=1, column=0, sticky='s')
+
+  or_label = tkb.Label(or_frame, text="OR", font=("Arial", 20))
+  or_label.grid(row=0, column=0, pady=25)
+
+  add_alias_frame = tkb.Frame(main_frame)
+  add_alias_frame.rowconfigure(0, weight=1)
+  add_alias_frame.rowconfigure(1, weight=1)
+  add_alias_frame.rowconfigure(2, weight=1)
+  add_alias_frame.rowconfigure(3, weight=3)
+  add_alias_frame.grid(row=2, column=0)
+
+  add_alias_frame_label = tkb.Label(add_alias_frame, text="Add Customer As Alias To", font=("Arial", 15))
+  add_alias_frame_label.grid(row=0, column=0)
+
+  add_alias_dropdown = tkb.Combobox(add_alias_frame, values=customerNames)
+  add_alias_dropdown.grid(row=1, column=0, pady=5)
+
   def updateNewAliasVar():
     newCustomerReturn.set("")
     print('runningAlias')
     newAliasReturn.set(add_alias_dropdown.get())
     promptWindow.destroy()
+
+  add_alias_button = tkb.Button(add_alias_frame, text='Submit', command= lambda: updateNewAliasVar())
+  add_alias_button.grid(row=2, column=0, sticky='ew')
+
+  def updateNewQuickAliasVar():
+    newCustomerReturn.set("")
+    print('runningAlias')
+    newAliasReturn.set(possibleCustomer)
+    promptWindow.destroy()
+
+  if len(possibleMatches) > 0:
+    possibleCustomer = possibleMatches[0]
+  else:
+    possibleCustomer = None
+
+  if possibleCustomer != None:
+    add_similar_frame = tkb.Frame(add_alias_frame)
+    add_similar_frame.rowconfigure(0, weight=1)
+    add_similar_frame.columnconfigure(0, weight=8)
+    add_similar_frame.columnconfigure(1, weight=3)
+    add_similar_frame.grid(row=3, column=0, pady=40, sticky='nesw')
+
+    add_similar_label = tkb.Label(add_similar_frame, text=f"{possibleCustomer} is a close match", font=("Arial", 10))
+    add_similar_label.grid(row=0, column=0)
+
+    add_similar_button = tkb.Button(add_similar_frame, text="Add Alias", command= lambda: updateNewQuickAliasVar())
+    add_similar_button.grid(row=0, column=1, padx=20)
 
   promptWindow.wait_window(main_frame)
 

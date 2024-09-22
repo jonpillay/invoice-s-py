@@ -98,9 +98,9 @@ def resolveNamesIntoDB(root, cur, con, namesList):
   for name in namesList:
 
     dbCustomers = getCustomerNamesIDs(cur)
-    alisesDict = constructCustomerAliasesDict(cur, dbCustomers)
+    aliasesDict = constructCustomerAliasesDict(cur, dbCustomers)
 
-    nameCheck = compareCustomerToAliasesDict(name, alisesDict)
+    nameCheck = compareCustomerToAliasesDict(name, aliasesDict)
 
     if nameCheck == True:
 
@@ -112,7 +112,7 @@ def resolveNamesIntoDB(root, cur, con, namesList):
 
       newAliasReturn = tk.StringVar()
 
-      openNewCustomerPrompt(root, name, dbCustomers, newCustomerReturn, newAliasReturn)
+      openNewCustomerPrompt(root, name, dbCustomers, newCustomerReturn, newAliasReturn, aliasesDict)
 
       customerName = newCustomerReturn.get()
 

@@ -21,6 +21,7 @@ def constructCustomerAliasesDict(cur, namesIDsTups):
 
   return aliasesDict
 
+
 def constructCustomerIDict(cur, aliasesDict):
 
   customerIDict = {}
