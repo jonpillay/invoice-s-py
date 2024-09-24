@@ -8,11 +8,10 @@ from datetime import datetime
 import json
 
 from isp_csv_helpers import cleanTransactionRaw, cleanInvoiceListRawGenCustomerList
-from isp_trans_verify import verifyTransactionDetails, verifyAlias, verifyTransactionAmount, checkIfTransactionListContainsErrorCorrections
-from isp_db_helpers import getInvoiceNumsIDs, fetchInvoiceByNum, fetchUnpaidInvoiceByNum, addTransactionsToDB, addNewCustomersToDB, getDBInvoiceNums, getCustomerNamesIDs, resolveNewCustomersDB, addCashInvoicesAndTransactions, addInvoicesToDB, addDummyTransactionsToDB, addCorrectedTransactionPairsDB, addParentErrorTransactionsToDB, addNoMatchTransactionsToDB
+from isp_trans_verify import verifyTransactionDetails, checkIfTransactionListContainsErrorCorrections
+from isp_db_helpers import fetchInvoiceByNum, addTransactionsToDB, getDBInvoiceNums, getCustomerNamesIDs, addCashInvoicesAndTransactions, addInvoicesToDB, addDummyTransactionsToDB, addCorrectedTransactionPairsDB, addParentErrorTransactionsToDB, addNoMatchTransactionsToDB
 from isp_data_handlers import constructCustomerAliasesDict, constructCustomerIDict, prepInvoiceUploadList, genInvoiceDCobj, genTransactionDCobj, genMultiTransactionDCobj, prepMatchedTransforDB, genMultiTransactions, reMatchPaymentErrors, genNoNumTransactionDCobj
 from isp_resolvers import resolveNameMismatches, resolvePaymentErrors, resolveMultiInvoiceTransactions, resolveNoMatchTransactions, resolveNamesIntoDB
-from isp_multi_invoice_prompt import openSelectBetweenInvoices
 from isp_error_payment_check import checkPaymentErrorAgainstUnpaidInvoices
 
 from isp_results_printer import print_transaction_upload_results
@@ -46,11 +45,13 @@ def handleInvoiceUpload(root, filename):
     
   cleanedInvoices, customers = cleanInvoiceListRawGenCustomerList(entriesList)
 
-  dbCustomers = getCustomerNamesIDs(cur)
+  # dbCustomers = getCustomerNamesIDs(cur)
 
-  alisesDict = constructCustomerAliasesDict(cur, dbCustomers)
+  # alisesDict = constructCustomerAliasesDict(cur, dbCustomers)
 
-  resolveNewCustomersDB(root, customers, alisesDict, cur, conn)
+  resolveNamesIntoDB(root, cur, conn, customers)
+
+  # resolveNewCustomersDB(root, customers, alisesDict, cur, conn)
 
   updatedDBCustomers = getCustomerNamesIDs(cur)
 
@@ -94,15 +95,12 @@ def handleTransactionUpload(root, filename):
 
       inComingCustomer = cleanedEntry[3]
 
-      print(inComingCustomer)
-
       if inComingCustomer not in uniqueIncomingCustomerList and not re.search("CASH", inComingCustomer):
         uniqueIncomingCustomerList.append(inComingCustomer)
 
       """ Check to see if the Transaction entry has one, numerous, or no invoice number matches """
       
       if len(cleanedEntry[0]) == 0:
-        print(cleanedEntry)
         transDC = genNoNumTransactionDCobj(cleanedEntry)
         transDC.error_notes = "No Invoice Number Attatched"
         unsortedIncompRec.append(transDC)
@@ -138,11 +136,6 @@ def handleTransactionUpload(root, filename):
   # multirec are transactions with 2 or more invoice numbers
   multiRec = sorted(unsortedMultiRec, key=lambda transaction:transaction.paid_on)
 
-
-  print("This is the transaction count at line 117")
-  print(len(incompRec))
-  print(len(compRec)+len(incompRec)+len(multiRec))
-
   upLoadedPairs = []
 
   # working lists
@@ -167,8 +160,6 @@ def handleTransactionUpload(root, filename):
     # fetch invoice via number on transaction
 
     invoice = fetchInvoiceByNum(invoiceNum, cur)
-
-    print(invoice)
 
     if len(invoice) == 0:
       transaction.error_notes = "No Match For Invoice Number Found."
@@ -321,10 +312,6 @@ def handleTransactionUpload(root, filename):
   inCompErrorCorrectionMatched = ['inCompErrorCorrectionMatched', inCompErrorCorrectionMatchedList]
 
   finalNoMatch = ['finalNoMatch', finalNoMatchList]
-
-  print("This is the final count of all final transaction lists")
-
-  print(len(matchedSingles[1]) + len(correctedErrorsReport[1]) + len(invoiceNumRematchedReport[1]) + len(correctionTransactionErrorsReport[1]) + len(inCompMatched[1]) + len(inCompErrorCorrectionMatched[1]) + len(uploadedMultiTransactionPairs[1]) + len(inCompMultiMatch[1]) + len(finalNoMatch[1]) + len(multiErrorFlagged[1]) + len(multiInvoiceErrors[1]) + len(newCustomerTransactions[1]))
 
   finalListOfLists = [matchedSingles, correctedErrorsReport, invoiceNumRematchedReport, correctionTransactionErrorsReport, inCompMatched, inCompErrorCorrectionMatched, uploadedMultiTransactionPairs, multiErrorFlagged, multiInvoiceErrors, inCompMultiMatch, finalNoMatch, newCustomerTransactions]
 

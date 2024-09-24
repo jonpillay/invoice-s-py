@@ -1,7 +1,7 @@
 import tkinter as tk
 
 from isp_data_handlers import groupDataClassObjsByAttribute, genDBInvoiceDCobj, genDBTransactionDCobj, prepMatchedTransforDB
-from isp_db_helpers import fetchInvoicesByCustomerBeforeDate, fetchTransactionsByInvoiceID, updateTransactionRec, updateInvoiceRec, addTransactionToDB, addDummyNoteTransactionsToDB, addErrorNoteTransactionToDB
+from isp_db_helpers import fetchInvoicesByCustomerBeforeDate, fetchTransactionsByInvoiceID, updateTransactionRec, updateInvoiceRec, addErrorNoteTransactionToDB
 from isp_trans_verify import checkIfNoNumTransactionErrorIsCorrection
 from isp_close_enough_prompts import openVerifyErrorCorrectionCloseEnoughMatch
 
@@ -54,10 +54,6 @@ def final_resolver(root, matchlessList, cur, con):
                 errorTransaction = genDBTransactionDCobj(candTransaction)
               elif "CORDUM" in candTransaction[5]:
                 dummyTransaction = genDBTransactionDCobj(candTransaction)
-
-            print("This is from the final resolver")
-            print(dummyTransaction)
-            print(errorTransaction)
 
             # pass all three into funct to see if the error correction and any other unpaid invoice match the transaction amount
             matchCheck = checkIfNoNumTransactionErrorIsCorrection(transaction, invoiceDC, dummyTransaction, cur, con)

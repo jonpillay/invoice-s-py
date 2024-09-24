@@ -312,10 +312,6 @@ def checkIfTransactionListContainsErrorCorrections(root, correctedErrors, con, c
 
       candDummyTransactionDCs = [genDBTransactionDCobj(transDC) for transDC in candDummyTransactions]
 
-      print("This is from the check if transaction list contains...")
-      for trans in candDummyTransactionDCs:
-        print(trans)
-
       for prevDummyTransaction in candDummyTransactionDCs:
 
         if prevDummyTransaction.amount + dummyTransaction.amount == 0:

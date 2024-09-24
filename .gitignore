@@ -9,3 +9,4 @@ isp_regex.py
 dist/
 build/
 ISPCreditReports/
+ISPTransactionUploadReports/

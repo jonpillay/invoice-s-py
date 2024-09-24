@@ -136,7 +136,7 @@ def print_transaction_upload_results(outputDict):
 
   dateToday = datetime.today().strftime("%d_%m_%Y")
   
-  outputDir = os.path.join("..", "ISPTransactionUploadReports")
+  outputDir = os.path.join("ISPTransactionUploadReports")
   outputFile = os.path.join(outputDir, f"transcation_upload_report-{dateToday}.pdf")
 
   if not os.path.exists(outputDir):
@@ -145,6 +145,4 @@ def print_transaction_upload_results(outputDict):
 
   results.output(outputFile)
 
-  subprocess.Popen([outputFile], shell=True)
-
-  results.output('../test.pdf')
+  os.startfile(outputFile)

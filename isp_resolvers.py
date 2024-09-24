@@ -40,8 +40,6 @@ def resolveNameMismatches(root, cur, conn, matchNameErrors):
           nameResolved.append(error)
           index += 1
 
-          print("Match single here")
-
           break
 
         else:
@@ -187,7 +185,7 @@ def resolveMultiInvoiceTransactions(root, cur, con, multiRecs):
     else:
 
       rec.error_flagged = 1
-      rec.error_notes = f"Transaction Supposed to pay for {rec.low_invoice} - {rec.high_invoice}. Amounts Do Not Match."
+      rec.error_notes = f"Transaction Supposed to pay for {rec.invoice_num} - {rec.high_invoice}. Amounts Do Not Match."
 
       errorList = [rec, invoiceOBJs]
 
@@ -201,8 +199,6 @@ def resolveMultiInvoiceTransactions(root, cur, con, multiRecs):
   while len(multiVerified) + len(multiErrorFlagged) < matchCount:
 
     for checkTrans, checkInvoices in multiInvoiceMatches:
-
-      print("here multi match")
 
       checkedBool = tk.BooleanVar()
       verifyBool = tk.BooleanVar()

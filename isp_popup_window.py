@@ -8,6 +8,7 @@ from tkinter import font as tkfont
 def openNewCustomerPrompt(root, customer, dbCustomers, newCustomerReturn, newAliasReturn, aliasesDict=None):
     
   customerNames = []
+  possibleMatches = []
 
   for id, name in dbCustomers:
     customerNames.append(name)
